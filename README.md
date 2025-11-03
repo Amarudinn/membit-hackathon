@@ -142,6 +142,8 @@ Akses halaman Community Nodes di: `http://YOUR_IP_VPS:5678/settings/community-no
 
 ### 2. Bangun Alur Kerja (Workflow)
 
+![Workflow Diagram](images/Workflow.png)
+
 Daripada mengimpor JSON, bangun alur kerja secara manual untuk memastikan kompatibilitas:
 
 - Klik **+** (pojok kanan atas) untuk menambahkan node.
