@@ -7,8 +7,8 @@ Proyek ini menjelaskan cara menginstal n8n di VPS, dan mengonfigurasi alur kerja
 Sebelum memulai, pastikan Anda memiliki:
 * Sebuah **VPS/Server** (disarankan Debian/Ubuntu) dengan akses root.
 * Alamat **IP Publik** untuk VPS Anda.
-* Sebuah **API Key Google Gemini**.
-* Sebuah **API Key Membit**.
+* Sebuah [API Key Google Gemini](https://aistudio.google.com/api-keys)
+* Sebuah [API Key Membit](https://membit.ai/integration)
 * Sebuah **Akun X (Twitter)** dengan akses [Developer Portal](https://developer.x.com/) untuk membuat aplikasi kustom.
 
 ---

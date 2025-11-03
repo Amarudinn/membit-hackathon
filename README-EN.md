@@ -7,8 +7,8 @@ This project explains how to install n8n on a VPS and configure a workflow to au
 Before starting, make sure you have:
 * A **VPS/Server** (Debian/Ubuntu recommended) with root access.
 * A **Public IP Address** for your VPS.
-* A **Google Gemini API Key**.
-* A **Membit API Key**.
+* A [Google Gemini API Key](https://aistudio.google.com/api-keys)
+* A [Membit API Key](https://membit.ai/integration)
 * An **X (Twitter) Account** with access to the [Developer Portal](https://developer.x.com/) to create a custom application.
 
 ---
