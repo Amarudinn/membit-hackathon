@@ -186,7 +186,7 @@ Klik pada setiap node untuk menghilangkan tanda peringatan (🔺).
 
 ### 3. Create Tweet
 
-**Credential to connect with:**
+**Credential to connect with**
 
 Klik **Create New** dan copy OAuth Redirect URL:
 
@@ -208,18 +208,20 @@ http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback
 - Sisanya kosongkan tidak masalah
 - Klik **Save**
 - Nanti akan muncul **Client ID** & **Client Secret**
-- Copy Paste ke Workflow Create Tweet:
+- Copy Paste ke Workflow Create Tweet
 
 ![Workflow Create Tweet](images/Workflow-Create-Tweet.png)
 
 - Klik **Connect my account** (X)
 - Klik **Save**
 
-**Text:** Masukkan ekspresi ini untuk mengambil output dari AI Agent:
+**Text** Masukkan ekspresi ini untuk mengambil output dari AI Agent:
 
 ```
 ={{ $('AI Agent').item.json.output }}
 ```
+
+![Workflow Create Tweet](images/Create-Tweet-Text.png)
 
 ### 4. AI Agent
 
@@ -229,6 +231,8 @@ http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback
 ```
 Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit (yang tersedia sebagai "Tool"), memilih SATU topik paling menarik terkait 'Web3', dan membuat draf tweet yang informatif dalam Bahasa Indonesia. Pastikan tweet diakhiri dengan tagar #Web3. Jawab HANYA dengan draf tweet, tanpa pengantar apa pun.
 ```
+
+- **Bisa kamu sesuaikan sendiri**
 
 ---
 
