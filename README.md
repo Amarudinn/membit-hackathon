@@ -129,11 +129,11 @@ Tunggu sekitar satu menit. n8n sekarang dapat diakses di `http://IP_VPS_ANDA:567
 
 Setelah Anda membuat akun admin di n8n, ikuti langkah-langkah ini.
 
+### 1. Install Node Membit (MCP Client)
+
 Akses halaman Community Nodes di: `http://YOUR_IP_VPS:5678/settings/community-nodes`
 
 ![Community Nodes](images/Community-Nodes.png)
-
-### 1. Install Node Membit (MCP Client)
 
 - Buka **Settings** ⚙️ (ikon roda gigi di kiri).
 - Buka **Community Nodes**.
@@ -148,7 +148,7 @@ Daripada mengimpor JSON, bangun alur kerja secara manual untuk memastikan kompat
 
 - Klik **+** (pojok kanan atas) untuk menambahkan node.
 - Tambahkan 5 node ini ke kanvas Anda:
-  - **Jalankan Setiap Jam** (Schedule)
+  - **Schedule**
   - **AI Agent**
   - **Google Gemini Chat Model**
   - **MCP Client**
@@ -158,7 +158,7 @@ Daripada mengimpor JSON, bangun alur kerja secara manual untuk memastikan kompat
 
 Tarik panah untuk membuat koneksi berikut:
 
-- **Jalankan Setiap Jam** ➔ ke input utama **AI Agent**
+- **Schedule** ➔ ke input utama **AI Agent**
 - **Google Gemini Chat Model** ➔ ke input **Chat Model*** di **AI Agent**
 - **MCP Client** ➔ ke input **Tool** di **AI Agent**
 - **AI Agent** ➔ ke input utama **Create Tweet**
@@ -176,15 +176,44 @@ Klik pada setiap node untuk menghilangkan tanda peringatan (🔺).
 
 ### 2. MCP Client
 
-- **Credential:** Masukkan API Key Membit Anda.
+- **Endpoint:** `https://mcp.membit.ai/mcp`
+- **Server Transport:** HTTP Streamable
+- **Authentication:** Header Auth
+- **Header Auth:**
+  - **Name:** `X-Membit-Api-Key`
+  - **Value:** `YOUR_API_MEMBIT`
+- **Tools to Include:** All
 
 ### 3. Create Tweet
 
 **Credential to connect with:**
 
-**PENTING:** Jangan gunakan X account bawaan. Klik **Create New**.
+Klik **Create New** dan copy OAuth Redirect URL:
 
-Ikuti instruksi untuk membuat Aplikasi kustom Anda sendiri di Twitter Developer Portal. Ini mengharuskan Anda memasukkan Client ID dan Client Secret dari aplikasi Anda.
+```
+http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback
+```
+
+#### Pergi ke [Developer Portal](https://developer.twitter.com/)
+
+- Buat app baru
+- **App permissions:** pilih **Read and write**
+- **Type of App:** pilih **Web App, Automated App or Bot**
+- **App info:**
+
+![Developer Portal App Info](images/Developer-App-Info.png)
+
+- Paste OAuth Redirect URL `http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback` di **Callback URI / Redirect URL**
+- **Website URL:** isi bebas
+- Sisanya kosongkan tidak masalah
+- Klik **Save**
+- Nanti akan muncul **Client ID** & **Client Secret**
+- Copy Paste ke Workflow Create Tweet:
+
+![Workflow Create Tweet](images/Workflow-Create-Tweet.png)
+
+- Klik **Connect my account** (X)
+- Klik **Save**
 
 **Text:** Masukkan ekspresi ini untuk mengambil output dari AI Agent:
 
@@ -216,4 +245,4 @@ Jika sudah berhasil:
 - Klik **Save** (pojok kanan atas) untuk menyimpan alur kerja.
 - Klik toggle **"Inactive"** (di sebelah "Save") untuk mengubahnya menjadi **"Active"**.
 
-**Selesai!** Alur kerja Anda sekarang akan berjalan secara otomatis sesuai jadwal di node "Jalankan Setiap Jam".
+**Selesai!** Alur kerja Anda sekarang akan berjalan secara otomatis sesuai jadwal di node "Schedule".
