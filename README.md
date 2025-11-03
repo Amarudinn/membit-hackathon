@@ -129,6 +129,10 @@ Tunggu sekitar satu menit. n8n sekarang dapat diakses di `http://IP_VPS_ANDA:567
 
 Setelah Anda membuat akun admin di n8n, ikuti langkah-langkah ini.
 
+Akses halaman Community Nodes di: `http://YOUR_IP_VPS:5678/settings/community-nodes`
+
+![Community Nodes](images/Community-Nodes.png)
+
 ### 1. Install Node Membit (MCP Client)
 
 - Buka **Settings** ⚙️ (ikon roda gigi di kiri).
