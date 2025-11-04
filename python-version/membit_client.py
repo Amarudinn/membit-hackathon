@@ -50,32 +50,10 @@ class MembitClient:
                         continue
         return result if result else {}
     
-    def get_trending_topics(self, limit=10):
-        """Get trending topics from Membit"""
+    def get_trending_topics(self, query="Web3", limit=10):
+        """Get trending topics from Membit using clusters_search"""
         try:
-            # First, try to list available tools
-            tools_response = self.list_tools()
-            
-            # Get the first available tool or use a default method
-            available_tools = tools_response.get('result', {}).get('tools', [])
-            
-            if not available_tools:
-                # If no tools listed, try direct call
-                return self._call_trending_api()
-            
-            # Use the first tool that seems related to trending/topics
-            tool_name = None
-            for tool in available_tools:
-                tool_name = tool.get('name', '')
-                if any(keyword in tool_name.lower() for keyword in ['trend', 'topic', 'news', 'feed', 'get']):
-                    break
-            
-            if not tool_name and available_tools:
-                tool_name = available_tools[0].get('name')
-            
-            print(f"Using tool: {tool_name}")
-            
-            # Call the tool
+            # Use clusters_search tool (recommended for trending discussions)
             response = requests.post(
                 self.endpoint,
                 headers=self.headers,
@@ -84,8 +62,11 @@ class MembitClient:
                     "id": 2,
                     "method": "tools/call",
                     "params": {
-                        "name": tool_name,
-                        "arguments": {}
+                        "name": "clusters_search",
+                        "arguments": {
+                            "q": query,
+                            "limit": limit
+                        }
                     }
                 },
                 timeout=30,
@@ -104,30 +85,95 @@ class MembitClient:
         except requests.exceptions.RequestException as e:
             raise Exception(f"Failed to fetch Membit data: {str(e)}")
     
-    def _call_trending_api(self):
-        """Fallback method to call trending API directly"""
-        response = requests.post(
-            self.endpoint,
-            headers=self.headers,
-            json={
-                "jsonrpc": "2.0",
-                "id": 2,
-                "method": "tools/call",
-                "params": {
-                    "name": "get_trending",
-                    "arguments": {}
-                }
-            },
-            timeout=30,
-            stream=True
-        )
-        response.raise_for_status()
-        data = self._parse_sse_response(response)
-        
-        if data.get('result'):
-            return self._format_trending_data(data['result'])
-        
-        return "No trending data available"
+    def search_clusters(self, query, limit=10):
+        """Search trending clusters by query"""
+        try:
+            response = requests.post(
+                self.endpoint,
+                headers=self.headers,
+                json={
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "clusters_search",
+                        "arguments": {
+                            "q": query,
+                            "limit": limit
+                        }
+                    }
+                },
+                timeout=30,
+                stream=True
+            )
+            response.raise_for_status()
+            data = self._parse_sse_response(response)
+            
+            if data.get('result'):
+                return self._format_trending_data(data['result'])
+            return "No data available"
+        except Exception as e:
+            raise Exception(f"Failed to search clusters: {str(e)}")
+    
+    def get_cluster_info(self, label, limit=10):
+        """Get detailed info about a specific cluster"""
+        try:
+            response = requests.post(
+                self.endpoint,
+                headers=self.headers,
+                json={
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "clusters_info",
+                        "arguments": {
+                            "label": label,
+                            "limit": limit
+                        }
+                    }
+                },
+                timeout=30,
+                stream=True
+            )
+            response.raise_for_status()
+            data = self._parse_sse_response(response)
+            
+            if data.get('result'):
+                return self._format_trending_data(data['result'])
+            return "No data available"
+        except Exception as e:
+            raise Exception(f"Failed to get cluster info: {str(e)}")
+    
+    def search_posts(self, query, limit=10):
+        """Search raw social posts"""
+        try:
+            response = requests.post(
+                self.endpoint,
+                headers=self.headers,
+                json={
+                    "jsonrpc": "2.0",
+                    "id": 5,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "posts_search",
+                        "arguments": {
+                            "q": query,
+                            "limit": limit
+                        }
+                    }
+                },
+                timeout=30,
+                stream=True
+            )
+            response.raise_for_status()
+            data = self._parse_sse_response(response)
+            
+            if data.get('result'):
+                return self._format_trending_data(data['result'])
+            return "No data available"
+        except Exception as e:
+            raise Exception(f"Failed to search posts: {str(e)}")
     
     def _format_trending_data(self, data):
         """Format trending data for better readability"""
