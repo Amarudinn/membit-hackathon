@@ -4,12 +4,6 @@ Bot Twitter otomatis dengan web dashboard yang modern untuk posting tweet berdas
 
 ## ✨ Fitur Utama
 
-### 🎨 Dashboard Modern
-- UI dark mode yang elegan
-- Real-time updates via WebSocket
-- Responsive design (desktop, tablet, mobile)
-- Gradient background & smooth animations
-
 ### 🎮 Control Panel
 - **Start Bot** - Jalankan bot dengan scheduler otomatis
 - **Stop Bot** - Hentikan bot (langsung responsive)
@@ -55,7 +49,7 @@ Bot Twitter otomatis dengan web dashboard yang modern untuk posting tweet berdas
 
 **📖 Panduan Setup Twitter API:** Lihat [TWITTER_SETUP.md](TWITTER_SETUP.md) untuk langkah lengkap.
 
-**⚠️ Twitter Rate Limits:** Lihat [TWITTER_RATE_LIMITS.md](../TWITTER_RATE_LIMITS.md) untuk info penting tentang batasan API.
+**⚠️ Twitter Rate Limits:** Lihat [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) untuk info penting tentang batasan API.
 
 ## 🚀 Quick Start
 
