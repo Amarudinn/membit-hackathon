@@ -41,7 +41,7 @@ Bot Twitter otomatis dengan web dashboard yang modern untuk posting tweet berdas
 ### API Keys
 - **Membit API Key** - [Daftar di sini](https://membit.ai/integration)
 - **Google Gemini API Key** - [Daftar di sini](https://aistudio.google.com/app/apikey)
-- **Twitter API Credentials** - [Developer Portal](https://developer.twitter.com/en/portal/dashboard)
+- **Twitter API Credentials** - [Developer Portal](https://developer.twitter.com)
   - API Key (Consumer Key)
   - API Secret (Consumer Secret)
   - Access Token
@@ -53,19 +53,25 @@ Bot Twitter otomatis dengan web dashboard yang modern untuk posting tweet berdas
 
 ## 🚀 Quick Start
 
-### 1. Masuk ke Folder Web Version
+### 1. Clone
+
+```bash
+git clone https://github.com/Amarudinn/membit-hackathon.git
+```
+
+### 2. Masuk ke Folder Web Version
 
 ```bash
 cd web-version
 ```
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Setup Environment Variables
+### 4. Setup Environment Variables
 
 Copy file `.env.example` menjadi `.env`:
 
@@ -293,7 +299,7 @@ Click tombol **"📖 Panduan"** untuk akses:
 1. Stop bot
 2. Tunggu 15 menit
 3. Adjust schedule: Settings → Configuration → Schedule Hours = 6 atau lebih
-4. Baca [TWITTER_RATE_LIMITS.md](../TWITTER_RATE_LIMITS.md) untuk detail
+4. Baca [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) untuk detail
 
 ### Port 5000 Already in Use
 
@@ -344,99 +350,239 @@ sudo ufw allow 5000
 
 ## 🚀 Deploy ke Production
 
-### Menggunakan Gunicorn (Linux)
+### 💻 Windows Installation
 
-Install Gunicorn:
+#### Prerequisites
+```powershell
+# Install Python 3.8+ dari https://www.python.org/downloads/
+# Pastikan "Add Python to PATH" dicentang saat install
+```
+
+#### Installation Steps
+
+1. **Clone Repository**
+   ```powershell
+   git clone https://github.com/your-repo/twitter-bot.git
+   cd twitter-bot\web-version
+   ```
+
+2. **Create Virtual Environment**
+   ```powershell
+   python -m venv venv
+   .\venv\Scripts\activate
+   ```
+
+3. **Install Dependencies**
+   ```powershell
+   pip install -r requirements.txt
+   ```
+
+4. **Setup Environment**
+   ```powershell
+   copy .env.example .env
+   notepad .env
+   ```
+   Isi semua API keys di file `.env`
+
+5. **Run Bot**
+   ```powershell
+   python app.py
+   ```
+
+6. **Access Dashboard**
+   - Buka browser: `http://localhost:5000`
+
+#### Run as Windows Service (Optional)
+
+**Using NSSM (Non-Sucking Service Manager):**
+
+1. Download NSSM dari https://nssm.cc/download
+2. Extract dan buka Command Prompt as Administrator
+3. Install service:
+   ```powershell
+   cd C:\path\to\nssm\win64
+   nssm install TwitterBot "C:\path\to\python.exe" "C:\path\to\web-version\app.py"
+   nssm set TwitterBot AppDirectory "C:\path\to\web-version"
+   nssm start TwitterBot
+   ```
+
+**Manage Service:**
+```powershell
+# Start service
+nssm start TwitterBot
+
+# Stop service
+nssm stop TwitterBot
+
+# Remove service
+nssm remove TwitterBot confirm
+```
+
+### 🐧 VPS Linux Ubuntu Installation
+
+#### Prerequisites
+```bash
+# Update system
+sudo apt update && sudo apt upgrade -y
+
+# Install Python 3 and pip
+sudo apt install python3 python3-pip python3-venv git -y
+```
+
+#### Installation Steps
+
+1. **Clone Repository**
+   ```bash
+   cd /opt
+   sudo git clone https://github.com/your-repo/twitter-bot.git
+   cd twitter-bot/web-version
+   ```
+
+2. **Create Virtual Environment**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Setup Environment**
+   ```bash
+   cp .env.example .env
+   nano .env
+   ```
+   Isi semua API keys, lalu save (Ctrl+X, Y, Enter)
+
+5. **Test Run**
+   ```bash
+   python app.py
+   ```
+   Akses dari browser: `http://your-server-ip:5000`
+
+#### Setup Systemd Service
+
+1. **Create Service File**
+   ```bash
+   sudo nano /etc/systemd/system/twitter-bot.service
+   ```
+
+2. **Add Configuration**
+   ```ini
+   [Unit]
+   Description=Twitter Bot Web Dashboard
+   After=network.target
+
+   [Service]
+   Type=simple
+   User=www-data
+   WorkingDirectory=/opt/twitter-bot/web-version
+   Environment="PATH=/opt/twitter-bot/web-version/venv/bin"
+   ExecStart=/opt/twitter-bot/web-version/venv/bin/python app.py
+   Restart=always
+   RestartSec=10
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+3. **Enable and Start Service**
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable twitter-bot
+   sudo systemctl start twitter-bot
+   ```
+
+4. **Check Status**
+   ```bash
+   sudo systemctl status twitter-bot
+   ```
+
+5. **View Logs**
+   ```bash
+   sudo journalctl -u twitter-bot -f
+   ```
+
+#### Setup Nginx Reverse Proxy
+
+1. **Install Nginx**
+   ```bash
+   sudo apt install nginx -y
+   ```
+
+2. **Create Nginx Config**
+   ```bash
+   sudo nano /etc/nginx/sites-available/twitter-bot
+   ```
+
+3. **Add Configuration**
+   ```nginx
+   server {
+       listen 80;
+       server_name your-domain.com;
+
+       location / {
+           proxy_pass http://127.0.0.1:5000;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection "upgrade";
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+       }
+   }
+   ```
+
+4. **Enable Site**
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/twitter-bot /etc/nginx/sites-enabled/
+   sudo nginx -t
+   sudo systemctl restart nginx
+   ```
+
+5. **Setup SSL with Let's Encrypt (Optional)**
+   ```bash
+   sudo apt install certbot python3-certbot-nginx -y
+   sudo certbot --nginx -d your-domain.com
+   ```
+
+#### Firewall Configuration
 
 ```bash
-pip install gunicorn eventlet
+# Allow SSH
+sudo ufw allow 22/tcp
+
+# Allow HTTP & HTTPS
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Enable firewall
+sudo ufw enable
+sudo ufw status
 ```
 
-Jalankan:
+#### Useful Commands
 
 ```bash
-gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:5000 app:app
-```
+# Restart bot
+sudo systemctl restart twitter-bot
 
-### Menggunakan Nginx Reverse Proxy
+# Stop bot
+sudo systemctl stop twitter-bot
 
-Config Nginx (`/etc/nginx/sites-available/twitter-bot`):
+# View logs
+sudo journalctl -u twitter-bot -f
 
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com;
+# Check status
+sudo systemctl status twitter-bot
 
-    location / {
-        proxy_pass http://127.0.0.1:5000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
-
-### Menggunakan Docker
-
-Buat `Dockerfile`:
-
-```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
-
-# Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy source code
-COPY . .
-
-# Expose port
-EXPOSE 5000
-
-# Run app
-CMD ["python", "app.py"]
-```
-
-Build dan run:
-
-```bash
-docker build -t twitter-bot-web .
-docker run -d -p 5000:5000 --env-file .env --name twitter-bot-web twitter-bot-web
-```
-
-### Menggunakan systemd
-
-Buat file `/etc/systemd/system/twitter-bot-web.service`:
-
-```ini
-[Unit]
-Description=Twitter Bot Web Dashboard
-After=network.target
-
-[Service]
-Type=simple
-User=your_user
-WorkingDirectory=/path/to/web-version
-Environment="PATH=/usr/bin:/usr/local/bin"
-ExecStart=/usr/bin/python3 app.py
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Enable dan jalankan:
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable twitter-bot-web
-sudo systemctl start twitter-bot-web
-sudo systemctl status twitter-bot-web
+# Update bot
+cd /opt/twitter-bot
+sudo git pull
+sudo systemctl restart twitter-bot
 ```
 
 ## 🔒 Security Tips

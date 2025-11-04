@@ -102,7 +102,6 @@ Total Tweets/Hari = (24 / SCHEDULE_HOURS) + Manual Tweets
 
 ### Langkah 1: Stop Bot
 - **Web Version:** Click tombol "Stop Bot"
-- **Terminal Version:** Tekan `Ctrl+C`
 
 ### Langkah 2: Tunggu 15 Menit
 Jangan coba posting lagi sampai rate limit reset (15 menit).
@@ -118,11 +117,6 @@ Jika sering kena limit, naikkan `SCHEDULE_HOURS`:
 2. Tab "Configuration"  
 3. Ubah `Schedule Hours` menjadi 6 atau lebih
 4. Click "Save All Settings"
-
-**Terminal Version:**
-1. Edit file `.env`
-2. Ubah `SCHEDULE_HOURS=6`
-3. Save file
 
 ### Langkah 5: Restart Bot
 Setelah 15 menit dan adjust schedule, restart bot.
