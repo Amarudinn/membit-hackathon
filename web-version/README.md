@@ -245,25 +245,6 @@ Click tombol **"📖 Panduan"** untuk akses:
 - `{trending_data}` - Data tren dari Membit
 - `{max_tweet_length}` - Panjang maksimal tweet
 
-## 🔌 API Endpoints
-
-### WebSocket Events
-
-**Client → Server:**
-| Event | Description |
-|-------|-------------|
-| `connect` | Client connected (auto-send status & logs) |
-| `start_bot` | Start the bot with scheduler |
-| `stop_bot` | Stop the bot (responsive, max 1s) |
-| `run_once` | Run single tweet generation |
-
-**Server → Client:**
-| Event | Data | Description |
-|-------|------|-------------|
-| `log` | `{message, level, timestamp}` | Log message (real-time) |
-| `status_update` | `{running, last_run, next_run, stats}` | Bot status update |
-| `error` | `{message}` | Error message |
-
 ## 🐛 Troubleshooting
 
 ### Bot Tidak Bisa Start
@@ -347,87 +328,6 @@ sudo ufw allow 5000
 2. Pastikan ada `{max_tweet_length}` di prompt
 3. Tambahkan instruksi "MAKSIMAL {max_tweet_length} karakter"
 4. Save settings
-
-## 🚀 Deploy ke Production
-
-### 💻 Windows Installation
-
-#### Prerequisites
-```powershell
-# Install Python 3.8+ dari https://www.python.org/downloads/
-# Pastikan "Add Python to PATH" dicentang saat install
-```
-
-#### Installation Steps
-
-1. **Clone Repository**
-   ```powershell
-   git clone https://github.com/Amarudinn/membit-hackathon.git
-   cd membit-hackathon/web-version
-   ```
-
-2. **Install Dependencies**
-   ```powershell
-   pip install -r requirements.txt
-   ```
-
-3. **Setup Environment**
-   ```powershell
-   copy .env.example .env
-   notepad .env
-   ```
-   Isi semua API keys di file `.env`
-
-4. **Run Bot**
-   ```powershell
-   python app.py
-   ```
-
-5. **Access Dashboard**
-   - Buka browser: `http://localhost:5000`
-
-### 🐧 VPS Linux Ubuntu Installation
-
-#### Prerequisites
-```bash
-# Update system
-apt update && apt upgrade -y
-
-# Install Python 3 and pip
-apt install python3 python3-pip python3-venv git -y
-```
-
-#### Installation Steps
-
-1. **Clone Repository**
-   ```bash
-   git clone https://github.com/Amarudinn/membit-hackathon.git
-   cd membit-hackathon/web-version
-   ```
-
-2. **Create Virtual Environment**
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-
-3. **Install Dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Setup Environment**
-   ```bash
-   cp .env.example .env
-   nano .env
-   ```
-   Isi semua API keys, lalu save (Ctrl+X, Y, Enter)
-
-5. **Test Run**
-   ```bash
-   python app.py
-   ```
-   Akses dari browser: `http://YOUR_IP_VPS:5000`
 
 ## 🤝 Contributing
 

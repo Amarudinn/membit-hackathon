@@ -6,11 +6,11 @@ Proyek ini menjelaskan cara menginstal n8n di VPS, dan mengonfigurasi alur kerja
 
 Proyek ini tersedia dalam 3 versi berbeda:
 
-| Versi | Deskripsi | Cocok Untuk |
+| Versi | Deskripsi |
 |-------|-----------|-------------|
-| **[n8n Version](.)** | Visual workflow dengan n8n | Yang suka no-code/low-code |
-| **[Python Terminal](python-version/)** | CLI dengan tampilan terminal cantik | Developer yang suka terminal |
-| **[Web Dashboard](web-version/)** | Dashboard web dengan UI modern | Yang ingin kontrol via browser |
+| **[n8n Version](.)** | n8n
+| **[Python Terminal](python-version/)** | CLI
+| **[Web Dashboard](web-version/)** | Dashboard web
 
 ## 📋 Prasyarat
 
@@ -24,12 +24,6 @@ Sebelum memulai, pastikan Anda memiliki:
 ## ⚠️ PENTING: Twitter Rate Limits
 
 **Baca dokumentasi ini sebelum menjalankan bot:** [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md)
-
-Twitter API Free Tier memiliki batasan:
-- 📊 **50 tweets per 24 jam**
-- 📅 **1,500 tweets per bulan**
-
-**Rekomendasi:** Set `SCHEDULE_HOURS=6` (4 tweets/hari) untuk menghindari rate limit dan suspend.
 
 ---
 
