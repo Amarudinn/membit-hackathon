@@ -122,8 +122,8 @@ Tekan `Ctrl+C` untuk menghentikan bot dengan graceful shutdown.
 
 ```env
 SCHEDULE_HOURS=6        # Post setiap 6 jam
-MAX_RETRIES=5           # Retry sampai 5x
-MAX_TWEET_LENGTH=200    # Tweet maksimal 200 karakter
+MAX_RETRIES=3           # Retry sampai 3x
+MAX_TWEET_LENGTH=250    # Tweet maksimal 250 karakter
 ```
 
 ### Mengubah Prompt AI
