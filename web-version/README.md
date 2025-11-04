@@ -362,80 +362,47 @@ sudo ufw allow 5000
 
 1. **Clone Repository**
    ```powershell
-   git clone https://github.com/your-repo/twitter-bot.git
-   cd twitter-bot\web-version
+   git clone https://github.com/Amarudinn/membit-hackathon.git
+   cd membit-hackathon/web-version
    ```
 
-2. **Create Virtual Environment**
-   ```powershell
-   python -m venv venv
-   .\venv\Scripts\activate
-   ```
-
-3. **Install Dependencies**
+2. **Install Dependencies**
    ```powershell
    pip install -r requirements.txt
    ```
 
-4. **Setup Environment**
+3. **Setup Environment**
    ```powershell
    copy .env.example .env
    notepad .env
    ```
    Isi semua API keys di file `.env`
 
-5. **Run Bot**
+4. **Run Bot**
    ```powershell
    python app.py
    ```
 
-6. **Access Dashboard**
+5. **Access Dashboard**
    - Buka browser: `http://localhost:5000`
-
-#### Run as Windows Service (Optional)
-
-**Using NSSM (Non-Sucking Service Manager):**
-
-1. Download NSSM dari https://nssm.cc/download
-2. Extract dan buka Command Prompt as Administrator
-3. Install service:
-   ```powershell
-   cd C:\path\to\nssm\win64
-   nssm install TwitterBot "C:\path\to\python.exe" "C:\path\to\web-version\app.py"
-   nssm set TwitterBot AppDirectory "C:\path\to\web-version"
-   nssm start TwitterBot
-   ```
-
-**Manage Service:**
-```powershell
-# Start service
-nssm start TwitterBot
-
-# Stop service
-nssm stop TwitterBot
-
-# Remove service
-nssm remove TwitterBot confirm
-```
 
 ### 🐧 VPS Linux Ubuntu Installation
 
 #### Prerequisites
 ```bash
 # Update system
-sudo apt update && sudo apt upgrade -y
+apt update && apt upgrade -y
 
 # Install Python 3 and pip
-sudo apt install python3 python3-pip python3-venv git -y
+apt install python3 python3-pip python3-venv git -y
 ```
 
 #### Installation Steps
 
 1. **Clone Repository**
    ```bash
-   cd /opt
-   sudo git clone https://github.com/your-repo/twitter-bot.git
-   cd twitter-bot/web-version
+   git clone https://github.com/Amarudinn/membit-hackathon.git
+   cd membit-hackathon/web-version
    ```
 
 2. **Create Virtual Environment**
@@ -460,138 +427,7 @@ sudo apt install python3 python3-pip python3-venv git -y
    ```bash
    python app.py
    ```
-   Akses dari browser: `http://your-server-ip:5000`
-
-#### Setup Systemd Service
-
-1. **Create Service File**
-   ```bash
-   sudo nano /etc/systemd/system/twitter-bot.service
-   ```
-
-2. **Add Configuration**
-   ```ini
-   [Unit]
-   Description=Twitter Bot Web Dashboard
-   After=network.target
-
-   [Service]
-   Type=simple
-   User=www-data
-   WorkingDirectory=/opt/twitter-bot/web-version
-   Environment="PATH=/opt/twitter-bot/web-version/venv/bin"
-   ExecStart=/opt/twitter-bot/web-version/venv/bin/python app.py
-   Restart=always
-   RestartSec=10
-
-   [Install]
-   WantedBy=multi-user.target
-   ```
-
-3. **Enable and Start Service**
-   ```bash
-   sudo systemctl daemon-reload
-   sudo systemctl enable twitter-bot
-   sudo systemctl start twitter-bot
-   ```
-
-4. **Check Status**
-   ```bash
-   sudo systemctl status twitter-bot
-   ```
-
-5. **View Logs**
-   ```bash
-   sudo journalctl -u twitter-bot -f
-   ```
-
-#### Setup Nginx Reverse Proxy
-
-1. **Install Nginx**
-   ```bash
-   sudo apt install nginx -y
-   ```
-
-2. **Create Nginx Config**
-   ```bash
-   sudo nano /etc/nginx/sites-available/twitter-bot
-   ```
-
-3. **Add Configuration**
-   ```nginx
-   server {
-       listen 80;
-       server_name your-domain.com;
-
-       location / {
-           proxy_pass http://127.0.0.1:5000;
-           proxy_http_version 1.1;
-           proxy_set_header Upgrade $http_upgrade;
-           proxy_set_header Connection "upgrade";
-           proxy_set_header Host $host;
-           proxy_set_header X-Real-IP $remote_addr;
-           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-           proxy_set_header X-Forwarded-Proto $scheme;
-       }
-   }
-   ```
-
-4. **Enable Site**
-   ```bash
-   sudo ln -s /etc/nginx/sites-available/twitter-bot /etc/nginx/sites-enabled/
-   sudo nginx -t
-   sudo systemctl restart nginx
-   ```
-
-5. **Setup SSL with Let's Encrypt (Optional)**
-   ```bash
-   sudo apt install certbot python3-certbot-nginx -y
-   sudo certbot --nginx -d your-domain.com
-   ```
-
-#### Firewall Configuration
-
-```bash
-# Allow SSH
-sudo ufw allow 22/tcp
-
-# Allow HTTP & HTTPS
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-
-# Enable firewall
-sudo ufw enable
-sudo ufw status
-```
-
-#### Useful Commands
-
-```bash
-# Restart bot
-sudo systemctl restart twitter-bot
-
-# Stop bot
-sudo systemctl stop twitter-bot
-
-# View logs
-sudo journalctl -u twitter-bot -f
-
-# Check status
-sudo systemctl status twitter-bot
-
-# Update bot
-cd /opt/twitter-bot
-sudo git pull
-sudo systemctl restart twitter-bot
-```
-
-## 🔒 Security Tips
-
-1. **Change SECRET_KEY** - Gunakan secret key yang kuat
-2. **Use HTTPS** - Deploy dengan SSL certificate
-3. **Add Authentication** - Tambahkan login jika deploy public
-4. **Firewall** - Batasi akses ke port tertentu
-5. **Environment Variables** - Jangan commit `.env` ke git
+   Akses dari browser: `http://YOUR_IP_VPS:5000`
 
 ## 🤝 Contributing
 

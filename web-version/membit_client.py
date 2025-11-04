@@ -50,32 +50,10 @@ class MembitClient:
                         continue
         return result if result else {}
     
-    def get_trending_topics(self, limit=10):
-        """Get trending topics from Membit"""
+    def get_trending_topics(self, query="Web3", limit=10):
+        """Get trending topics from Membit using clusters_search"""
         try:
-            # First, try to list available tools
-            tools_response = self.list_tools()
-            
-            # Get the first available tool or use a default method
-            available_tools = tools_response.get('result', {}).get('tools', [])
-            
-            if not available_tools:
-                # If no tools listed, try direct call
-                return self._call_trending_api()
-            
-            # Use the first tool that seems related to trending/topics
-            tool_name = None
-            for tool in available_tools:
-                tool_name = tool.get('name', '')
-                if any(keyword in tool_name.lower() for keyword in ['trend', 'topic', 'news', 'feed', 'get']):
-                    break
-            
-            if not tool_name and available_tools:
-                tool_name = available_tools[0].get('name')
-            
-            print(f"Using tool: {tool_name}")
-            
-            # Call the tool
+            # Use clusters_search tool (recommended for trending discussions)
             response = requests.post(
                 self.endpoint,
                 headers=self.headers,
@@ -84,8 +62,11 @@ class MembitClient:
                     "id": 2,
                     "method": "tools/call",
                     "params": {
-                        "name": tool_name,
-                        "arguments": {}
+                        "name": "clusters_search",
+                        "arguments": {
+                            "q": query,
+                            "limit": limit
+                        }
                     }
                 },
                 timeout=30,

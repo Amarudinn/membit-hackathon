@@ -86,4 +86,4 @@ Access Token Secret:  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 **🎉 Selamat! Bot Anda siap digunakan!**
 
-Jika ada masalah, baca troubleshooting di atas atau cek dokumentasi lengkap di [README.md](README.md).
+Jika ada masalah, baca dokumentasi lengkap di [README.md](README.md).

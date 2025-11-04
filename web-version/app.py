@@ -103,20 +103,20 @@ def create_and_post_tweet():
     max_retries = int(os.getenv('MAX_RETRIES', 3))
     max_tweet_length = int(os.getenv('MAX_TWEET_LENGTH', 250))
     
-    emit_log('🚀 Starting tweet generation...', 'info')
+    emit_log('Starting tweet generation...', 'info')
     
     for attempt in range(max_retries):
         # Check if bot was stopped
         if stop_scheduler:
-            emit_log('🛑 Bot stopped, cancelling tweet generation', 'warning')
+            emit_log('Bot stopped, cancelling tweet generation', 'warning')
             return
         
         try:
             if attempt > 0:
-                emit_log(f'🔄 Retry attempt {attempt + 1}/{max_retries}', 'warning')
+                emit_log(f'Retry attempt {attempt + 1}/{max_retries}', 'warning')
             
             # Initialize clients
-            emit_log('🔧 Initializing clients...', 'info')
+            emit_log('Initializing clients...', 'info')
             
             # Debug: Check if API keys are loaded
             gemini_key = os.getenv('GEMINI_API_KEY')
@@ -134,20 +134,20 @@ def create_and_post_tweet():
             
             # Check if bot was stopped
             if stop_scheduler:
-                emit_log('🛑 Bot stopped, cancelling tweet generation', 'warning')
+                emit_log('Bot stopped, cancelling tweet generation', 'warning')
                 return
             
             # Get trending data
-            emit_log('📊 Fetching trending data from Membit...', 'info')
+            emit_log('Fetching trending data from Membit...', 'info')
             trending_data = membit.get_trending_topics()
             
             # Check if bot was stopped
             if stop_scheduler:
-                emit_log('🛑 Bot stopped, cancelling tweet generation', 'warning')
+                emit_log('Bot stopped, cancelling tweet generation', 'warning')
                 return
             
             # Generate tweet
-            emit_log('🤖 Generating tweet with Gemini AI...', 'info')
+            emit_log('Generating tweet with Gemini AI...', 'info')
             
             # Use custom prompt template from config
             prompt_template = bot_config.get('prompt_template', '')
@@ -157,7 +157,7 @@ def create_and_post_tweet():
             
             # Validate prompt template
             if '{max_tweet_length}' not in prompt_template:
-                emit_log('⚠️ Warning: Prompt template missing {max_tweet_length} variable. Gemini may generate long tweets.', 'warning')
+                emit_log('Warning: Prompt template missing {max_tweet_length} variable. Gemini may generate long tweets.', 'warning')
             
             # Format prompt with variables
             try:
@@ -168,25 +168,25 @@ def create_and_post_tweet():
             except KeyError as e:
                 raise Exception(f"Invalid prompt template. Missing variable: {e}")
             
-            emit_log(f'📝 Using custom prompt (template: {len(prompt_template)} chars, formatted: {len(prompt)} chars)', 'info')
+            emit_log(f'Using custom prompt (template: {len(prompt_template)} chars, formatted: {len(prompt)} chars)', 'info')
             
             tweet_text = gemini.generate_content(prompt)
             tweet_text = tweet_text.strip().strip('"').strip("'")
             
             # Validate length
             if len(tweet_text) > 280:
-                emit_log(f'⚠️ Tweet too long ({len(tweet_text)} chars), regenerating...', 'warning')
+                emit_log(f'Tweet too long ({len(tweet_text)} chars), regenerating...', 'warning')
                 continue
             
-            emit_log(f'📝 Generated tweet ({len(tweet_text)} chars): {tweet_text}', 'success')
+            emit_log(f'Generated tweet ({len(tweet_text)} chars): {tweet_text}', 'success')
             
             # Check if bot was stopped before posting
             if stop_scheduler:
-                emit_log('🛑 Bot stopped, cancelling tweet posting', 'warning')
+                emit_log('Bot stopped, cancelling tweet posting', 'warning')
                 return
             
             # Post tweet
-            emit_log('🐦 Posting to Twitter...', 'info')
+            emit_log('Posting to Twitter...', 'info')
             result = twitter.post_tweet(tweet_text)
             
             # Update status
@@ -200,13 +200,13 @@ def create_and_post_tweet():
                 'timestamp': bot_status['last_run']
             }
             
-            emit_log(f'✅ Tweet posted successfully! ID: {result.get("id")}', 'success')
+            emit_log(f'Tweet posted successfully! ID: {result.get("id")}', 'success')
             socketio.emit('status_update', bot_status)
             return
             
         except Exception as e:
             error_msg = str(e)
-            emit_log(f'❌ Error: {error_msg}', 'error')
+            emit_log(f'Error: {error_msg}', 'error')
             bot_status['error_count'] += 1
             bot_status['last_error'] = {
                 'message': error_msg,
@@ -218,11 +218,11 @@ def create_and_post_tweet():
                 # Sleep in small intervals to allow stopping
                 for _ in range(5):
                     if stop_scheduler:
-                        emit_log('🛑 Bot stopped during retry wait', 'warning')
+                        emit_log('Bot stopped during retry wait', 'warning')
                         return
                     time.sleep(1)
             else:
-                emit_log('🛑 Max retries reached. Giving up.', 'error')
+                emit_log('Max retries reached. Giving up.', 'error')
                 socketio.emit('status_update', bot_status)
                 return
 
@@ -243,7 +243,7 @@ def scheduler_loop():
         bot_status['next_run'] = datetime.fromtimestamp(next_run_time).strftime('%Y-%m-%d %H:%M:%S')
         socketio.emit('status_update', bot_status)
         
-        emit_log(f'⏰ Next run in {schedule_hours} hours', 'info')
+        emit_log(f'Next run in {schedule_hours} hours', 'info')
         
         # Sleep in small intervals to allow stopping
         for _ in range(schedule_hours * 3600):
@@ -318,7 +318,7 @@ def update_prompt():
         # Save to file for persistence
         save_prompt_config()
         
-        emit_log('📝 Prompt template updated and saved', 'success')
+        emit_log('Prompt template updated and saved', 'success')
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
@@ -496,7 +496,7 @@ def handle_run_once():
         emit('error', {'message': error_msg})
         return
     
-    emit_log('▶️ Running single tweet generation...', 'info')
+    emit_log('Running single tweet generation...', 'info')
     threading.Thread(target=create_and_post_tweet, daemon=True).start()
 
 @socketio.on('connect')

@@ -169,8 +169,6 @@
                         <button class="toggle-password" onclick="togglePassword('membitKey')">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <small style="color: #64748B;">Keys are stored securely and only visible when you click the eye
-                            icon</small>
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-brain"></i> Gemini API Key:</label>
@@ -245,17 +243,14 @@
                     <div class="form-group">
                         <label><i class="fas fa-clock"></i> Schedule (hours):</label>
                         <input type="number" id="scheduleHours" min="1" max="24" value="6">
-                        <small>How often the bot should post tweets</small>
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-redo"></i> Max Retries:</label>
                         <input type="number" id="maxRetries" min="1" max="10" value="3">
-                        <small>Number of retry attempts if posting fails</small>
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-ruler"></i> Max Tweet Length:</label>
                         <input type="number" id="maxLength" min="100" max="280" value="250">
-                        <small>Maximum characters for generated tweets</small>
                     </div>
                 </div>
 
@@ -292,12 +287,14 @@
                             </ul>
                             <p style="margin-top: 10px;"><strong>Contoh prompt yang baik:</strong></p>
                             <code
-                                style="display: block; padding: 10px; background: rgba(29, 161, 242, 0.1); border-radius: 5px; margin-top: 5px; white-space: pre-wrap;">Lihat data: {trending_data}
+                                style="display: block; padding: 10px; background: rgba(29, 161, 242, 0.1); border-radius: 5px; margin-top: 5px; white-space: pre-wrap;">Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit 
 
-Buat tweet MAKSIMAL {max_tweet_length} karakter tentang Web3.
+Lihat data: {trending_data}
+
+Buat tweet MAKSIMAL {max_tweet_length} karakter tentang sektor oracle.
 - Singkat dan menarik
-- Akhiri dengan #Web3
-- HANYA tweet, tanpa pengantar</code>
+- HANYA tweet, tanpa pengantar
+- Diakhir tambahkan #Oracle</code>
                         </div>
                     </div>
                 </div>
@@ -665,7 +662,7 @@ Buat tweet MAKSIMAL {max_tweet_length} karakter tentang Web3.
                                 <li>Generate Access Token & Secret</li>
                                 <li>Copy semua credentials (4 keys total)</li>
                             </ol>
-                            <p><strong>⚠️ Penting:</strong> Lihat file <code>TWITTER_SETUP.md</code> untuk panduan
+                            <p><strong>⚠️ Penting:</strong> Lihat file <a href="https://github.com/Amarudinn/membit-hackathon/blob/main/web-version/TWITTER_SETUP.md" target="_blank">TWITTER_SETUP.md</a> untuk panduan
                                 detail setup Twitter API.</p>
                         </div>
 
@@ -793,7 +790,8 @@ PENTING:
 
                         <ul>
                             <li>✅ <strong>Spesifik:</strong> Jelaskan format yang diinginkan</li>
-                            <li>✅ <strong>Batasan jelas:</strong> Sebutkan MAKSIMAL karakter <code>{max_tweet_length}</code></li>
+                            <li>✅ <strong>Batasan jelas:</strong> Sebutkan MAKSIMAL karakter
+                                <code>{max_tweet_length}</code></li>
                             <li>✅ <strong>Output only:</strong> Minta HANYA tweet, tanpa pengantar</li>
                             <li>✅ <strong>Style guide:</strong> Tentukan tone (formal/casual)</li>
                             <li>✅ <strong>Hashtag:</strong> Tentukan hashtag yang wajib ada</li>
@@ -980,7 +978,7 @@ PENTING:
                         <h3>📚 Resources Tambahan</h3>
 
                         <ul>
-                            <li><strong>README.md</strong> - Dokumentasi project lengkap</li>
+                            <li><a href="https://github.com/Amarudinn/membit-hackathon/blob/main/web-version/README.md" target="_blank">README.md</a> - Dokumentasi project lengkap</li>
                             <li><a href="https://developer.twitter.com/en/docs" target="_blank">Twitter API Docs</a> -
                                 Official documentation</li>
                             <li><a href="https://ai.google.dev/docs" target="_blank">Gemini API Docs</a> - Gemini
