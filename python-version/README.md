@@ -18,9 +18,9 @@ Bot Twitter otomatis versi CLI yang modern untuk posting tweet berdasarkan trend
   - Access Token
   - Access Token Secret
 
-**📖 Panduan Setup Twitter API:** Lihat [TWITTER_SETUP.md](TWITTER_SETUP.md) untuk langkah lengkap.
+**📖 Panduan Setup Twitter API:** Lihat [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md) untuk langkah lengkap.
   
-**⚠️ Twitter Rate Limits:** Lihat [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) untuk info penting tentang batasan API.
+**⚠️ Twitter Rate Limits:** Lihat [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md) untuk info penting tentang batasan API.
 
 ## 🚀 Quick Start
 
@@ -76,31 +76,23 @@ MAX_TWEET_LENGTH=250
 SECRET_KEY=your-secret-key-change-this-in-production
 ```
 
-### 4. Jalankan Bot
-
-```bash
-python main.py
-```
-
-Bot akan langsung menjalankan sekali, lalu otomatis berjalan setiap 6 jam.
-
 ## Cara Menddapatkan API Keys
 
 ### Membit API Key
 
-1. Daftar di [Membit.ai](https://membit.ai)
+1. Daftar di [Membit.ai](https://membit.ai/integration)
 2. Buat API Key di dashboard
 3. Copy API Key ke `.env`
 
 ### Google Gemini API Key
 
-1. Pergi ke [Google AI Studio](https://makersuite.google.com/app/apikey)
+1. Pergi ke [Google AI Studio](https://membit.ai/integration)
 2. Klik "Create API Key"
 3. Copy API Key ke `.env`
 
 ### Twitter API Credentials
 
-[TWITTER_SETUP.md](TWITTER_SETUP.md)
+[TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md)
 
 ## ▶️ Cara Menggunakan
 
@@ -109,6 +101,8 @@ Bot akan langsung menjalankan sekali, lalu otomatis berjalan setiap 6 jam.
 ```bash
 python main.py
 ```
+
+Bot akan langsung menjalankan sekali, lalu otomatis berjalan setiap 6 jam.
 
 ### Stop Bot
 
@@ -186,7 +180,7 @@ IMPORTANT:
 
 **Solusi:**
 - Cek `GEMINI_API_KEY` di file `.env`
-- Cek quota di [Google AI Studio](https://makersuite.google.com)
+- Cek quota di [Google AI Studio](https://membit.ai/integration)
 
 ### ❌ Error: "Failed to post tweet"
 
