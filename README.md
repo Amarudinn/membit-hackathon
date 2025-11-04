@@ -7,8 +7,7 @@ Proyek ini menjelaskan cara menginstal n8n di VPS, dan mengonfigurasi alur kerja
 Proyek ini tersedia dalam 3 versi berbeda:
 
 | Versi | Deskripsi |
-|-------|-----------|-------------|
-| **[n8n Version](.)** | n8n
+|-------|-----------|
 | **[Python Terminal](python-version/)** | CLI
 | **[Web Dashboard](web-version/)** | Dashboard web
 
@@ -23,7 +22,7 @@ Sebelum memulai, pastikan Anda memiliki:
 
 ## ⚠️ PENTING: Twitter Rate Limits
 
-**Baca dokumentasi ini sebelum menjalankan bot:** [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md)
+**Baca dokumentasi ini sebelum menjalankan bot:** [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md)
 
 ---
 
