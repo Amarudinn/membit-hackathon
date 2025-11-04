@@ -8,6 +8,7 @@ Proyek ini tersedia dalam 3 versi berbeda:
 
 | Versi | Deskripsi |
 |-------|-----------|
+| **[n8n Version](.)** | n8n
 | **[Python Terminal](python-version/)** | CLI
 | **[Web Dashboard](web-version/)** | Dashboard web
 
