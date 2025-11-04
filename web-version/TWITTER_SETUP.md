@@ -30,23 +30,23 @@ Panduan lengkap untuk mendapatkan Twitter API credentials.
 
 1. Klik pada icon Gear (⚙️) atau **App settings**
    
-   ![App Settings](images/App-Settings.png)
+   ![App Settings](/images/App-Settings.png)
 
 2. Pada bagian **Settings > User authentication not set up**, klik **Set Up**
    
-   ![Set Up](images/Developer-Set-Up.png)
+   ![Set Up](/images/Developer-Set-Up.png)
 
 3. Pada bagian **App permissions** ubah jadi **Read and write**
    
-   ![App Permissions](images/App-Permissions.png)
+   ![App Permissions](/images/App-Permissions.png)
 
 4. Pada bagian **Type of App** pilih **Web App, Automated App or Bot**
    
-   ![Type of App](images/Type-of-App.png)
+   ![Type of App](/images/Type-of-App.png)
 
 5. Pada bagian **App Info** isi bebas, contoh: `https://google.com`
    
-   ![App Info](images/App-Info.png)
+   ![App Info](/images/App-Info.png)
 
 6. Klik **Save**
 
