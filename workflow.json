@@ -1,0 +1,158 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit (yang tersedia sebagai \"Tool\"), memilih SATU topik paling menarik terkait 'Web3', dan membuat draf tweet yang informatif dalam Bahasa Indonesia. Pastikan tweet diakhiri dengan tagar #Web3. Jawab HANYA dengan draf tweet, tanpa pengantar apa pun.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1088,
+        144
+      ],
+      "id": "1a1bb82c-6b47-4d86-8f16-b1d299aca85b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 2,
+      "position": [
+        1376,
+        144
+      ],
+      "id": "8a638482-4619-4036-a7c4-cd353cec27b8",
+      "name": "Create Tweet",
+      "credentials": {
+        "twitterOAuth2Api": {
+          "id": "zS9GuzoN28RNYo5l",
+          "name": "X account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        336
+      ],
+      "id": "7e19ec49-38ce-43fc-b20b-be05eba4de42",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "wNWi1pxSBwILv9nM",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://mcp.membit.ai/mcp",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        336
+      ],
+      "id": "1a82defd-fbf5-4a9c-b008-8d34a7bfe1c2",
+      "name": "Membit MCP",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "5nIUauRysJOe6LtC",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "id": "fa300c6b-b32f-4190-813a-b3bd9aefd9ef",
+      "name": "6 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        928,
+        144
+      ],
+      "typeVersion": 1.2
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create Tweet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Membit MCP": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6 Hours": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "430905c9-7173-43ee-b5fe-9d26bf72734a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d77ba3f40116e2662afaf2a0740203216fb4d96ae571cd59ec2f5cf05bfaa28f"
+  },
+  "id": "hO1jLjyTXZTiSXdP",
+  "tags": []
+}

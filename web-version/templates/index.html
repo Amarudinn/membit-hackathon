@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Twitter Bot - Web Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-robot"></i> Membit x Gemini</h1>
+                <p>Powered by Membit API & Google Gemini AI</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-warning" onclick="openGuide()">
+                    <i class="fas fa-book"></i> Panduan
+                </button>
+                <button class="btn btn-secondary" onclick="openSettings()">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Control Panel -->
+            <div class="card control-panel">
+                <div class="control-panel-header">
+                    <h2><i class="fas fa-gamepad"></i> Control Panel</h2>
+                    <div class="status-indicator" id="statusIndicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Stopped</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-success" id="startBtn" onclick="startBot()" disabled
+                        title="Configure API keys in Settings first">
+                        <i class="fas fa-play"></i> Start Bot
+                    </button>
+                    <button class="btn btn-danger" id="stopBtn" onclick="stopBot()" disabled>
+                        <i class="fas fa-stop"></i> Stop Bot
+                    </button>
+                    <button class="btn btn-primary" id="runOnceBtn" onclick="runOnce()" disabled
+                        title="Configure API keys in Settings first">
+                        <i class="fas fa-forward"></i> Run Once
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-content">
+                        <h3 id="successCount">0</h3>
+                        <p>Successful Tweets</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon error"><i class="fas fa-exclamation-circle"></i></div>
+                    <div class="stat-content">
+                        <h3 id="errorCount">0</h3>
+                        <p>Errors</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon info"><i class="fas fa-hashtag"></i></div>
+                    <div class="stat-content">
+                        <h3 id="totalTweets">0</h3>
+                        <p>Total Tweets</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Config Display -->
+            <div class="card config-display">
+                <h2><i class="fas fa-info-circle"></i> Current Configuration</h2>
+                <div class="config-grid">
+                    <div class="config-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Schedule:</span>
+                        <strong id="displaySchedule">6</strong> hours
+                    </div>
+                    <div class="config-item">
+                        <i class="fas fa-redo"></i>
+                        <span>Max Retries:</span>
+                        <strong id="displayRetries">3</strong>
+                    </div>
+                    <div class="config-item">
+                        <i class="fas fa-ruler"></i>
+                        <span>Max Length:</span>
+                        <strong id="displayLength">250</strong> chars
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Tweet -->
+            <div class="card last-tweet" id="lastTweetCard" style="display: none;">
+                <h2>
+                    <svg viewBox="0 0 24 24" width="20" height="20"
+                        style="display: inline-block; vertical-align: middle; margin-right: 8px; fill: currentColor;">
+                        <path
+                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                    </svg>
+                    Last Tweet
+                </h2>
+                <div class="tweet-content">
+                    <p id="lastTweetText"></p>
+                    <div class="tweet-meta">
+                        <span id="lastTweetTime"></span>
+                        <a id="lastTweetLink" href="#" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="fas fa-external-link-alt"></i> View on Twitter
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs -->
+            <div class="card logs-panel">
+                <h2><i class="fas fa-terminal"></i> Activity Logs</h2>
+                <div class="logs-container" id="logsContainer">
+                    <div class="log-entry info">
+                        <span class="log-time">--:--:--</span>
+                        <span class="log-message">Waiting for connection...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Bot Settings</h2>
+                <button class="close-btn" onclick="closeSettings()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('api')">
+                        <i class="fas fa-key"></i> API Keys
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('config')">
+                        <i class="fas fa-sliders-h"></i> Configuration
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('prompt')">
+                        <i class="fas fa-edit"></i> Prompt
+                    </button>
+                </div>
+
+                <!-- API Keys Tab -->
+                <div id="apiTab" class="tab-content active">
+                    <div class="form-group">
+                        <label><i class="fas fa-database"></i> Membit API Key:</label>
+                        <input type="password" id="membitKey" placeholder="Enter Membit API Key" autocomplete="off">
+                        <button class="toggle-password" onclick="togglePassword('membitKey')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <small style="color: #64748B;">Keys are stored securely and only visible when you click the eye
+                            icon</small>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-brain"></i> Gemini API Key:</label>
+                        <input type="password" id="geminiKey" placeholder="Enter Gemini API Key">
+                        <button class="toggle-password" onclick="togglePassword('geminiKey')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <svg viewBox="0 0 24 24" width="16" height="16"
+                                style="display: inline-block; vertical-align: middle; margin-right: 5px; fill: currentColor;">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                            Twitter API Key:
+                        </label>
+                        <input type="password" id="twitterKey" placeholder="Enter Twitter API Key" autocomplete="off">
+                        <button class="toggle-password" onclick="togglePassword('twitterKey')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <svg viewBox="0 0 24 24" width="16" height="16"
+                                style="display: inline-block; vertical-align: middle; margin-right: 5px; fill: currentColor;">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                            Twitter API Secret:
+                        </label>
+                        <input type="password" id="twitterSecret" placeholder="Enter Twitter API Secret"
+                            autocomplete="off">
+                        <button class="toggle-password" onclick="togglePassword('twitterSecret')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <svg viewBox="0 0 24 24" width="16" height="16"
+                                style="display: inline-block; vertical-align: middle; margin-right: 5px; fill: currentColor;">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                            Twitter Access Token:
+                        </label>
+                        <input type="password" id="twitterToken" placeholder="Enter Twitter Access Token"
+                            autocomplete="off">
+                        <button class="toggle-password" onclick="togglePassword('twitterToken')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <svg viewBox="0 0 24 24" width="16" height="16"
+                                style="display: inline-block; vertical-align: middle; margin-right: 5px; fill: currentColor;">
+                                <path
+                                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                            </svg>
+                            Twitter Access Secret:
+                        </label>
+                        <input type="password" id="twitterAccessSecret" placeholder="Enter Twitter Access Secret"
+                            autocomplete="off">
+                        <button class="toggle-password" onclick="togglePassword('twitterAccessSecret')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Configuration Tab -->
+                <div id="configTab" class="tab-content">
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Schedule (hours):</label>
+                        <input type="number" id="scheduleHours" min="1" max="24" value="6">
+                        <small>How often the bot should post tweets</small>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-redo"></i> Max Retries:</label>
+                        <input type="number" id="maxRetries" min="1" max="10" value="3">
+                        <small>Number of retry attempts if posting fails</small>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-ruler"></i> Max Tweet Length:</label>
+                        <input type="number" id="maxLength" min="100" max="280" value="250">
+                        <small>Maximum characters for generated tweets</small>
+                    </div>
+                </div>
+
+                <!-- Prompt Tab -->
+                <div id="promptTab" class="tab-content">
+                    <div class="form-group">
+                        <label><i class="fas fa-edit"></i> Tweet Prompt Template:</label>
+                        <textarea id="promptTemplate" rows="14" spellcheck="false"></textarea>
+                        <div class="prompt-help">
+                            <p><strong>⚠️ PENTING - Wajib gunakan variables ini:</strong></p>
+                            <ul>
+                                <li>
+                                    <code class="copyable-code" onclick="copyToClipboard('{trending_data}', this)">
+                                        {trending_data}
+                                        <i class="fas fa-copy copy-icon"></i>
+                                    </code>
+                                    - Data tren dari Membit (WAJIB)
+                                </li>
+                                <li>
+                                    <code class="copyable-code" onclick="copyToClipboard('{max_tweet_length}', this)">
+                                        {max_tweet_length}
+                                        <i class="fas fa-copy copy-icon"></i>
+                                    </code>
+                                    - Panjang maksimal tweet (WAJIB)
+                                </li>
+                            </ul>
+                            <p style="margin-top: 10px;"><strong>Tips membuat prompt yang baik:</strong></p>
+                            <ul>
+                                <li>✅ Sebutkan MAKSIMAL karakter dengan jelas</li>
+                                <li>✅ Minta output HANYA tweet, tanpa pengantar</li>
+                                <li>✅ Spesifik tentang format dan style</li>
+                                <li>✅ Tambahkan contoh jika perlu</li>
+                                <li>❌ Jangan terlalu pendek atau ambigu</li>
+                            </ul>
+                            <p style="margin-top: 10px;"><strong>Contoh prompt yang baik:</strong></p>
+                            <code
+                                style="display: block; padding: 10px; background: rgba(29, 161, 242, 0.1); border-radius: 5px; margin-top: 5px; white-space: pre-wrap;">Lihat data: {trending_data}
+
+Buat tweet MAKSIMAL {max_tweet_length} karakter tentang Web3.
+- Singkat dan menarik
+- Akhiri dengan #Web3
+- HANYA tweet, tanpa pengantar</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSettings()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-success" onclick="saveAllSettings()">
+                    <i class="fas fa-save"></i> Save All Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guide Modal -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content guide-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-book"></i> Panduan Lengkap</h2>
+                <button class="close-btn" onclick="closeGuide()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Guide Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchGuideTab('usage')">
+                    <i class="fas fa-cog"></i> Cara Menggunakan
+                </button>
+                <button class="tab-btn" onclick="switchGuideTab('ratelimits')">
+                    <i class="fas fa-exclamation-triangle"></i> Rate Limits
+                </button>
+            </div>
+
+            <div class="modal-body guide-content">
+                <!-- Rate Limits Tab -->
+                <div id="ratelimitsGuide" class="guide-tab-content">
+                    <div class="markdown-body">
+                        <h2>⚠️ Panduan Twitter API Rate Limits</h2>
+
+                        <h3>Apa itu Rate Limit?</h3>
+                        <p>Rate limit adalah batasan jumlah tweet yang bisa diposting dalam periode waktu tertentu.
+                            Twitter memberlakukan ini untuk mencegah spam dan penyalahgunaan API.</p>
+
+                        <h3>📊 Batasan Twitter API Free Tier</h3>
+
+                        <h4>Batas Harian</h4>
+                        <ul>
+                            <li><strong>50 tweets per 24 jam</strong></li>
+                        </ul>
+
+                        <h4>Batas Bulanan</h4>
+                        <ul>
+                            <li><strong>1,500 tweets per bulan</strong></li>
+                        </ul>
+
+                        <h4>Reset Time</h4>
+                        <ul>
+                            <li>Rate limit akan reset setiap <strong>15 menit</strong></li>
+                            <li>Jika kena limit, tunggu 15 menit sebelum mencoba lagi</li>
+                        </ul>
+
+                        <h3>🚨 Error 429 - Too Many Requests</h3>
+
+                        <h4>Apa Artinya?</h4>
+                        <p>Error ini muncul ketika Anda sudah mencapai batas maksimal posting dalam periode waktu
+                            tertentu.</p>
+
+                        <h4>Penyebab Umum:</h4>
+                        <ul>
+                            <li>❌ Posting terlalu sering (interval &lt; 3 jam)</li>
+                            <li>❌ Spam tombol "Run Once" untuk testing</li>
+                            <li>❌ Bot retry berkali-kali saat error</li>
+                            <li>❌ Kombinasi bot + manual tweet melebihi 50/hari</li>
+                        </ul>
+
+                        <h4>Konsekuensi:</h4>
+                        <ul>
+                            <li>⚠️ Request ditolak sampai rate limit reset</li>
+                            <li>⚠️ Jika terus spam, akun bisa di-suspend</li>
+                            <li>⚠️ API access bisa dicabut sementara</li>
+                        </ul>
+
+                        <h3>✅ Cara Menghindari Rate Limit</h3>
+
+                        <h4>1. Set Schedule yang Aman</h4>
+                        <p><strong>Rekomendasi interval posting:</strong></p>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Interval</th>
+                                    <th>Tweets/Hari</th>
+                                    <th>Tweets/Bulan</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>24 jam</td>
+                                    <td>1</td>
+                                    <td>30</td>
+                                    <td>✅ Sangat Aman</td>
+                                </tr>
+                                <tr>
+                                    <td>12 jam</td>
+                                    <td>2</td>
+                                    <td>60</td>
+                                    <td>✅ Aman</td>
+                                </tr>
+                                <tr>
+                                    <td>8 jam</td>
+                                    <td>3</td>
+                                    <td>90</td>
+                                    <td>✅ Aman</td>
+                                </tr>
+                                <tr class="highlight">
+                                    <td><strong>6 jam</strong></td>
+                                    <td><strong>4</strong></td>
+                                    <td><strong>120</strong></td>
+                                    <td>✅ <strong>Recommended</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>4 jam</td>
+                                    <td>6</td>
+                                    <td>180</td>
+                                    <td>⚠️ Hati-hati</td>
+                                </tr>
+                                <tr>
+                                    <td>2 jam</td>
+                                    <td>12</td>
+                                    <td>360</td>
+                                    <td>❌ Berisiko</td>
+                                </tr>
+                                <tr>
+                                    <td>1 jam</td>
+                                    <td>24</td>
+                                    <td>720</td>
+                                    <td>❌ Pasti kena limit</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box">
+                            <strong>Setting Recommended:</strong>
+                            <pre><code>SCHEDULE_HOURS=6</code></pre>
+                            <p>Dengan setting ini:</p>
+                            <ul>
+                                <li>4 tweets per hari</li>
+                                <li>120 tweets per bulan</li>
+                                <li>Masih ada buffer 930 tweets untuk manual posting</li>
+                                <li>Aman dari rate limit</li>
+                            </ul>
+                        </div>
+
+                        <h4>2. Jangan Spam "Run Once"</h4>
+
+                        <div class="warning-box">
+                            <p><strong>❌ JANGAN:</strong></p>
+                            <ul>
+                                <li>Spam click "Run Once" berkali-kali</li>
+                                <li>Test bot dengan interval &lt; 15 menit</li>
+                                <li>Retry manual saat kena error 429</li>
+                            </ul>
+                        </div>
+
+                        <div class="success-box">
+                            <p><strong>✅ LAKUKAN:</strong></p>
+                            <ul>
+                                <li>Test "Run Once" maksimal 2-3x per hari</li>
+                                <li>Tunggu minimal 15 menit antar test</li>
+                                <li>Gunakan schedule otomatis untuk posting rutin</li>
+                            </ul>
+                        </div>
+
+                        <h4>3. Hitung Total Tweets Harian</h4>
+
+                        <div class="info-box">
+                            <p><strong>Formula:</strong></p>
+                            <pre><code>Total Tweets/Hari = (24 / SCHEDULE_HOURS) + Manual Tweets</code></pre>
+
+                            <p><strong>Contoh:</strong></p>
+                            <ul>
+                                <li>Bot: <code>SCHEDULE_HOURS=6</code> → 4 tweets/hari</li>
+                                <li>Manual: 3 tweets/hari</li>
+                                <li><strong>Total: 7 tweets/hari</strong> ✅ (masih di bawah 50)</li>
+                            </ul>
+
+                            <p><strong>Pastikan total tidak melebihi 50 tweets/hari!</strong></p>
+                        </div>
+
+                        <h4>4. Monitor Usage</h4>
+
+                        <p><strong>Cek di Twitter Developer Portal:</strong></p>
+                        <ol>
+                            <li>Login ke <a href="https://developer.twitter.com/en/portal/dashboard"
+                                    target="_blank">https://developer.twitter.com/en/portal/dashboard</a></li>
+                            <li>Pilih project/app Anda</li>
+                            <li>Klik tab "Usage"</li>
+                            <li>Lihat grafik daily/monthly usage</li>
+                        </ol>
+
+                        <p><strong>Cek di Bot Dashboard:</strong></p>
+                        <ul>
+                            <li>Total Tweets: Lihat statistik di dashboard</li>
+                            <li>Success Count: Berapa tweet berhasil diposting</li>
+                            <li>Error Count: Berapa kali gagal</li>
+                        </ul>
+
+                        <h3>🛑 Apa yang Harus Dilakukan Saat Kena Rate Limit?</h3>
+
+                        <div class="steps-box">
+                            <h4>Langkah 1: Stop Bot</h4>
+                            <ul>
+                                <li><strong>Web Version:</strong> Click tombol "Stop Bot"</li>
+                                <li><strong>Terminal Version:</strong> Tekan <code>Ctrl+C</code></li>
+                            </ul>
+
+                            <h4>Langkah 2: Tunggu 15 Menit</h4>
+                            <p>Jangan coba posting lagi sampai rate limit reset (15 menit).</p>
+
+                            <h4>Langkah 3: Cek Usage</h4>
+                            <p>Login ke Twitter Developer Portal dan cek berapa tweets sudah diposting hari ini.</p>
+
+                            <h4>Langkah 4: Adjust Schedule</h4>
+                            <p>Jika sering kena limit, naikkan <code>SCHEDULE_HOURS</code>:</p>
+                            <ul>
+                                <li><strong>Web Version:</strong> Click "Settings" → Tab "Configuration" → Ubah
+                                    "Schedule Hours" menjadi 6 atau lebih → Click "Save All Settings"</li>
+                                <li><strong>Terminal Version:</strong> Edit file <code>.env</code> → Ubah
+                                    <code>SCHEDULE_HOURS=6</code> → Save file
+                                </li>
+                            </ul>
+
+                            <h4>Langkah 5: Restart Bot</h4>
+                            <p>Setelah 15 menit dan adjust schedule, restart bot.</p>
+                        </div>
+
+                        <h3>💡 Tips Menghindari Suspend</h3>
+
+                        <ol>
+                            <li><strong>Jangan Retry Saat Error 429</strong><br>Jika bot kena error 429,
+                                <strong>STOP</strong> - jangan retry berkali-kali. Ini bisa dianggap spam oleh Twitter.
+                            </li>
+                            <li><strong>Gunakan Interval Wajar</strong><br>Posting setiap 6-8 jam lebih natural daripada
+                                setiap 1-2 jam.</li>
+                            <li><strong>Variasi Konten</strong><br>Pastikan tweet tidak terlalu repetitif. Bot sudah
+                                menggunakan AI untuk variasi konten.</li>
+                            <li><strong>Kombinasi Bot + Manual</strong>
+                                <ul>
+                                    <li>Bot: 4 tweets/hari (schedule 6 jam)</li>
+                                    <li>Manual: Maksimal 10-15 tweets/hari</li>
+                                    <li>Total: 14-19 tweets/hari (aman)</li>
+                                </ul>
+                            </li>
+                            <li><strong>Monitor Regularly</strong><br>Cek usage setiap hari untuk memastikan tidak
+                                mendekati limit.</li>
+                        </ol>
+
+                        <h3>📈 Upgrade Options</h3>
+
+                        <p>Jika 50 tweets/hari tidak cukup:</p>
+
+                        <h4>Basic Tier ($100/bulan)</h4>
+                        <ul>
+                            <li>3,000 tweets/bulan</li>
+                            <li>10,000 tweets/bulan (write)</li>
+                            <li>Rate limits lebih tinggi</li>
+                        </ul>
+
+                        <h4>Pro Tier ($5,000/bulan)</h4>
+                        <ul>
+                            <li>300,000 tweets/bulan</li>
+                            <li>Rate limits jauh lebih tinggi</li>
+                            <li>Advanced features</li>
+                        </ul>
+
+                        <p><strong>Info:</strong> <a href="https://developer.twitter.com/en/portal/products"
+                                target="_blank">https://developer.twitter.com/en/portal/products</a></p>
+
+                        <h3>🎯 Best Practices Summary</h3>
+
+                        <div class="success-box">
+                            <p><strong>✅ DO:</strong></p>
+                            <ul>
+                                <li>Set <code>SCHEDULE_HOURS=6</code> atau lebih</li>
+                                <li>Monitor usage di Developer Portal</li>
+                                <li>Tunggu 15 menit jika kena rate limit</li>
+                                <li>Hitung total tweets (bot + manual) per hari</li>
+                                <li>Stop bot jika error 429</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <p><strong>❌ DON'T:</strong></p>
+                            <ul>
+                                <li>Spam "Run Once" untuk testing</li>
+                                <li>Set interval &lt; 3 jam</li>
+                                <li>Retry berkali-kali saat error 429</li>
+                                <li>Posting &gt; 50 tweets/hari</li>
+                                <li>Ignore error messages</li>
+                            </ul>
+                        </div>
+
+                        <h3>📚 Resources</h3>
+
+                        <ul>
+                            <li><a href="https://developer.twitter.com/en/docs/twitter-api" target="_blank">Twitter API
+                                    Documentation</a></li>
+                            <li><a href="https://developer.twitter.com/en/docs/twitter-api/rate-limits"
+                                    target="_blank">Rate Limits Reference</a></li>
+                            <li><a href="https://developer.twitter.com/en/portal/dashboard" target="_blank">Developer
+                                    Portal</a></li>
+                            <li><a href="https://developer.twitter.com/en/portal/products" target="_blank">API
+                                    Pricing</a></li>
+                        </ul>
+
+                        <div class="info-box" style="margin-top: 30px; text-align: center;">
+                            <p><strong>💡 Ingat:</strong> Lebih baik posting 4 tweets berkualitas per hari daripada spam
+                                50 tweets dan kena suspend!</p>
+                            <p><strong>🎯 Recommended Setting:</strong> <code>SCHEDULE_HOURS=6</code> (4 tweets/hari =
+                                120 tweets/bulan)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Usage Guide Tab -->
+                <div id="usageGuide" class="guide-tab-content active">
+                    <div class="markdown-body">
+                        <h2>🚀 Cara Menggunakan Bot</h2>
+
+                        <h3>📋 Setup Awal</h3>
+
+                        <h4>1. Persiapan API Keys</h4>
+                        <p>Sebelum menggunakan bot, Anda perlu mendapatkan API keys dari 3 service:</p>
+
+                        <div class="steps-box">
+                            <h4>A. Membit API Key</h4>
+                            <ol>
+                                <li>Kunjungi <a href="https://membit.ai/integration"
+                                        target="_blank">https://membit.ai/integration</a></li>
+                                <li>Login atau daftar akun baru</li>
+                                <li>Generate API key</li>
+                                <li>Copy dan simpan API key</li>
+                            </ol>
+
+                            <h4>B. Google Gemini API Key</h4>
+                            <ol>
+                                <li>Kunjungi <a href="https://aistudio.google.com/app/apikey"
+                                        target="_blank">https://aistudio.google.com/app/apikey</a></li>
+                                <li>Login dengan Google account</li>
+                                <li>Click "Create API Key"</li>
+                                <li>Copy dan simpan API key</li>
+                            </ol>
+
+                            <h4>C. Twitter API Credentials</h4>
+                            <ol>
+                                <li>Kunjungi <a href="https://developer.twitter.com/en/portal/dashboard"
+                                        target="_blank">Twitter Developer Portal</a></li>
+                                <li>Create new project & app</li>
+                                <li>Set permissions ke "Read and Write"</li>
+                                <li>Generate API Key & Secret</li>
+                                <li>Generate Access Token & Secret</li>
+                                <li>Copy semua credentials (4 keys total)</li>
+                            </ol>
+                            <p><strong>⚠️ Penting:</strong> Lihat file <code>TWITTER_SETUP.md</code> untuk panduan
+                                detail setup Twitter API.</p>
+                        </div>
+
+                        <h4>2. Konfigurasi API Keys di Dashboard</h4>
+
+                        <div class="info-box">
+                            <p><strong>Langkah-langkah:</strong></p>
+                            <ol>
+                                <li>Click tombol <strong>"⚙️ Settings"</strong> di header</li>
+                                <li>Pastikan tab <strong>"API Keys"</strong> aktif</li>
+                                <li>Masukkan semua API keys:
+                                    <ul>
+                                        <li><strong>Membit API Key</strong> - Dari Membit</li>
+                                        <li><strong>Gemini API Key</strong> - Dari Google AI Studio</li>
+                                        <li><strong>Twitter API Key</strong> - Consumer Key</li>
+                                        <li><strong>Twitter API Secret</strong> - Consumer Secret</li>
+                                        <li><strong>Twitter Access Token</strong> - Access Token</li>
+                                        <li><strong>Twitter Access Secret</strong> - Access Token Secret</li>
+                                    </ul>
+                                </li>
+                                <li>Click <strong>"Save All Settings"</strong></li>
+                            </ol>
+                            <p><strong>✅ Tips:</strong> Gunakan icon mata (👁️) untuk show/hide password saat input.</p>
+                        </div>
+
+                        <h3>⚙️ Konfigurasi Bot</h3>
+
+                        <h4>1. Schedule Configuration</h4>
+
+                        <p>Atur seberapa sering bot posting tweet:</p>
+
+                        <div class="info-box">
+                            <p><strong>Setting: Schedule Hours</strong></p>
+                            <ul>
+                                <li><strong>Nilai:</strong> 1-24 jam</li>
+                                <li><strong>Recommended:</strong> 6 jam (4 tweets/hari)</li>
+                                <li><strong>Lokasi:</strong> Settings → Configuration tab</li>
+                            </ul>
+
+                            <p><strong>Contoh:</strong></p>
+                            <ul>
+                                <li><code>Schedule Hours = 6</code> → Bot posting setiap 6 jam (4x/hari)</li>
+                                <li><code>Schedule Hours = 12</code> → Bot posting setiap 12 jam (2x/hari)</li>
+                                <li><code>Schedule Hours = 24</code> → Bot posting setiap 24 jam (1x/hari)</li>
+                            </ul>
+                        </div>
+
+                        <h4>2. Retry Configuration</h4>
+
+                        <div class="info-box">
+                            <p><strong>Setting: Max Retries</strong></p>
+                            <ul>
+                                <li><strong>Nilai:</strong> 1-10</li>
+                                <li><strong>Recommended:</strong> 3</li>
+                                <li><strong>Fungsi:</strong> Berapa kali bot retry jika posting gagal</li>
+                            </ul>
+
+                            <p><strong>⚠️ Note:</strong> Jika kena rate limit (error 429), bot akan stop retry otomatis.
+                            </p>
+                        </div>
+
+                        <h4>3. Tweet Length Configuration</h4>
+
+                        <div class="info-box">
+                            <p><strong>Setting: Max Tweet Length</strong></p>
+                            <ul>
+                                <li><strong>Nilai:</strong> 100-280 karakter</li>
+                                <li><strong>Recommended:</strong> 250</li>
+                                <li><strong>Fungsi:</strong> Batas maksimal panjang tweet yang di-generate</li>
+                            </ul>
+
+                            <p><strong>💡 Tips:</strong> Set 250 untuk memberi buffer untuk hashtag dan variasi.</p>
+                        </div>
+
+                        <h3>✏️ Customize Prompt Template</h3>
+
+                        <p>Prompt template mengontrol bagaimana AI (Gemini) membuat tweet.</p>
+
+                        <h4>1. Akses Prompt Editor</h4>
+                        <ol>
+                            <li>Click <strong>"⚙️ Settings"</strong></li>
+                            <li>Pilih tab <strong>"Prompt"</strong></li>
+                            <li>Edit prompt di textarea</li>
+                        </ol>
+
+                        <h4>2. Variables Wajib</h4>
+
+                        <div class="warning-box">
+                            <p><strong>⚠️ WAJIB gunakan 2 variables ini:</strong></p>
+                            <ul>
+                                <li><code>{trending_data}</code> - Data tren dari Membit (WAJIB)</li>
+                                <li><code>{max_tweet_length}</code> - Panjang maksimal tweet (WAJIB)</li>
+                            </ul>
+                            <p>Jika tidak ada, bot akan error atau generate tweet terlalu panjang!</p>
+                        </div>
+
+                        <h4>3. Contoh Prompt Template</h4>
+
+                        <div class="success-box">
+                            <p><strong>✅ Prompt yang Baik:</strong></p>
+                            <pre><code>Anda adalah social media manager ahli. Lihat data tren:
+
+{trending_data}
+
+Buat tweet MAKSIMAL {max_tweet_length} karakter tentang Web3.
+
+PENTING:
+- Singkat, padat, menarik
+- Akhiri dengan #Web3
+- HANYA tweet, tanpa pengantar</code></pre>
+                        </div>
+
+                        <div class="warning-box">
+                            <p><strong>❌ Prompt yang Buruk:</strong></p>
+                            <pre><code>Buat tweet tentang {trending_data}</code></pre>
+                            <p><strong>Masalah:</strong></p>
+                            <ul>
+                                <li>Tidak ada <code>{max_tweet_length}</code> → Tweet bisa terlalu panjang</li>
+                                <li>Tidak spesifik → Hasil tidak konsisten</li>
+                                <li>Tidak ada instruksi format → Output bisa ada pengantar</li>
+                            </ul>
+                        </div>
+
+                        <h4>4. Tips Membuat Prompt Efektif</h4>
+
+                        <ul>
+                            <li>✅ <strong>Spesifik:</strong> Jelaskan format yang diinginkan</li>
+                            <li>✅ <strong>Batasan jelas:</strong> Sebutkan MAKSIMAL karakter <code>{max_tweet_length}</code></li>
+                            <li>✅ <strong>Output only:</strong> Minta HANYA tweet, tanpa pengantar</li>
+                            <li>✅ <strong>Style guide:</strong> Tentukan tone (formal/casual)</li>
+                            <li>✅ <strong>Hashtag:</strong> Tentukan hashtag yang wajib ada</li>
+                            <li>❌ <strong>Jangan:</strong> Terlalu pendek atau ambigu</li>
+                        </ul>
+
+                        <h3>🎮 Mengoperasikan Bot</h3>
+
+                        <h4>1. Start Bot (Automatic Mode)</h4>
+
+                        <div class="info-box">
+                            <p><strong>Fungsi:</strong> Bot akan posting otomatis sesuai schedule</p>
+                            <ol>
+                                <li>Pastikan semua API keys sudah dikonfigurasi</li>
+                                <li>Click tombol <strong>"▶️ Start Bot"</strong></li>
+                                <li>Bot akan mulai posting setiap X jam (sesuai schedule)</li>
+                                <li>Status badge berubah jadi "Running" (hijau)</li>
+                                <li>Dashboard menampilkan "Next Run" time</li>
+                            </ol>
+
+                            <p><strong>💡 Tips:</strong> Bot akan terus running sampai di-stop atau server restart.</p>
+                        </div>
+
+                        <h4>2. Stop Bot</h4>
+
+                        <div class="info-box">
+                            <p><strong>Fungsi:</strong> Hentikan bot yang sedang running</p>
+                            <ol>
+                                <li>Click tombol <strong>"⏹️ Stop Bot"</strong></li>
+                                <li>Bot akan stop setelah task saat ini selesai</li>
+                                <li>Status badge berubah jadi "Stopped" (merah)</li>
+                                <li>"Next Run" time dihapus</li>
+                            </ol>
+                        </div>
+
+                        <h4>3. Run Once (Manual Mode)</h4>
+
+                        <div class="info-box">
+                            <p><strong>Fungsi:</strong> Posting 1 tweet sekarang (untuk testing)</p>
+                            <ol>
+                                <li>Click tombol <strong>"⏩ Run Once"</strong></li>
+                                <li>Bot akan generate & posting 1 tweet</li>
+                                <li>Tidak mempengaruhi schedule</li>
+                                <li>Bagus untuk testing sebelum start automatic mode</li>
+                            </ol>
+
+                            <p><strong>⚠️ Warning:</strong> Jangan spam "Run Once" - bisa kena rate limit!</p>
+                        </div>
+
+                        <h3>📊 Monitoring Bot</h3>
+
+                        <h4>1. Statistics Cards</h4>
+
+                        <p>Dashboard menampilkan 3 metrics penting:</p>
+
+                        <table class="guide-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Deskripsi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Total Tweets</strong></td>
+                                    <td>Total tweet yang sudah diposting (success + error)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Success</strong></td>
+                                    <td>Jumlah tweet berhasil diposting</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Errors</strong></td>
+                                    <td>Jumlah kali gagal posting</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>2. Activity Logs</h4>
+
+                        <p>Logs menampilkan aktivitas bot real-time dengan color coding:</p>
+
+                        <ul>
+                            <li>🔵 <strong>Info</strong> - Informasi umum (biru)</li>
+                            <li>✅ <strong>Success</strong> - Operasi berhasil (hijau)</li>
+                            <li>⚠️ <strong>Warning</strong> - Peringatan (kuning)</li>
+                            <li>❌ <strong>Error</strong> - Error/gagal (merah)</li>
+                        </ul>
+
+                        <h4>3. Last Tweet Preview</h4>
+
+                        <p>Card "Last Tweet" menampilkan:</p>
+                        <ul>
+                            <li>Isi tweet terakhir</li>
+                            <li>Timestamp posting</li>
+                            <li>Link ke tweet di Twitter</li>
+                        </ul>
+
+                        <h3>🔧 Troubleshooting</h3>
+
+                        <h4>Problem: Button "Start Bot" Disabled</h4>
+
+                        <div class="warning-box">
+                            <p><strong>Penyebab:</strong> API keys belum dikonfigurasi</p>
+                            <p><strong>Solusi:</strong></p>
+                            <ol>
+                                <li>Click "Settings"</li>
+                                <li>Tab "API Keys"</li>
+                                <li>Isi semua API keys</li>
+                                <li>Click "Save All Settings"</li>
+                                <li>Button akan enabled otomatis</li>
+                            </ol>
+                        </div>
+
+                        <h4>Problem: Error "GEMINI_API_KEY not found"</h4>
+
+                        <div class="warning-box">
+                            <p><strong>Penyebab:</strong> Gemini API key tidak tersimpan</p>
+                            <p><strong>Solusi:</strong></p>
+                            <ol>
+                                <li>Cek API key di Google AI Studio</li>
+                                <li>Copy ulang API key</li>
+                                <li>Paste di Settings → API Keys</li>
+                                <li>Save settings</li>
+                                <li>Restart bot</li>
+                            </ol>
+                        </div>
+
+                        <h4>Problem: Tweet Terlalu Panjang</h4>
+
+                        <div class="warning-box">
+                            <p><strong>Penyebab:</strong> Prompt tidak include <code>{max_tweet_length}</code></p>
+                            <p><strong>Solusi:</strong></p>
+                            <ol>
+                                <li>Settings → Prompt tab</li>
+                                <li>Pastikan ada <code>{max_tweet_length}</code> di prompt</li>
+                                <li>Tambahkan instruksi "MAKSIMAL {max_tweet_length} karakter"</li>
+                                <li>Save settings</li>
+                                <li>Test dengan "Run Once"</li>
+                            </ol>
+                        </div>
+
+                        <h4>Problem: Error 429 (Rate Limit)</h4>
+
+                        <div class="warning-box">
+                            <p><strong>Penyebab:</strong> Terlalu banyak posting dalam 24 jam</p>
+                            <p><strong>Solusi:</strong></p>
+                            <ol>
+                                <li>Stop bot</li>
+                                <li>Tunggu 15 menit</li>
+                                <li>Settings → Configuration</li>
+                                <li>Naikkan "Schedule Hours" ke 6 atau lebih</li>
+                                <li>Save settings</li>
+                                <li>Restart bot setelah 15 menit</li>
+                            </ol>
+                            <p><strong>📖 Detail:</strong> Lihat tab "Rate Limits" untuk info lengkap.</p>
+                        </div>
+
+                        <h3>💡 Best Practices</h3>
+
+                        <div class="success-box">
+                            <p><strong>✅ DO:</strong></p>
+                            <ul>
+                                <li>Test dengan "Run Once" sebelum start automatic mode</li>
+                                <li>Monitor logs regularly untuk detect issues</li>
+                                <li>Set schedule 6 jam atau lebih untuk safety</li>
+                                <li>Backup API keys di tempat aman</li>
+                                <li>Update prompt template untuk improve quality</li>
+                                <li>Check Twitter Developer Portal untuk usage stats</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <p><strong>❌ DON'T:</strong></p>
+                            <ul>
+                                <li>Spam "Run Once" berkali-kali</li>
+                                <li>Set schedule terlalu pendek (< 3 jam)</li>
+                                <li>Share API keys dengan orang lain</li>
+                                <li>Ignore error messages di logs</li>
+                                <li>Lupa monitor usage di Twitter Developer Portal</li>
+                            </ul>
+                        </div>
+
+                        <h3>📚 Resources Tambahan</h3>
+
+                        <ul>
+                            <li><strong>README.md</strong> - Dokumentasi project lengkap</li>
+                            <li><a href="https://developer.twitter.com/en/docs" target="_blank">Twitter API Docs</a> -
+                                Official documentation</li>
+                            <li><a href="https://ai.google.dev/docs" target="_blank">Gemini API Docs</a> - Gemini
+                                documentation</li>
+                        </ul>
+
+                        <div class="info-box" style="margin-top: 30px; text-align: center;">
+                            <p><strong>🎯 Quick Start Checklist:</strong></p>
+                            <ol style="text-align: left;">
+                                <li>✅ Dapatkan semua API keys (Membit, Gemini, Twitter)</li>
+                                <li>✅ Konfigurasi API keys di Settings</li>
+                                <li>✅ Set schedule = 6 jam</li>
+                                <li>✅ Review & customize prompt template</li>
+                                <li>✅ Test dengan "Run Once"</li>
+                                <li>✅ Jika berhasil, click "Start Bot"</li>
+                                <li>✅ Monitor logs & statistics</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeGuide()">
+                    <i class="fas fa-check"></i> Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>
