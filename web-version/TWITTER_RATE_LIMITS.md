@@ -1,157 +1,157 @@
-# ⚠️ Panduan Twitter API Rate Limits
+# ⚠️ Twitter API Rate Limits Guide
 
-## Apa itu Rate Limit?
+## What is Rate Limit?
 
-Rate limit adalah batasan jumlah tweet yang bisa diposting dalam periode waktu tertentu. Twitter memberlakukan ini untuk mencegah spam dan penyalahgunaan API.
+Rate limit is a restriction on the number of tweets that can be posted within a certain time period. Twitter enforces this to prevent spam and API abuse.
 
-## 📊 Batasan Twitter API Free Tier
+## 📊 Twitter API Free Tier Limits
 
-### Batas Harian
-- **50 tweets per 24 jam**
+### Daily Limit
+- **50 tweets per 24 hours**
 
-### Batas Bulanan  
-- **1,500 tweets per bulan**
+### Monthly Limit  
+- **1,500 tweets per month**
 
 ### Reset Time
-- Rate limit akan reset setiap **15 menit**
-- Jika kena limit, tunggu 15 menit sebelum mencoba lagi
+- Rate limit will reset every **15 minutes**
+- If you hit the limit, wait 15 minutes before trying again
 
 ## 🚨 Error 429 - Too Many Requests
 
-### Apa Artinya?
-Error ini muncul ketika Anda sudah mencapai batas maksimal posting dalam periode waktu tertentu.
+### What Does It Mean?
+This error appears when you have reached the maximum posting limit within a certain time period.
 
-### Penyebab Umum:
-1. ❌ Posting terlalu sering (interval < 3 jam)
-2. ❌ Spam tombol "Run Once" untuk testing
-3. ❌ Bot retry berkali-kali saat error
-4. ❌ Kombinasi bot + manual tweet melebihi 50/hari
+### Common Causes:
+1. ❌ Posting too frequently (interval < 3 hours)
+2. ❌ Spamming "Run Once" button for testing
+3. ❌ Bot retrying multiple times on error
+4. ❌ Combination of bot + manual tweets exceeding 50/day
 
-### Konsekuensi:
-- ⚠️ Request ditolak sampai rate limit reset
-- ⚠️ Jika terus spam, akun bisa di-suspend
-- ⚠️ API access bisa dicabut sementara
+### Consequences:
+- ⚠️ Requests rejected until rate limit resets
+- ⚠️ If you continue spamming, account can be suspended
+- ⚠️ API access can be temporarily revoked
 
-## ✅ Cara Menghindari Rate Limit
+## ✅ How to Avoid Rate Limit
 
-### 1. Set Schedule yang Aman
+### 1. Set Safe Schedule
 
-**Rekomendasi interval posting:**
+**Recommended posting interval:**
 
-| Interval | Tweets/Hari | Tweets/Bulan | Status |
-|----------|-------------|--------------|--------|
-| 24 jam   | 1           | 30           | ✅ Sangat Aman |
-| 12 jam   | 2           | 60           | ✅ Aman |
-| 8 jam    | 3           | 90           | ✅ Aman |
-| **6 jam**| **4**       | **120**      | ✅ **Recommended** |
-| 4 jam    | 6           | 180          | ⚠️ Hati-hati |
-| 2 jam    | 12          | 360          | ❌ Berisiko |
-| 1 jam    | 24          | 720          | ❌ Pasti kena limit |
+| Interval | Tweets/Day | Tweets/Month | Status |
+|----------|------------|--------------|--------|
+| 24 hours | 1          | 30           | ✅ Very Safe |
+| 12 hours | 2          | 60           | ✅ Safe |
+| 8 hours  | 3          | 90           | ✅ Safe |
+| **6 hours**| **4**    | **120**      | ✅ **Recommended** |
+| 4 hours  | 6          | 180          | ⚠️ Be Careful |
+| 2 hours  | 12         | 360          | ❌ Risky |
+| 1 hour   | 24         | 720          | ❌ Will hit limit |
 
-**Setting Recommended:**
+**Recommended Setting:**
 ```env
 SCHEDULE_HOURS=6
 ```
 
-Dengan setting ini:
-- 4 tweets per hari
-- 120 tweets per bulan
-- Masih ada buffer 930 tweets untuk manual posting
-- Aman dari rate limit
+With this setting:
+- 4 tweets per day
+- 120 tweets per month
+- Still have buffer of 930 tweets for manual posting
+- Safe from rate limit
 
-### 2. Jangan Spam "Run Once"
+### 2. Don't Spam "Run Once"
 
-**❌ JANGAN:**
-- Spam click "Run Once" berkali-kali
-- Test bot dengan interval < 15 menit
-- Retry manual saat kena error 429
+**❌ DON'T:**
+- Spam click "Run Once" multiple times
+- Test bot with interval < 15 minutes
+- Manually retry when hitting error 429
 
-**✅ LAKUKAN:**
-- Test "Run Once" maksimal 2-3x per hari
-- Tunggu minimal 15 menit antar test
-- Gunakan schedule otomatis untuk posting rutin
+**✅ DO:**
+- Test "Run Once" maximum 2-3x per day
+- Wait at least 15 minutes between tests
+- Use automatic schedule for routine posting
 
-### 3. Hitung Total Tweets Harian
+### 3. Calculate Total Daily Tweets
 
 **Formula:**
 ```
-Total Tweets/Hari = (24 / SCHEDULE_HOURS) + Manual Tweets
+Total Tweets/Day = (24 / SCHEDULE_HOURS) + Manual Tweets
 ```
 
-**Contoh:**
-- Bot: `SCHEDULE_HOURS=6` → 4 tweets/hari
-- Manual: 3 tweets/hari
-- **Total: 7 tweets/hari** ✅ (masih di bawah 50)
+**Example:**
+- Bot: `SCHEDULE_HOURS=6` → 4 tweets/day
+- Manual: 3 tweets/day
+- **Total: 7 tweets/day** ✅ (still below 50)
 
-**Pastikan total tidak melebihi 50 tweets/hari!**
+**Make sure total does not exceed 50 tweets/day!**
 
 ### 4. Monitor Usage
 
-**Cek di Twitter Developer Portal:**
-1. Login ke https://developer.twitter.com/en/portal/dashboard
-2. Pilih project/app Anda
-3. Klik tab "Usage"
-4. Lihat grafik daily/monthly usage
+**Check in Twitter Developer Portal:**
+1. Login to https://developer.twitter.com/en/portal/dashboard
+2. Select your project/app
+3. Click "Usage" tab
+4. View daily/monthly usage graph
 
-**Cek di Bot Dashboard:**
-- Total Tweets: Lihat statistik di dashboard
-- Success Count: Berapa tweet berhasil diposting
-- Error Count: Berapa kali gagal
+**Check in Bot Dashboard:**
+- Total Tweets: View statistics in dashboard
+- Success Count: How many tweets successfully posted
+- Error Count: How many times failed
 
-## 🛑 Apa yang Harus Dilakukan Saat Kena Rate Limit?
+## 🛑 What to Do When You Hit Rate Limit?
 
-### Langkah 1: Stop Bot
-- **Web Version:** Click tombol "Stop Bot"
+### Step 1: Stop Bot
+- **Web Version:** Click "Stop Bot" button
 
-### Langkah 2: Tunggu 15 Menit
-Jangan coba posting lagi sampai rate limit reset (15 menit).
+### Step 2: Wait 15 Minutes
+Don't try posting again until rate limit resets (15 minutes).
 
-### Langkah 3: Cek Usage
-Login ke Twitter Developer Portal dan cek berapa tweets sudah diposting hari ini.
+### Step 3: Check Usage
+Login to Twitter Developer Portal and check how many tweets have been posted today.
 
-### Langkah 4: Adjust Schedule
-Jika sering kena limit, naikkan `SCHEDULE_HOURS`:
+### Step 4: Adjust Schedule
+If you frequently hit the limit, increase `SCHEDULE_HOURS`:
 
 **Web Version:**
 1. Click "Settings"
-2. Tab "Configuration"  
-3. Ubah `Schedule Hours` menjadi 6 atau lebih
+2. "Configuration" tab  
+3. Change `Schedule Hours` to 6 or more
 4. Click "Save All Settings"
 
-### Langkah 5: Restart Bot
-Setelah 15 menit dan adjust schedule, restart bot.
+### Step 5: Restart Bot
+After 15 minutes and adjusting schedule, restart bot.
 
-## 💡 Tips Menghindari Suspend
+## 💡 Tips to Avoid Suspension
 
-### 1. Jangan Retry Saat Error 429
-Jika bot kena error 429, **STOP** - jangan retry berkali-kali. Ini bisa dianggap spam oleh Twitter.
+### 1. Don't Retry on Error 429
+If bot hits error 429, **STOP** - don't retry multiple times. This can be considered spam by Twitter.
 
-### 2. Gunakan Interval Wajar
-Posting setiap 6-8 jam lebih natural daripada setiap 1-2 jam.
+### 2. Use Reasonable Interval
+Posting every 6-8 hours is more natural than every 1-2 hours.
 
-### 3. Variasi Konten
-Pastikan tweet tidak terlalu repetitif. Bot sudah menggunakan AI untuk variasi konten.
+### 3. Content Variation
+Make sure tweets are not too repetitive. Bot already uses AI for content variation.
 
-### 4. Kombinasi Bot + Manual
-- Bot: 4 tweets/hari (schedule 6 jam)
-- Manual: Maksimal 10-15 tweets/hari
-- Total: 14-19 tweets/hari (aman)
+### 4. Bot + Manual Combination
+- Bot: 4 tweets/day (6 hour schedule)
+- Manual: Maximum 10-15 tweets/day
+- Total: 14-19 tweets/day (safe)
 
 ### 5. Monitor Regularly
-Cek usage setiap hari untuk memastikan tidak mendekati limit.
+Check usage daily to ensure not approaching limit.
 
 ## 📈 Upgrade Options
 
-Jika 50 tweets/hari tidak cukup:
+If 50 tweets/day is not enough:
 
-### Basic Tier ($100/bulan)
-- 3,000 tweets/bulan
-- 10,000 tweets/bulan (write)
-- Rate limits lebih tinggi
+### Basic Tier ($100/month)
+- 3,000 tweets/month
+- 10,000 tweets/month (write)
+- Higher rate limits
 
-### Pro Tier ($5,000/bulan)
-- 300,000 tweets/bulan
-- Rate limits jauh lebih tinggi
+### Pro Tier ($5,000/month)
+- 300,000 tweets/month
+- Much higher rate limits
 - Advanced features
 
 **Info:** https://developer.twitter.com/en/portal/products
@@ -159,17 +159,17 @@ Jika 50 tweets/hari tidak cukup:
 ## 🎯 Best Practices Summary
 
 ✅ **DO:**
-- Set `SCHEDULE_HOURS=6` atau lebih
-- Monitor usage di Developer Portal
-- Tunggu 15 menit jika kena rate limit
-- Hitung total tweets (bot + manual) per hari
-- Stop bot jika error 429
+- Set `SCHEDULE_HOURS=6` or more
+- Monitor usage in Developer Portal
+- Wait 15 minutes if you hit rate limit
+- Calculate total tweets (bot + manual) per day
+- Stop bot if error 429
 
 ❌ **DON'T:**
-- Spam "Run Once" untuk testing
-- Set interval < 3 jam
-- Retry berkali-kali saat error 429
-- Posting > 50 tweets/hari
+- Spam "Run Once" for testing
+- Set interval < 3 hours
+- Retry multiple times on error 429
+- Post > 50 tweets/day
 - Ignore error messages
 
 ## 📚 Resources
@@ -181,6 +181,6 @@ Jika 50 tweets/hari tidak cukup:
 
 ---
 
-**💡 Ingat:** Lebih baik posting 4 tweets berkualitas per hari daripada spam 50 tweets dan kena suspend!
+**💡 Remember:** Better to post 4 quality tweets per day than spam 50 tweets and get suspended!
 
-**🎯 Recommended Setting:** `SCHEDULE_HOURS=6` (4 tweets/hari = 120 tweets/bulan)
+**🎯 Recommended Setting:** `SCHEDULE_HOURS=6` (4 tweets/day = 120 tweets/month)

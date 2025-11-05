@@ -22,7 +22,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--bg-dark);
-    background-image: 
+    background-image:
         radial-gradient(at 0% 0%, rgba(29, 161, 242, 0.1) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
     min-height: 100vh;
@@ -164,9 +164,12 @@ body {
 }
 
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.5;
     }
@@ -694,7 +697,8 @@ body {
     /* Form adjustments */
     .form-group input,
     .form-group textarea {
-        font-size: 16px; /* Prevent zoom on iOS */
+        font-size: 16px;
+        /* Prevent zoom on iOS */
     }
 
     .prompt-editor textarea {
@@ -786,9 +790,12 @@ body {
 
 /* Animations */
 @keyframes pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.5;
     }
@@ -799,6 +806,7 @@ body {
         opacity: 0;
         transform: translateX(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
@@ -806,9 +814,12 @@ body {
 }
 
 @keyframes glow {
-    0%, 100% {
+
+    0%,
+    100% {
         box-shadow: 0 0 5px rgba(29, 161, 242, 0.5);
     }
+
     50% {
         box-shadow: 0 0 20px rgba(29, 161, 242, 0.8);
     }
@@ -989,6 +1000,7 @@ body {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -999,6 +1011,7 @@ body {
         opacity: 0;
         transform: translateY(50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -1072,7 +1085,8 @@ body {
     margin-bottom: 15px;
 }
 
-.markdown-body ul, .markdown-body ol {
+.markdown-body ul,
+.markdown-body ol {
     margin-bottom: 15px;
     padding-left: 25px;
 }
@@ -1237,28 +1251,28 @@ body {
         max-width: 95%;
         margin: 20px auto;
     }
-    
+
     .guide-content {
         padding: 15px;
         max-height: calc(90vh - 160px);
     }
-    
+
     .markdown-body h2 {
         font-size: 1.3em;
     }
-    
+
     .markdown-body h3 {
         font-size: 1.1em;
     }
-    
+
     .markdown-body h4 {
         font-size: 1em;
     }
-    
+
     .guide-table {
         font-size: 0.85em;
     }
-    
+
     .guide-table th,
     .guide-table td {
         padding: 8px;
@@ -1270,7 +1284,7 @@ body {
     .control-panel-header {
         position: relative;
     }
-    
+
     .status-indicator {
         position: absolute;
         top: 0;
@@ -1282,11 +1296,11 @@ body {
     .control-panel-header h2 {
         font-size: 1.2em;
     }
-    
+
     .status-indicator {
         font-size: 0.85em;
     }
-    
+
     .status-dot {
         width: 10px;
         height: 10px;

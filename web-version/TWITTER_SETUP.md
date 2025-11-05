@@ -1,70 +1,70 @@
 # 🐦 Twitter API Setup Guide
 
-Panduan lengkap untuk mendapatkan Twitter API credentials.
+Complete guide to get Twitter API credentials.
 
-## 📋 Prasyarat
+## 📋 Prerequisites
 
-- Akun Twitter yang aktif (tidak di-suspend)
+- Active Twitter account (not suspended)
 
-## 🚀 Langkah 1: Daftar Twitter Developer Account
+## 🚀 Step 1: Register Twitter Developer Account
 
-### 1.1 Akses Developer Portal
+### 1.1 Access Developer Portal
 
-1. Buka [Twitter Developer Portal](https://developer.twitter.com/)
-2. Login dengan akun Twitter Anda
-3. Jika belum punya Developer Account, klik **"Sign up for Free Account"**
+1. Open [Twitter Developer Portal](https://developer.twitter.com/)
+2. Login with your Twitter account
+3. If you don't have a Developer Account yet, click **"Sign up for Free Account"**
 
-### 1.2 Lengkapi Aplikasi Developer
+### 1.2 Complete Developer Application
 
-1. Jelaskan use case Anda (contoh):
+1. Explain your use case (example):
    ```
    I'm building an automated Twitter bot that posts about Web3 trends 
    using AI-generated content. The bot will post tweets based on trending 
    topics from Membit API and generate content using Google Gemini AI.
    ```
-2. Setujui Terms of Service
+2. Agree to Terms of Service
 
-## 🔧 Langkah 2: Buat Twitter App
+## 🔧 Step 2: Create Twitter App
 
 ### 2.1 Create New App
 
-1. Klik pada icon Gear (⚙️) atau **App settings**
+1. Click on the Gear icon (⚙️) or **App settings**
    
    ![App Settings](/images/App-Settings.png)
 
-2. Pada bagian **Settings > User authentication not set up**, klik **Set Up**
+2. In the **Settings > User authentication not set up** section, click **Set Up**
    
    ![Set Up](/images/Developer-Set-Up.png)
 
-3. Pada bagian **App permissions** ubah jadi **Read and write**
+3. In the **App permissions** section, change to **Read and write**
    
    ![App Permissions](/images/App-Permissions.png)
 
-4. Pada bagian **Type of App** pilih **Web App, Automated App or Bot**
+4. In the **Type of App** section, select **Web App, Automated App or Bot**
    
    ![Type of App](/images/Type-of-App.png)
 
-5. Pada bagian **App Info** isi bebas, contoh: `https://google.com`
+5. In the **App Info** section, fill in anything, example: `https://google.com`
    
    ![App Info](/images/App-Info.png)
 
-6. Klik **Save**
+6. Click **Save**
 
-### 2.2 Ambil API KEY dan Access Token
+### 2.2 Get API KEY and Access Token
 
-1. Pergi ke **Keys and tokens**
+1. Go to **Keys and tokens**
 
-2. Pada bagian **Consumer Keys** klik **Regenerate**
+2. In the **Consumer Keys** section, click **Regenerate**
 
-3. Simpan **API Key** & **API Key Secret** di tempat yang aman
+3. Save **API Key** & **API Key Secret** in a safe place
 
-4. Pada bagian **Authentication Tokens > Access Token and Secret** klik **Generate**
+4. In the **Authentication Tokens > Access Token and Secret** section, click **Generate**
 
-5. Simpan **Access Token** & **Access Token Secret** di tempat yang aman
+5. Save **Access Token** & **Access Token Secret** in a safe place
 
-### 2.3 Simpan Credentials
+### 2.3 Save Credentials
 
-Anda sekarang punya 4 credentials:
+You now have 4 credentials:
 
 ```
 API Key:              xxxxxxxxxxxxxxxxxxxx
@@ -73,7 +73,7 @@ Access Token:         1234567890-zzzzzzzzzzzzzzzzzzz
 Access Token Secret:  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ```
 
-**Simpan semua di tempat aman!**
+**Save all in a safe place!**
 
 ## 📚 Resources
 
@@ -84,6 +84,6 @@ Access Token Secret:  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 ---
 
-**🎉 Selamat! Bot Anda siap digunakan!**
+**🎉 Congratulations! Your bot is ready to use!**
 
-Jika ada masalah, baca dokumentasi lengkap di [README.md](README.md).
+If there are any problems, read the complete documentation at [README.md](README.md).

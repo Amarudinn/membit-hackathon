@@ -1,55 +1,55 @@
 # 🌐 Twitter Bot - Web Dashboard Version
 
-Bot Twitter otomatis dengan web dashboard yang modern untuk posting tweet berdasarkan trending topics dari Membit menggunakan AI Google Gemini.
+Automatic Twitter bot with modern web dashboard for posting tweets based on trending topics from Membit using Google Gemini AI.
 
-## ✨ Fitur Utama
+## ✨ Main Features
 
 ### 🎮 Control Panel
-- **Start Bot** - Jalankan bot dengan scheduler otomatis
-- **Stop Bot** - Hentikan bot (langsung responsive)
+- **Start Bot** - Run bot with automatic scheduler
+- **Stop Bot** - Stop bot (immediately responsive)
 - **Run Once** - Test posting 1 tweet
-- **Status Indicator** - Circle merah/hijau di pojok kanan atas
+- **Status Indicator** - Red/green circle in top right corner
 
-### 📊 Monitoring Real-time
+### 📊 Real-time Monitoring
 - **Statistics Cards** - Total tweets, success count, error count
 - **Activity Logs** - Color-coded logs (info, success, warning, error)
-- **Last Tweet Preview** - Lihat tweet terakhir dengan link ke Twitter
-- **Auto-scroll Logs** - Logs otomatis scroll ke bawah
+- **Last Tweet Preview** - View last tweet with link to Twitter
+- **Auto-scroll Logs** - Logs automatically scroll down
 
 ### ⚙️ Settings Management
-- **API Keys Tab** - Konfigurasi Membit, Gemini, Twitter API
+- **API Keys Tab** - Configure Membit, Gemini, Twitter API
 - **Configuration Tab** - Schedule hours, max retries, tweet length
-- **Prompt Tab** - Customize prompt template untuk AI
+- **Prompt Tab** - Customize prompt template for AI
 - **Password Toggle** - Show/hide API keys
-- **Persistent Storage** - Settings tersimpan di `.env` file
+- **Persistent Storage** - Settings saved in `.env` file
 
-### 📖 Panduan Lengkap
-- **Button Panduan** - Akses panduan dari dashboard
-- **2 Tab Panduan:**
-  - **Cara Menggunakan** - Setup, konfigurasi, operasional
-  - **Rate Limits** - Info Twitter API limits & best practices
+### 📖 Complete Guide
+- **Guide Button** - Access guide from dashboard
+- **2 Guide Tabs:**
+  - **How to Use** - Setup, configuration, operations
+  - **Rate Limits** - Twitter API limits info & best practices
 - **GitHub-style Markdown** - Tables, code blocks, info boxes
-- **External Links** - Icon ↗ untuk link eksternal
+- **External Links** - Icon ↗ for external links
 
-## 📋 Prasyarat
+## 📋 Prerequisites
 
 ### Software
-- Python 3.8 atau lebih tinggi
+- Python 3.8 or higher
 - pip (Python package manager)
-- Browser modern (Chrome, Firefox, Edge, Safari)
+- Modern browser (Chrome, Firefox, Edge, Safari)
 
 ### API Keys
-- **Membit API Key** - [Daftar di sini](https://membit.ai/integration)
-- **Google Gemini API Key** - [Daftar di sini](https://aistudio.google.com/app/apikey)
+- **Membit API Key** - [Register here](https://membit.ai/integration)
+- **Google Gemini API Key** - [Register here](https://aistudio.google.com/app/apikey)
 - **Twitter API Credentials** - [Developer Portal](https://developer.twitter.com)
   - API Key (Consumer Key)
   - API Secret (Consumer Secret)
   - Access Token
   - Access Token Secret
 
-**📖 Panduan Setup Twitter API:** Lihat [TWITTER_SETUP.md](TWITTER_SETUP.md) untuk langkah lengkap.
+**📖 Twitter API Setup Guide:** See [TWITTER_SETUP.md](TWITTER_SETUP.md) for complete steps.
 
-**⚠️ Twitter Rate Limits:** Lihat [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) untuk info penting tentang batasan API.
+**⚠️ Twitter Rate Limits:** See [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) for important information about API limitations.
 
 ## 🚀 Quick Start
 
@@ -59,7 +59,7 @@ Bot Twitter otomatis dengan web dashboard yang modern untuk posting tweet berdas
 git clone https://github.com/Amarudinn/membit-hackathon.git
 ```
 
-### 2. Masuk ke Folder Web Version
+### 2. Enter the Web Version Folder
 
 ```bash
 cd web-version
@@ -73,7 +73,7 @@ pip install -r requirements.txt
 
 ### 4. Setup Environment Variables
 
-Copy file `.env.example` menjadi `.env`:
+Copy the `.env.example` file to `.env`:
 
 ```bash
 # Windows
@@ -83,7 +83,7 @@ copy .env.example .env
 cp .env.example .env
 ```
 
-Edit file `.env` dan isi dengan credentials Anda:
+Edit the `.env` file and fill in your credentials:
 
 ```env
 # API Keys
@@ -105,186 +105,186 @@ MAX_TWEET_LENGTH=250
 SECRET_KEY=your-secret-key-change-this-in-production
 ```
 
-### 4. Jalankan Web Server
+### 4. Run Web Server
 
 ```bash
 python app.py
 ```
 
-### 5. Buka Browser & Setup API Keys
+### 5. Open Browser & Setup API Keys
 
-Akses dashboard di: **http://localhost:5000**
+Access dashboard at: **http://localhost:5000**
 
 **First Time Setup:**
-1. Dashboard akan menampilkan warning jika API keys belum dikonfigurasi
-2. Click tombol **"⚙️ Settings"**
-3. Masuk ke tab **"API Keys"**
-4. Isi semua API keys:
-   - **Membit API Key** - Dari Membit
-   - **Gemini API Key** - Dari Google AI Studio
-   - **Twitter API Key** - Consumer Key dari Twitter
-   - **Twitter API Secret** - Consumer Secret dari Twitter
-   - **Twitter Access Token** - Access Token dari Twitter
-   - **Twitter Access Secret** - Access Token Secret dari Twitter
-5. (Optional) Tab **"Configuration"** - Sesuaikan schedule, retries, tweet length
-6. (Optional) Tab **"Prompt"** - Customize prompt template untuk AI
+1. Dashboard will display warning if API keys are not configured yet
+2. Click **"⚙️ Settings"** button
+3. Go to **"API Keys"** tab
+4. Fill in all API keys:
+   - **Membit API Key** - From Membit
+   - **Gemini API Key** - From Google AI Studio
+   - **Twitter API Key** - Consumer Key from Twitter
+   - **Twitter API Secret** - Consumer Secret from Twitter
+   - **Twitter Access Token** - Access Token from Twitter
+   - **Twitter Access Secret** - Access Token Secret from Twitter
+5. (Optional) **"Configuration"** tab - Adjust schedule, retries, tweet length
+6. (Optional) **"Prompt"** tab - Customize prompt template for AI
 7. Click **"Save All Settings"**
-8. Bot siap digunakan!
+8. Bot is ready to use!
 
 **💡 Tips:**
-- Gunakan icon mata (👁️) untuk show/hide password
-- Semua settings tersimpan di file `.env`
-- Baca panduan lengkap dengan click tombol **"📖 Panduan"**
+- Use eye icon (👁️) to show/hide password
+- All settings are saved in `.env` file
+- Read complete guide by clicking **"📖 Panduan"** button
 
-## 🎮 Cara Menggunakan
+## 🎮 How to Use
 
 ### Control Panel
 
-**Status Indicator** (pojok kanan atas Control Panel):
-- 🔴 **Stopped** - Bot tidak berjalan
-- 🟢 **Running** - Bot berjalan otomatis
+**Status Indicator** (top right corner of Control Panel):
+- 🔴 **Stopped** - Bot is not running
+- 🟢 **Running** - Bot is running automatically
 
-**Tombol Kontrol:**
+**Control Buttons:**
 
 1. **▶️ Start Bot**
-   - Mulai bot dengan scheduler otomatis
-   - Bot akan posting setiap X jam (sesuai SCHEDULE_HOURS)
-   - Status berubah jadi "Running" (hijau)
-   - Menampilkan "Next Run" time
+   - Start bot with automatic scheduler
+   - Bot will post every X hours (according to SCHEDULE_HOURS)
+   - Status changes to "Running" (green)
+   - Displays "Next Run" time
 
 2. **⏹️ Stop Bot**
-   - Hentikan bot yang sedang berjalan
-   - Bot langsung berhenti (responsive, max 1 detik)
-   - Status berubah jadi "Stopped" (merah)
-   - Aman: tidak posting tweet setelah stop
+   - Stop the running bot
+   - Bot stops immediately (responsive, max 1 second)
+   - Status changes to "Stopped" (red)
+   - Safe: does not post tweet after stop
 
 3. **⏩ Run Once**
-   - Posting 1 tweet sekarang (untuk testing)
-   - Tidak mempengaruhi schedule
-   - Bagus untuk test sebelum start automatic mode
+   - Post 1 tweet now (for testing)
+   - Does not affect schedule
+   - Good for testing before starting automatic mode
 
 ### Monitoring Dashboard
 
 **Statistics Cards:**
-- **Total Tweets** - Total tweet yang sudah diposting
-- **Success** - Jumlah tweet berhasil (hijau)
-- **Errors** - Jumlah kali gagal (merah)
+- **Total Tweets** - Total tweets posted
+- **Success** - Number of successful tweets (green)
+- **Errors** - Number of failures (red)
 
 **Activity Logs:**
-- 🔵 **Info** - Informasi umum (biru)
-- ✅ **Success** - Operasi berhasil (hijau)
-- ⚠️ **Warning** - Peringatan (kuning)
-- ❌ **Error** - Error/gagal (merah)
-- Auto-scroll ke log terbaru
+- 🔵 **Info** - General information (blue)
+- ✅ **Success** - Successful operation (green)
+- ⚠️ **Warning** - Warning (yellow)
+- ❌ **Error** - Error/failed (red)
+- Auto-scroll to latest log
 - Max 100 log entries
 
 **Last Tweet Card:**
-- Isi tweet terakhir
-- Timestamp posting
-- Link ke tweet di Twitter (click untuk buka)
+- Last tweet content
+- Posting timestamp
+- Link to tweet on Twitter (click to open)
 
 ### Settings
 
 **API Keys Tab:**
-- Input semua API credentials
-- Password input dengan toggle show/hide
-- Validasi sebelum save
+- Input all API credentials
+- Password input with show/hide toggle
+- Validation before save
 
 **Configuration Tab:**
-- **Schedule Hours** (1-24) - Interval posting (recommended: 6)
-- **Max Retries** (1-10) - Jumlah retry jika gagal (recommended: 3)
-- **Max Tweet Length** (100-280) - Panjang maksimal tweet (recommended: 250)
+- **Schedule Hours** (1-24) - Posting interval (recommended: 6)
+- **Max Retries** (1-10) - Number of retries if failed (recommended: 3)
+- **Max Tweet Length** (100-280) - Maximum tweet length (recommended: 250)
 
 **Prompt Tab:**
-- Customize prompt template untuk Gemini AI
-- Variables wajib: `{trending_data}`, `{max_tweet_length}`
-- Contoh prompt disediakan
-- Tips membuat prompt efektif
+- Customize prompt template for Gemini AI
+- Required variables: `{trending_data}`, `{max_tweet_length}`
+- Example prompt provided
+- Tips for creating effective prompts
 
-### Panduan
+### Guide
 
-Click tombol **"📖 Panduan"** untuk akses:
+Click **"📖 Panduan"** button to access:
 
-**Tab "Cara Menggunakan":**
-- Setup awal (API keys)
-- Konfigurasi bot
+**"How to Use" Tab:**
+- Initial setup (API keys)
+- Bot configuration
 - Customize prompt template
-- Operasional bot
+- Bot operations
 - Monitoring & troubleshooting
 
-**Tab "Rate Limits":**
-- Info Twitter API limits (50 tweets/24 jam)
-- Cara menghindari rate limit
+**"Rate Limits" Tab:**
+- Twitter API limits info (50 tweets/24 hours)
+- How to avoid rate limit
 - Best practices
 - Troubleshooting error 429
 
-## ⚙️ Konfigurasi
+## ⚙️ Configuration
 
 ### Via Environment Variables (`.env`)
 
-| Variable | Default | Deskripsi |
+| Variable | Default | Description |
 |----------|---------|-----------|
-| `SCHEDULE_HOURS` | `6` | Interval waktu posting (dalam jam) |
-| `MAX_RETRIES` | `3` | Jumlah percobaan ulang jika gagal |
-| `MAX_TWEET_LENGTH` | `250` | Panjang maksimal tweet (karakter) |
-| `SECRET_KEY` | - | Flask secret key untuk session |
+| `SCHEDULE_HOURS` | `6` | Posting time interval (in hours) |
+| `MAX_RETRIES` | `3` | Number of retry attempts if failed |
+| `MAX_TWEET_LENGTH` | `250` | Maximum tweet length (characters) |
+| `SECRET_KEY` | - | Flask secret key for session |
 
-### Mengubah Prompt AI
+### Changing AI Prompt
 
 **Via Dashboard (Recommended):**
 1. Click **"⚙️ Settings"**
-2. Tab **"Prompt"**
+2. **"Prompt"** tab
 3. Edit prompt template
 4. Click **"Save All Settings"**
 
 **Via File:**
-- Edit `prompt_template.txt` di folder `web-version`
-- Restart bot untuk apply changes
+- Edit `prompt_template.txt` in `web-version` folder
+- Restart bot to apply changes
 
-**Variables Wajib:**
-- `{trending_data}` - Data tren dari Membit
-- `{max_tweet_length}` - Panjang maksimal tweet
+**Required Variables:**
+- `{trending_data}` - Trend data from Membit
+- `{max_tweet_length}` - Maximum tweet length
 
 ## 🐛 Troubleshooting
 
-### Bot Tidak Bisa Start
+### Bot Cannot Start
 
-**Problem:** Button "Start Bot" disabled
+**Problem:** "Start Bot" button disabled
 
-**Penyebab:** API keys belum dikonfigurasi
+**Cause:** API keys not configured yet
 
-**Solusi:**
+**Solution:**
 1. Click **"⚙️ Settings"**
-2. Tab **"API Keys"**
-3. Isi semua API keys
+2. **"API Keys"** tab
+3. Fill in all API keys
 4. Click **"Save All Settings"**
-5. Button akan enabled otomatis
+5. Button will be enabled automatically
 
 ### Error 401 Unauthorized (Twitter)
 
-**Penyebab:**
-- Twitter permissions masih "Read only"
-- Access Token di-generate sebelum ubah permissions
+**Cause:**
+- Twitter permissions still "Read only"
+- Access Token generated before changing permissions
 
-**Solusi:**
-1. Baca [TWITTER_SETUP.md](TWITTER_SETUP.md) untuk panduan lengkap
-2. Set permissions ke "Read and Write"
+**Solution:**
+1. Read [TWITTER_SETUP.md](TWITTER_SETUP.md) for complete guide
+2. Set permissions to "Read and Write"
 3. Regenerate Access Token & Secret
-4. Update di Settings
+4. Update in Settings
 
 ### Error 429 Too Many Requests
 
-**Penyebab:** Sudah posting > 50 tweets dalam 24 jam
+**Cause:** Already posted > 50 tweets in 24 hours
 
-**Solusi:**
+**Solution:**
 1. Stop bot
-2. Tunggu 15 menit
-3. Adjust schedule: Settings → Configuration → Schedule Hours = 6 atau lebih
-4. Baca [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) untuk detail
+2. Wait 15 minutes
+3. Adjust schedule: Settings → Configuration → Schedule Hours = 6 or more
+4. Read [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) for details
 
 ### Port 5000 Already in Use
 
-**Solusi:** Ubah port di `app.py`:
+**Solution:** Change port in `app.py`:
 
 ```python
 socketio.run(app, host='0.0.0.0', port=8080, debug=False)
@@ -292,7 +292,7 @@ socketio.run(app, host='0.0.0.0', port=8080, debug=False)
 
 ### WebSocket Connection Failed
 
-**Solusi:** Allow port di firewall:
+**Solution:** Allow port in firewall:
 
 ```bash
 # Windows
@@ -305,28 +305,28 @@ sudo ufw allow 5000
 ### Dashboard Not Loading
 
 **Checklist:**
-1. ✅ Flask server berjalan? (cek terminal)
-2. ✅ Port 5000 tidak diblokir?
-3. ✅ Dependencies terinstall? (`pip install -r requirements.txt`)
-4. ✅ Browser console ada error? (F12 → Console)
+1. ✅ Flask server running? (check terminal)
+2. ✅ Port 5000 not blocked?
+3. ✅ Dependencies installed? (`pip install -r requirements.txt`)
+4. ✅ Browser console has errors? (F12 → Console)
 
-### Settings Tidak Tersimpan
+### Settings Not Saved
 
-**Penyebab:** File `.env` tidak writable
+**Cause:** `.env` file is not writable
 
-**Solusi:**
-1. Cek file `.env` ada di folder `web-version`
-2. Pastikan file bisa di-edit (check permissions)
-3. Restart bot setelah save
+**Solution:**
+1. Check `.env` file exists in `web-version` folder
+2. Make sure file can be edited (check permissions)
+3. Restart bot after save
 
-### Tweet Terlalu Panjang
+### Tweet Too Long
 
-**Penyebab:** Prompt template tidak include `{max_tweet_length}`
+**Cause:** Prompt template does not include `{max_tweet_length}`
 
-**Solusi:**
+**Solution:**
 1. Settings → Prompt tab
-2. Pastikan ada `{max_tweet_length}` di prompt
-3. Tambahkan instruksi "MAKSIMAL {max_tweet_length} karakter"
+2. Make sure `{max_tweet_length}` is in prompt
+3. Add instruction "MAXIMUM {max_tweet_length} characters"
 4. Save settings
 
 ## 🤝 Contributing
@@ -338,4 +338,4 @@ Contributions are welcome! Feel free to:
 
 ## 📄 License
 
-MIT License - Silakan digunakan dan dimodifikasi sesuai kebutuhan.
+MIT License - Feel free to use and modify as needed.

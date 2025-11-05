@@ -1,77 +1,77 @@
-# Otomatisasi Tweet Real-Time dengan n8n, Membit, dan Gemini
+# Real-Time Tweet Automation with Membit + n8n
 
-Proyek ini menjelaskan cara menginstal n8n di VPS, dan mengonfigurasi alur kerja (workflow) untuk secara otomatis membuat tweet berdasarkan data tren *real-time* dari Membit, menggunakan Google Gemini untuk membuat konten.
+This project explains how to install n8n on a VPS, and configure a workflow to automatically create tweets based on *real-time* trend data from Membit, using Google Gemini to generate content.
 
-## 🎯 Pilih Versi yang Sesuai
+## 🎯 Choose the Right Version
 
-Proyek ini tersedia dalam 3 versi berbeda:
+This project is available in 3 different versions:
 
-| Versi |
+| Version |
 |-------|
 | **[n8n Version](.)** |
 | **[Python Terminal](python-version/)** |
 | **[Web Dashboard](web-version/)** |
 
-## 📋 Prasyarat
+## 📋 Prerequisites
 
-Sebelum memulai, pastikan Anda memiliki:
-* Sebuah **VPS/Server** (disarankan Debian/Ubuntu) dengan akses root.
-* Alamat **IP Publik** untuk VPS Anda.
-* Sebuah [API Key Google Gemini](https://aistudio.google.com/api-keys)
-* Sebuah [API Key Membit](https://membit.ai/integration)
-* Sebuah **Akun X (Twitter)** dengan akses [Developer Portal](https://developer.x.com/) untuk membuat aplikasi kustom.
+Before starting, make sure you have:
+* A **VPS/Server** (Debian/Ubuntu recommended) with root access.
+* A **Public IP Address** for your VPS.
+* A [Google Gemini API Key](https://aistudio.google.com/api-keys)
+* A [Membit API Key](https://membit.ai/integration)
+* An **X (Twitter) Account** with access to the [Developer Portal](https://developer.x.com/) to create a custom application.
 
-## ⚠️ PENTING: Twitter Rate Limits
+## ⚠️ IMPORTANT: Twitter Rate Limits
 
-**Baca dokumentasi ini sebelum menjalankan bot:** [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md)
+**Read this documentation before running the bot:** [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md)
 
 ---
 
-## 🚀 Bagian 1: Instalasi Server (VPS)
+## 🚀 Part 1: Server Installation (VPS)
 
-Masuk ke VPS Anda melalui SSH dan siapkan Docker.
+Log in to your VPS via SSH and set up Docker.
 
 ### 1. Install Docker
 ```bash
-# Download skrip instalasi resmi
+# Download the official installation script
 curl -fsSL [https://get.docker.com](https://get.docker.com) -o get-docker.sh
 
-# Jalankan skrip
+# Run the script
 sh get-docker.sh
 
-# Download binary Docker Compose
+# Download Docker Compose binary
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
-# Berikan izin eksekusi
+# Grant execution permission
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
 ---
 
-## ⚙️ Bagian 2: Instalasi n8n dengan Docker Compose
+## ⚙️ Part 2: Installing n8n with Docker Compose
 
-### 1. Buat Direktori Proyek
+### 1. Create Project Directory
 
 ```bash
 
-# Buat folder untuk data n8n
+# Create folder for n8n data
 mkdir /root/n8n-data
 
-# Masuk ke folder tersebut
+# Enter that folder
 cd /root/n8n-data
 ```
 
-### 2. Buat file docker-compose.yml
+### 2. Create docker-compose.yml file
 
-Buat file konfigurasi menggunakan nano atau editor teks Anda.
+Create a configuration file using nano or your text editor.
 
 ```bash
 nano docker-compose.yml
 ```
 
-Salin dan tempelkan seluruh konfigurasi di bawah ini ke dalam file tersebut.
+Copy and paste the entire configuration below into that file.
 
-**PENTING:** Ganti `IP_VPS_ANDA` dengan alamat IP publik VPS Anda.
+**IMPORTANT:** Replace `YOUR_VPS_IP` with your VPS public IP address.
 
 ```yaml
 services:
@@ -81,112 +81,112 @@ services:
     ports:
       - "5678:5678"
     environment:
-      # Atur zona waktu Anda
+      # Set your timezone
       - GENERIC_TIMEZONE=Asia/Jakarta
       
-      # [FIX] Nonaktifkan secure cookie agar bisa diakses via IP
+      # [FIX] Disable secure cookie so it can be accessed via IP
       - N8N_SECURE_COOKIE=false
       
-      # [FIX] Atur URL webhook agar koneksi Twitter (OAuth) berhasil
-      # GANTI "IP_VPS_ANDA" DI BAWAH INI!
-      - WEBHOOK_URL=http://IP_VPS_ANDA:5678/
+      # [FIX] Set webhook URL so Twitter (OAuth) connection succeeds
+      # REPLACE "YOUR_VPS_IP" BELOW!
+      - WEBHOOK_URL=http://YOUR_VPS_IP:5678/
       
     volumes:
-      # Gunakan path relatif untuk folder data
+      # Use relative path for data folder
       - ./n8n_data:/home/node/.n8n
 ```
 
-Simpan dan keluar dari editor (`Ctrl + X`, lalu `Y`, lalu `Enter`).
+Save and exit the editor (`Ctrl + X`, then `Y`, then `Enter`).
 
-### 3. Atur Izin (Permissions)
+### 3. Set Permissions
 
-Ini adalah langkah krusial untuk mencegah n8n crash-loop (Restarting).
+This is a crucial step to prevent n8n crash-loop (Restarting).
 
 ```bash
 
-# Buat folder data secara manual
+# Create data folder manually
 mkdir n8n_data
 
-# [FIX] Berikan kepemilikan folder ke user 'node' (ID 1000)
+# [FIX] Give folder ownership to 'node' user (ID 1000)
 chown -R 1000:1000 n8n_data
 ```
 
-### 4. Konfigurasi Firewall (UFW)
+### 4. Configure Firewall (UFW)
 
-Kita harus membuka port 22 (SSH) dan 5678 (n8n).
+We need to open port 22 (SSH) and 5678 (n8n).
 
 ```bash
 
-# Izinkan SSH (agar koneksi Anda tidak terputus)
+# Allow SSH (so your connection doesn't get cut off)
 ufw allow 22/tcp
 
-# Izinkan port n8n
+# Allow n8n port
 ufw allow 5678/tcp
 
-# Aktifkan firewall
+# Enable firewall
 ufw enable
 ```
 
-(Ketik `y` dan `Enter` jika diminta).
+(Type `y` and `Enter` if prompted).
 
-### 5. Jalankan n8n
+### 5. Run n8n
 
 ```bash
 docker-compose up -d
 ```
 
-Tunggu sekitar satu menit. n8n sekarang dapat diakses di `http://IP_VPS_ANDA:5678`.
+Wait about a minute. n8n can now be accessed at `http://YOUR_VPS_IP:5678`.
 
 ---
 
-## 🤖 Bagian 3: Konfigurasi Alur Kerja (Workflow) n8n
+## 🤖 Part 3: Configuring n8n Workflow
 
-Setelah Anda membuat akun admin di n8n, ikuti langkah-langkah ini.
+After you create an admin account in n8n, follow these steps.
 
-### 1. Install Node Membit (MCP Client)
+### 1. Install Membit Node (MCP Client)
 
-Akses halaman Community Nodes di: `http://YOUR_IP_VPS:5678/settings/community-nodes`
+Access the Community Nodes page at: `http://YOUR_IP_VPS:5678/settings/community-nodes`
 
 ![Community Nodes](images/Community-Nodes.png)
 
-- Buka **Settings** ⚙️ (ikon roda gigi di kiri).
-- Buka **Community Nodes**.
-- Di kotak pencarian, ketik **MCP Client**.
-- Klik **Install** pada `n8n-nodes-mcp-client`.
+- Open **Settings** ⚙️ (gear icon on the left).
+- Open **Community Nodes**.
+- In the search box, type **MCP Client**.
+- Click **Install** on `n8n-nodes-mcp-client`.
 
-### 2. Bangun Alur Kerja (Workflow)
+### 2. Build the Workflow
 
 ![Workflow Diagram](images/Workflow.png)
 
-Daripada mengimpor JSON, bangun alur kerja secara manual untuk memastikan kompatibilitas:
+Rather than importing JSON, build the workflow manually to ensure compatibility:
 
-- Klik **+** (pojok kanan atas) untuk menambahkan node.
-- Tambahkan 5 node ini ke kanvas Anda:
+- Click **+** (top right corner) to add a node.
+- Add these 5 nodes to your canvas:
   - **Schedule**
   - **AI Agent**
   - **Google Gemini Chat Model**
   - **MCP Client**
   - **Create Tweet** (Twitter)
 
-### 3. Hubungkan Node
+### 3. Connect Nodes
 
-Tarik panah untuk membuat koneksi berikut:
+Drag arrows to create the following connections:
 
-- **Schedule** ➔ ke input utama **AI Agent**
-- **Google Gemini Chat Model** ➔ ke input **Chat Model*** di **AI Agent**
-- **MCP Client** ➔ ke input **Tool** di **AI Agent**
-- **AI Agent** ➔ ke input utama **Create Tweet**
+- **Schedule** ➔ to main input of **AI Agent**
+- **Google Gemini Chat Model** ➔ to **Chat Model*** input on **AI Agent**
+- **MCP Client** ➔ to **Tool** input on **AI Agent**
+- **AI Agent** ➔ to main input of **Create Tweet**
 
 ---
 
-## 🔧 Bagian 4: Mengisi Parameter Node
+## 🔧 Part 4: Filling in Node Parameters
 
-Klik pada setiap node untuk menghilangkan tanda peringatan (🔺).
+Click on each node to remove warning signs (🔺).
 
 ### 1. Google Gemini Chat Model
 
-- **Credential:** Masukkan API Key Gemini Anda.
-- **Host:** Biarkan default (`https://generativelanguage.googleapis.com`).
+- **Credential:** Enter your Gemini API Key.
+- **Host:** Leave default (`https://generativelanguage.googleapis.com`).
 
 ### 2. MCP Client
 
@@ -202,34 +202,34 @@ Klik pada setiap node untuk menghilangkan tanda peringatan (🔺).
 
 **Credential to connect with**
 
-Klik **Create New** dan copy OAuth Redirect URL:
+Click **Create New** and copy OAuth Redirect URL:
 
 ```
 http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback
 ```
 
-#### Pergi ke [Developer Portal](https://developer.twitter.com/)
+#### Go to [Developer Portal](https://developer.twitter.com/)
 
-- Buat app baru
-- **App permissions:** pilih **Read and write**
-- **Type of App:** pilih **Web App, Automated App or Bot**
+- Create a new app
+- **App permissions:** select **Read and write**
+- **Type of App:** select **Web App, Automated App or Bot**
 - **App info:**
 
 ![Developer Portal App Info](images/Developer-App-Info.png)
 
-- Paste OAuth Redirect URL `http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback` di **Callback URI / Redirect URL**
-- **Website URL:** isi bebas
-- Sisanya kosongkan tidak masalah
-- Klik **Save**
-- Nanti akan muncul **Client ID** & **Client Secret**
-- Copy Paste ke Workflow Create Tweet
+- Paste OAuth Redirect URL `http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback` in **Callback URI / Redirect URL**
+- **Website URL:** fill in anything
+- Leave the rest blank, no problem
+- Click **Save**
+- **Client ID** & **Client Secret** will appear later
+- Copy Paste to Workflow Create Tweet
 
 ![Workflow Create Tweet](images/Workflow-Create-Tweet.png)
 
-- Klik **Connect my account** (X)
-- Klik **Save**
+- Click **Connect my account** (X)
+- Click **Save**
 
-**Text** Masukkan ekspresi ini untuk mengambil output dari AI Agent:
+**Text** Enter this expression to retrieve output from AI Agent:
 
 ```
 ={{ $('AI Agent').item.json.output }}
@@ -239,28 +239,28 @@ http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback
 
 ### 4. AI Agent
 
-- **Source for Prompt (User Message):** Ubah dari `Connected Chat Trigger Node` menjadi `Prompt`.
-- **Prompt (User Message):** Salin dan tempelkan prompt ini:
+- **Source for Prompt (User Message):** Change from `Connected Chat Trigger Node` to `Prompt`.
+- **Prompt (User Message):** Copy and paste this prompt:
 
 ```
-Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit (yang tersedia sebagai "Tool"), memilih SATU topik paling menarik terkait 'Web3', dan membuat draf tweet yang informatif dalam Bahasa Indonesia. Pastikan tweet diakhiri dengan tagar #Web3. Jawab HANYA dengan draf tweet, tanpa pengantar apa pun.
+You are an expert social media manager. Your task is to look at trend data from Membit (available as a "Tool"), select ONE most interesting topic related to 'Web3', and create an informative tweet draft in Indonesian. Make sure the tweet ends with the hashtag #Web3. Answer ONLY with the tweet draft, without any introduction.
 ```
 
-- **Bisa kamu sesuaikan sendiri**
+- **You can customize it yourself**
 
 ---
 
-## ▶️ Bagian 5: Menjalankan Alur Kerja
+## ▶️ Part 5: Running the Workflow
 
-### 1. Uji Coba
+### 1. Testing
 
-Klik tombol **"Execute workflow"** di pojok kiri atas untuk menjalankan tes manual. Periksa apakah tweet berhasil diposting.
+Click the **"Execute workflow"** button in the top left corner to run a manual test. Check if the tweet was successfully posted.
 
-### 2. Aktivasi
+### 2. Activation
 
-Jika sudah berhasil:
+If successful:
 
-- Klik **Save** (pojok kanan atas) untuk menyimpan alur kerja.
-- Klik toggle **"Inactive"** (di sebelah "Save") untuk mengubahnya menjadi **"Active"**.
+- Click **Save** (top right corner) to save the workflow.
+- Click the **"Inactive"** toggle (next to "Save") to change it to **"Active"**.
 
-**Selesai!** Alur kerja Anda sekarang akan berjalan secara otomatis sesuai jadwal di node "Schedule".
+**Done!** Your workflow will now run automatically according to the schedule in the "Schedule" node.

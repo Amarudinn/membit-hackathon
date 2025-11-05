@@ -1,26 +1,26 @@
 # 🤖 Twitter Bot - Python Version
 
-Bot Twitter otomatis versi CLI yang modern untuk posting tweet berdasarkan trending topics dari Membit menggunakan AI Google Gemini.
+Modern CLI version automatic Twitter bot for posting tweets based on trending topics from Membit using Google Gemini AI.
 
-## 📋 Prasyarat
+## 📋 Prerequisites
 
 ### Software
-- Python 3.8 atau lebih tinggi
+- Python 3.8 or higher
 - pip (Python package manager)
-- Browser modern (Chrome, Firefox, Edge, Safari)
+- Modern browser (Chrome, Firefox, Edge, Safari)
 
 ### API Keys
-- **Membit API Key** - [Daftar di sini](https://membit.ai/integration)
-- **Google Gemini API Key** - [Daftar di sini](https://aistudio.google.com/app/apikey)
+- **Membit API Key** - [Register here](https://membit.ai/integration)
+- **Google Gemini API Key** - [Register here](https://aistudio.google.com/app/apikey)
 - **Twitter API Credentials** - [Developer Portal](https://developer.twitter.com)
   - API Key (Consumer Key)
   - API Secret (Consumer Secret)
   - Access Token
   - Access Token Secret
 
-**📖 Panduan Setup Twitter API:** Lihat [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md) untuk langkah lengkap.
+**📖 Twitter API Setup Guide:** See [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md) for complete steps.
   
-**⚠️ Twitter Rate Limits:** Lihat [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md) untuk info penting tentang batasan API.
+**⚠️ Twitter Rate Limits:** See [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md) for important information about API limitations.
 
 ## 🚀 Quick Start
 
@@ -30,7 +30,7 @@ Bot Twitter otomatis versi CLI yang modern untuk posting tweet berdasarkan trend
 git clone https://github.com/Amarudinn/membit-hackathon.git
 ```
 
-### 2. Masuk ke Folder Web Version
+### 2. Enter the Web Version Folder
 
 ```bash
 cd python-version
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 ### 4. Setup Environment Variables
 
-Copy file `.env.example` menjadi `.env`:
+Copy the `.env.example` file to `.env`:
 
 ```bash
 # Windows
@@ -54,7 +54,7 @@ copy .env.example .env
 cp .env.example .env
 ```
 
-Edit file `.env` dan isi dengan credentials Anda:
+Edit the `.env` file and fill in your credentials:
 
 ```env
 # API Keys
@@ -76,61 +76,61 @@ MAX_TWEET_LENGTH=250
 SECRET_KEY=your-secret-key-change-this-in-production
 ```
 
-## Cara Menddapatkan API Keys
+## How to Get API Keys
 
 ### Membit API Key
 
-1. Daftar di [Membit.ai](https://membit.ai/integration)
-2. Buat API Key di dashboard
-3. Copy API Key ke `.env`
+1. Register at [Membit.ai](https://membit.ai/integration)
+2. Create API Key in dashboard
+3. Copy API Key to `.env`
 
 ### Google Gemini API Key
 
-1. Pergi ke [Google AI Studio](https://membit.ai/integration)
-2. Klik "Create API Key"
-3. Copy API Key ke `.env`
+1. Go to [Google AI Studio](https://membit.ai/integration)
+2. Click "Create API Key"
+3. Copy API Key to `.env`
 
 ### Twitter API Credentials
 
 [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md)
 
-## ▶️ Cara Menggunakan
+## ▶️ How to Use
 
-### Jalankan Bot
+### Run the Bot
 
 ```bash
 python main.py
 ```
 
-Bot akan langsung menjalankan sekali, lalu otomatis berjalan setiap 6 jam.
+The bot will run once immediately, then automatically run every 6 hours.
 
 ### Stop Bot
 
-Tekan `Ctrl+C` untuk menghentikan bot dengan graceful shutdown.
+Press `Ctrl+C` to stop the bot with graceful shutdown.
 
-## ⚙️ Konfigurasi
+## ⚙️ Configuration
 
 ### Via Environment Variables (`.env`)
 
-| Variable | Default | Deskripsi |
+| Variable | Default | Description |
 |----------|---------|-----------|
-| `SCHEDULE_HOURS` | `6` | Interval waktu posting (dalam jam) |
-| `MAX_RETRIES` | `3` | Jumlah percobaan ulang jika gagal |
-| `MAX_TWEET_LENGTH` | `250` | Panjang maksimal tweet (karakter) |
+| `SCHEDULE_HOURS` | `6` | Posting time interval (in hours) |
+| `MAX_RETRIES` | `3` | Number of retry attempts if failed |
+| `MAX_TWEET_LENGTH` | `250` | Maximum tweet length (characters) |
 
-**Contoh:**
+**Example:**
 
 ```env
-SCHEDULE_HOURS=6        # Post setiap 6 jam
-MAX_RETRIES=3           # Retry sampai 3x
-MAX_TWEET_LENGTH=250    # Tweet maksimal 250 karakter
+SCHEDULE_HOURS=6        # Post every 6 hours
+MAX_RETRIES=3           # Retry up to 3x
+MAX_TWEET_LENGTH=250    # Tweet maximum 250 characters
 ```
 
-### Mengubah Prompt AI
+### Changing AI Prompt
 
-Edit prompt di `main.py` pada fungsi `create_and_post_tweet()` (sekitar baris 80):
+Edit the prompt in `main.py` in the `create_and_post_tweet()` function (around line 80):
 
-**Bahasa Indonesia (Default):**
+**Indonesian (Default):**
 ```python
 prompt = f"""Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit berikut:
 
@@ -164,41 +164,41 @@ IMPORTANT:
 
 ### ❌ Error: "Failed to fetch Membit data"
 
-**Penyebab:**
-- API Key Membit salah
-- Koneksi internet bermasalah
+**Cause:**
+- Membit API Key is wrong
+- Internet connection problem
 
-**Solusi:**
-- Cek `MEMBIT_API_KEY` di file `.env`
-- Test koneksi internet
+**Solution:**
+- Check `MEMBIT_API_KEY` in `.env` file
+- Test internet connection
 
 ### ❌ Error: "Failed to generate content with Gemini"
 
-**Penyebab:**
-- API Key Gemini salah atau expired
-- Quota API Gemini habis
+**Cause:**
+- Gemini API Key is wrong or expired
+- Gemini API quota exhausted
 
-**Solusi:**
-- Cek `GEMINI_API_KEY` di file `.env`
-- Cek quota di [Google AI Studio](https://membit.ai/integration)
+**Solution:**
+- Check `GEMINI_API_KEY` in `.env` file
+- Check quota at [Google AI Studio](https://membit.ai/integration)
 
 ### ❌ Error: "Failed to post tweet"
 
-**Penyebab:**
-- Twitter credentials salah
-- App permissions tidak Read and Write
-- Tweet duplikat (Twitter tidak izinkan tweet sama berturut-turut)
+**Cause:**
+- Twitter credentials are wrong
+- App permissions are not Read and Write
+- Duplicate tweet (Twitter doesn't allow same consecutive tweets)
 - Rate limit exceeded
 
-**Solusi:**
-- Cek semua credentials di `.env`
-- Pastikan App permissions = **Read and write** di Developer Portal
-- Tunggu beberapa menit jika rate limit
-- Ubah prompt agar tweet lebih bervariasi
+**Solution:**
+- Check all credentials in `.env`
+- Make sure App permissions = **Read and write** in Developer Portal
+- Wait a few minutes if rate limit
+- Change prompt so tweets are more varied
 
 ### ⚠️ Warning: "ALTS creds ignored"
 
-**Ini normal!** Warning dari Google SDK, tidak mempengaruhi fungsi bot. Sudah di-suppress di kode.
+**This is normal!** Warning from Google SDK, does not affect bot function. Already suppressed in code.
 
 ## 🤝 Contributing
 
@@ -209,6 +209,6 @@ Contributions are welcome! Feel free to:
 
 ## 📄 License
 
-MIT License - Silakan digunakan dan dimodifikasi sesuai kebutuhan.
+MIT License - Feel free to use and modify as needed.
 
 ---
