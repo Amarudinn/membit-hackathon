@@ -228,7 +228,7 @@ http://YOUR_IP_VPS:5678/rest/oauth2-credential/callback
 **Text** Enter this expression to retrieve output from AI Agent:
 
 ```
-={{ $('AI Agent').item.json.output }}
+{{ $('AI Agent').item.json.output }}
 ```
 
 ![Workflow Create Tweet](images/Create-Tweet-Text.png)
