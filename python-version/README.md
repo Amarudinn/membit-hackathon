@@ -7,7 +7,6 @@ Modern CLI version automatic Twitter bot for posting tweets based on trending to
 ### Software
 - Python 3.8 or higher
 - pip (Python package manager)
-- Modern browser (Chrome, Firefox, Edge, Safari)
 
 ### API Keys
 - **Membit API Key** - [Register here](https://membit.ai/integration)
