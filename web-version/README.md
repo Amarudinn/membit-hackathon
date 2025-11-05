@@ -119,13 +119,20 @@ MAX_TWEET_LENGTH=250
 SECRET_KEY=your-secret-key-change-this-in-production
 ```
 
-### 4. Run Web Server
+### 5. Open port 5000 in the firewall
+
+```bash
+sudo ufw allow 5000/tcp
+sudo ufw status
+```
+
+### 6. Run Web Server
 
 ```bash
 python app.py
 ```
 
-### 5. Open Browser & Setup API Keys
+### 7. Open Browser & Setup API Keys
 
 Access dashboard at: **http://localhost:5000**
 
