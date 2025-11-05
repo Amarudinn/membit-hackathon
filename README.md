@@ -34,7 +34,7 @@ Log in to your VPS via SSH and set up Docker.
 ### 1. Install Docker
 ```bash
 # Download the official installation script
-curl -fsSL [https://get.docker.com](https://get.docker.com) -o get-docker.sh
+curl -fsSL https://get.docker.com -o get-docker.sh
 
 # Run the script
 sh get-docker.sh
@@ -103,10 +103,6 @@ Save and exit the editor (`Ctrl + X`, then `Y`, then `Enter`).
 This is a crucial step to prevent n8n crash-loop (Restarting).
 
 ```bash
-
-# Create data folder manually
-mkdir n8n_data
-
 # [FIX] Give folder ownership to 'node' user (ID 1000)
 chown -R 1000:1000 n8n_data
 ```
