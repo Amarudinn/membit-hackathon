@@ -41,6 +41,16 @@ cd python-version
 pip install -r requirements.txt
 ```
 
+### 3.1 VPS Ubuntu/Debian
+
+```bash
+python3 -m venv venv
+
+source venv/bin/activate
+
+pip install -r requirements.txt
+```
+
 ### 4. Setup Environment Variables
 
 Copy the `.env.example` file to `.env`:
