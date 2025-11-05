@@ -74,6 +74,14 @@ cd web-version
 ### 3. Install Dependencies
 
 ```bash
+# Windows
+pip install -r requirements.txt
+
+# Linux/Mac
+python3 -m venv venv
+
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 
