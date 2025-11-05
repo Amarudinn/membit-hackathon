@@ -48,12 +48,9 @@ Automatic Twitter bot with modern web dashboard for posting tweets based on tren
   - Access Token Secret
 
 ### Flask Configuration
-- [https://randomkeygen.com/](https://randomkeygen.com/)
+- **RandomKeygen** - [Generate here](https://randomkeygen.com/)
 
-- Or
-```bash
-python -c "import secrets; print(secrets.token_hex(32))"
-```
+- Or `python -c "import secrets; print(secrets.token_hex(32))"`
 
 
 **📖 Twitter API Setup Guide:** See [TWITTER_SETUP.md](TWITTER_SETUP.md) for complete steps.
