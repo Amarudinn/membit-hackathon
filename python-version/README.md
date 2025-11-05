@@ -38,12 +38,10 @@ cd python-version
 ### 3. Install Dependencies
 
 ```bash
+# Windows
 pip install -r requirements.txt
-```
 
-### 3.1 VPS Ubuntu/Debian
-
-```bash
+# Linux/Mac
 python3 -m venv venv
 
 source venv/bin/activate
