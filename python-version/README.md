@@ -70,9 +70,6 @@ TWITTER_ACCESS_SECRET=your_twitter_access_secret_here
 SCHEDULE_HOURS=6
 MAX_RETRIES=3
 MAX_TWEET_LENGTH=250
-
-# Flask Configuration
-SECRET_KEY=your-secret-key-change-this-in-production
 ```
 
 ## How to Get API Keys
