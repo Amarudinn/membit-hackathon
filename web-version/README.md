@@ -59,6 +59,12 @@ Automatic Twitter bot with modern web dashboard built with **Vite + React** for 
 
 ## 🚀 Quick Start
 
+⚠️ **IMPORTANT:** This project requires **2 servers** to run:
+1. **Backend (Flask)** - Port 5000 - Bot logic & API
+2. **Frontend (Vite)** - Port 5173 - Dashboard UI
+
+Both must be running simultaneously!
+
 ### 1. Clone Repository
 
 ```bash
@@ -122,9 +128,56 @@ cd frontend
 
 # Install Node.js dependencies
 npm install
+
+# Go back to web-version folder
+cd ..
 ```
 
-### 6. Run Frontend Dev Server
+### 6. Open Firewall Ports (VPS Only)
+
+If running on VPS, open required ports:
+
+```bash
+# Allow Backend port
+sudo ufw allow 5000/tcp
+
+# Allow Frontend port
+sudo ufw allow 5173/tcp
+
+# Check status
+sudo ufw status
+```
+
+### 7. Run Backend Server (Terminal 1 / Screen 1)
+
+⚠️ **IMPORTANT:** Backend MUST be running for the bot to work!
+
+```bash
+# In web-version folder
+python app.py
+
+# Or for Linux/Mac
+python3 app.py
+```
+
+You should see:
+```
+🚀 Starting Twitter Bot Web Interface...
+📱 Open http://localhost:5000 in your browser
+```
+
+**Keep this terminal running!** Or use `screen`:
+
+```bash
+# Using screen (recommended for VPS)
+screen -S backend
+python3 app.py
+# Press Ctrl+A then D to detach
+```
+
+### 8. Run Frontend Dev Server (Terminal 2 / Screen 2)
+
+Open a **NEW terminal** or screen session:
 
 ```bash
 # In web-version/frontend folder
@@ -132,11 +185,43 @@ cd frontend
 npm run dev
 ```
 
-Frontend will run at `http://localhost:5173`
+You should see:
+```
+VITE v6.4.1  ready in 2907 ms
+➜  Local:   http://localhost:5173/
+➜  Network: http://YOUR_IP:5173/
+```
 
-### 7. Open Browser & Setup API Keys
+**Keep this terminal running!** Or use `screen`:
 
-Access dashboard at: **http://localhost:5173**
+```bash
+# Using screen (recommended for VPS)
+screen -S frontend
+cd frontend
+npm run dev
+# Press Ctrl+A then D to detach
+```
+
+### 9. Access Dashboard
+
+**Local Development:**
+- Open browser: **http://localhost:5173**
+
+**VPS/Server:**
+- Open browser: **http://YOUR_VPS_IP:5173**
+
+### 10. Setup API Keys in Dashboard
+
+**First Time Setup:**
+1. Dashboard will display warning if API keys are not configured yet
+2. Click **"⚙️ Settings"** button
+3. Go to **"API Keys"** tab
+4. Fill in all API keys:
+   - **Membit API Key** - From Membit
+   - **Gemini API Key** - From Google AI Studio
+   - **Twitter API Key** - Consumer Key from Twitter
+   - **Twitter API Secret** - Consumer Secret from Twitter
+   - **Twitter Access Token** - Access Token from Twitter
 
 **First Time Setup:**
 1. Dashboard will display warning if API keys are not configured yet
@@ -270,6 +355,23 @@ Click **"📖 Panduan"** button to access:
 
 ## 🐛 Troubleshooting
 
+### Error: ECONNREFUSED ::1:5000
+
+**Problem:** Frontend shows error `connect ECONNREFUSED ::1:5000`
+
+**Cause:** Flask backend is not running
+
+**Solution:**
+1. Open a **NEW terminal** or screen session
+2. Navigate to `web-version` folder
+3. Run: `python app.py` (or `python3 app.py`)
+4. Keep backend running
+5. Refresh browser
+
+**⚠️ IMPORTANT:** You need **BOTH** backend and frontend running:
+- Backend (Flask): Port 5000
+- Frontend (Vite): Port 5173
+
 ### Bot Cannot Start
 
 **Problem:** "Start Bot" button disabled
@@ -280,7 +382,7 @@ Click **"📖 Panduan"** button to access:
 1. Click **"⚙️ Settings"**
 2. **"API Keys"** tab
 3. Fill in all API keys
-4. Click **"Save All Settings"**
+4. Click **"Save"**
 5. Button will be enabled automatically
 
 ### Error 401 Unauthorized (Twitter)

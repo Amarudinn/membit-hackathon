@@ -376,7 +376,7 @@ IMPORTANT:
 
           {activeTab === 'ratelimits' && (
             <div className="markdown-body">
-              <h2>⚠️ Twitter API Rate Limits Guide</h2>
+              <h2>⚠️ Twitter API Rate Limits</h2>
               
               <h3>What is Rate Limit?</h3>
               <p>Rate limit is a restriction on the number of tweets that can be posted within a certain time period. Twitter enforces this to prevent spam and API abuse.</p>
