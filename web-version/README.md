@@ -63,24 +63,21 @@ Automatic Twitter bot with modern web dashboard built with **Vite + React** for 
 
 ```bash
 git clone https://github.com/Amarudinn/membit-hackathon.git
-cd web-version
+cd membit-hackathon/web-version
+```
+### 2. Use Virtual Environments
+
+```bash
+# Linux
+python3 -m venv venv
+source venv/bin/activate
 ```
 
-### 2. Install Backend Dependencies
+### 3. Install Backend Dependencies
 
 ```bash
 # Install Python dependencies
 pip install -r requirements.txt
-```
-
-### 3. Install Frontend Dependencies
-
-```bash
-# Navigate to frontend folder
-cd frontend
-
-# Install Node.js dependencies
-npm install
 ```
 
 ### 4. Setup Environment Variables
@@ -114,26 +111,20 @@ MAX_RETRIES=3
 MAX_TWEET_LENGTH=250
 
 # Flask Configuration
-SECRET_KEY=your-secret-key-change-this-in-production
+SECRET_KEY=your-secret-key
 ```
 
-### 5. Open port 5000 in the firewall
+### 5. Install Frontend Dependencies
 
 ```bash
-sudo ufw allow 5000/tcp
-sudo ufw status
+# Navigate to frontend folder
+cd frontend
+
+# Install Node.js dependencies
+npm install
 ```
 
-### 6. Run Backend Server (Terminal 1)
-
-```bash
-# In web-version folder
-python app.py
-```
-
-Backend will run at `http://localhost:5000`
-
-### 7. Run Frontend Dev Server (Terminal 2)
+### 6. Run Frontend Dev Server
 
 ```bash
 # In web-version/frontend folder
@@ -143,7 +134,7 @@ npm run dev
 
 Frontend will run at `http://localhost:5173`
 
-### 8. Open Browser & Setup API Keys
+### 7. Open Browser & Setup API Keys
 
 Access dashboard at: **http://localhost:5173**
 
