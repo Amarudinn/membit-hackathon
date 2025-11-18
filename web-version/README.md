@@ -242,7 +242,7 @@ npm run dev
 **💡 Tips:**
 - Use eye icon (👁️) to show/hide password
 - All settings are saved in `.env` file
-- Read complete guide by clicking **"📖 Panduan"** button
+- Read complete guide by clicking **"📖 Guide"** button
 
 ## 🎮 How to Use
 
@@ -311,7 +311,7 @@ npm run dev
 
 ### Guide
 
-Click **"📖 Panduan"** button to access:
+Click **"📖 Guide"** button to access:
 
 **"How to Use" Tab:**
 - Initial setup (API keys)
