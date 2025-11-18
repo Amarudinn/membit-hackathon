@@ -54,17 +54,25 @@ def load_prompt_config():
             bot_config['prompt_template'] = f.read()
     else:
         # Default prompt
-        bot_config['prompt_template'] = """Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit berikut:
+        bot_config['prompt_template'] = """Anda adalah seorang social media manager yang ahli di bidang Web3 dan cryptocurrency. 
 
+Analisis data trending dari Membit berikut:
 {trending_data}
 
-Pilih SATU topik paling menarik terkait 'Web3', dan membuat draf tweet yang informatif dalam Bahasa Indonesia. 
+Tugas Anda:
+1. Pilih SATU topik paling menarik dan relevan dari data di atas
+2. Prioritaskan topik yang sedang trending atau memiliki pergerakan signifikan
+3. Buat tweet informatif dan engaging dalam Bahasa Inggris
 
-PENTING: 
+Aturan PENTING:
 - Tweet MAKSIMAL {max_tweet_length} karakter (termasuk spasi dan hashtag)
-- Harus singkat, padat, dan menarik
-- Akhiri dengan hashtag #Web3
-- Jawab HANYA dengan draf tweet, tanpa pengantar apa pun"""
+- Singkat, padat, dan menarik
+- Fokus pada insight atau fakta menarik
+- Gunakan tone profesional tapi tetap casual
+- Akhiri dengan 1-2 hashtag relevan (contoh: #Web3, #Crypto, #DeFi, #NFT, #Oracle, #Layer2, dll sesuai topik)
+- Jawab HANYA dengan tweet final, tanpa penjelasan atau pengantar apapun
+
+Variasikan topik setiap kali - jangan selalu pilih topik yang sama!"""
 
 def save_prompt_config():
     """Save prompt template to file"""
