@@ -1,4 +1,4 @@
-# 🌐 Twitter Bot - Modern Web Dashboard (Vite + React)
+# 🌐 Twitter Bot - Modern Web Dashboard
 
 Automatic Twitter bot with modern web dashboard built with **Vite + React** for posting tweets based on trending topics from Membit using Google Gemini AI.
 
@@ -22,14 +22,6 @@ Automatic Twitter bot with modern web dashboard built with **Vite + React** for 
 - **Prompt Tab** - Customize prompt template for AI
 - **Password Toggle** - Show/hide API keys
 - **Persistent Storage** - Settings saved in `.env` file
-
-### 📖 Complete Guide
-- **Guide Button** - Access guide from dashboard
-- **2 Guide Tabs:**
-  - **How to Use** - Setup, configuration, operations
-  - **Rate Limits** - Twitter API limits info & best practices
-- **GitHub-style Markdown** - Tables, code blocks, info boxes
-- **External Links** - Icon ↗ for external links
 
 ## 📋 Prerequisites
 
