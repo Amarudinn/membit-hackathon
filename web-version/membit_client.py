@@ -110,6 +110,72 @@ class MembitClient:
         
         return "No trending data available"
     
+    def get_cluster_info(self, label, limit=10):
+        """Get detailed information about a specific cluster"""
+        try:
+            response = requests.post(
+                self.endpoint,
+                headers=self.headers,
+                json={
+                    "jsonrpc": "2.0",
+                    "id": 3,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "clusters_info",
+                        "arguments": {
+                            "label": label,
+                            "limit": limit
+                        }
+                    }
+                },
+                timeout=30,
+                stream=True
+            )
+            
+            response.raise_for_status()
+            data = self._parse_sse_response(response)
+            
+            if data.get('result'):
+                return self._format_trending_data(data['result'])
+            
+            return "No cluster info available"
+            
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Failed to fetch cluster info: {str(e)}")
+    
+    def search_posts(self, query, limit=10):
+        """Search for specific posts"""
+        try:
+            response = requests.post(
+                self.endpoint,
+                headers=self.headers,
+                json={
+                    "jsonrpc": "2.0",
+                    "id": 4,
+                    "method": "tools/call",
+                    "params": {
+                        "name": "posts_search",
+                        "arguments": {
+                            "q": query,
+                            "limit": limit
+                        }
+                    }
+                },
+                timeout=30,
+                stream=True
+            )
+            
+            response.raise_for_status()
+            data = self._parse_sse_response(response)
+            
+            if data.get('result'):
+                return self._format_trending_data(data['result'])
+            
+            return "No posts found"
+            
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Failed to search posts: {str(e)}")
+    
     def _format_trending_data(self, data):
         """Format trending data for better readability"""
         # Handle different response formats

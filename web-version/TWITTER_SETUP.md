@@ -1,12 +1,12 @@
-# 🐦 Twitter API Setup Guide
+# Twitter API Setup Guide
 
 Complete guide to get Twitter API credentials.
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Active Twitter account (not suspended)
 
-## 🚀 Step 1: Register Twitter Developer Account
+## Step 1: Register Twitter Developer Account
 
 ### 1.1 Access Developer Portal
 
@@ -24,7 +24,7 @@ Complete guide to get Twitter API credentials.
    ```
 2. Agree to Terms of Service
 
-## 🔧 Step 2: Create Twitter App
+## Step 2: Create Twitter App
 
 ### 2.1 Create New App
 
@@ -75,7 +75,7 @@ Access Token Secret:  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 **Save all in a safe place!**
 
-## 📚 Resources
+## Resources
 
 - [Twitter Developer Portal](https://developer.twitter.com/en/portal/dashboard)
 - [Twitter API Documentation](https://developer.twitter.com/en/docs/twitter-api)
@@ -84,6 +84,6 @@ Access Token Secret:  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 ---
 
-**🎉 Congratulations! Your bot is ready to use!**
+**Congratulations! Your bot is ready to use!**
 
 If there are any problems, read the complete documentation at [README.md](README.md).

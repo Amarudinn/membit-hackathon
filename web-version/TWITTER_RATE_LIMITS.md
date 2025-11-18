@@ -4,7 +4,7 @@
 
 Rate limit is a restriction on the number of tweets that can be posted within a certain time period. Twitter enforces this to prevent spam and API abuse.
 
-## 📊 Twitter API Free Tier Limits
+## Twitter API Free Tier Limits
 
 ### Daily Limit
 - **50 tweets per 24 hours**
@@ -16,7 +16,7 @@ Rate limit is a restriction on the number of tweets that can be posted within a 
 - Rate limit will reset every **15 minutes**
 - If you hit the limit, wait 15 minutes before trying again
 
-## 🚨 Error 429 - Too Many Requests
+## Error 429 - Too Many Requests
 
 ### What Does It Mean?
 This error appears when you have reached the maximum posting limit within a certain time period.
@@ -98,7 +98,7 @@ Total Tweets/Day = (24 / SCHEDULE_HOURS) + Manual Tweets
 - Success Count: How many tweets successfully posted
 - Error Count: How many times failed
 
-## 🛑 What to Do When You Hit Rate Limit?
+## What to Do When You Hit Rate Limit?
 
 ### Step 1: Stop Bot
 - **Web Version:** Click "Stop Bot" button
@@ -121,7 +121,7 @@ If you frequently hit the limit, increase `SCHEDULE_HOURS`:
 ### Step 5: Restart Bot
 After 15 minutes and adjusting schedule, restart bot.
 
-## 💡 Tips to Avoid Suspension
+## Tips to Avoid Suspension
 
 ### 1. Don't Retry on Error 429
 If bot hits error 429, **STOP** - don't retry multiple times. This can be considered spam by Twitter.
@@ -140,7 +140,7 @@ Make sure tweets are not too repetitive. Bot already uses AI for content variati
 ### 5. Monitor Regularly
 Check usage daily to ensure not approaching limit.
 
-## 📈 Upgrade Options
+## Upgrade Options
 
 If 50 tweets/day is not enough:
 
@@ -156,7 +156,7 @@ If 50 tweets/day is not enough:
 
 **Info:** https://developer.twitter.com/en/portal/products
 
-## 🎯 Best Practices Summary
+## Best Practices Summary
 
 ✅ **DO:**
 - Set `SCHEDULE_HOURS=6` or more
@@ -172,7 +172,7 @@ If 50 tweets/day is not enough:
 - Post > 50 tweets/day
 - Ignore error messages
 
-## 📚 Resources
+## Resources
 
 - [Twitter API Documentation](https://developer.twitter.com/en/docs/twitter-api)
 - [Rate Limits Reference](https://developer.twitter.com/en/docs/twitter-api/rate-limits)
@@ -181,6 +181,6 @@ If 50 tweets/day is not enough:
 
 ---
 
-**💡 Remember:** Better to post 4 quality tweets per day than spam 50 tweets and get suspended!
+**Remember:** Better to post 4 quality tweets per day than spam 50 tweets and get suspended!
 
-**🎯 Recommended Setting:** `SCHEDULE_HOURS=6` (4 tweets/day = 120 tweets/month)
+**Recommended Setting:** `SCHEDULE_HOURS=6` (4 tweets/day = 120 tweets/month)

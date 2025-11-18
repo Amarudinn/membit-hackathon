@@ -48,7 +48,10 @@ bot_config = {
     'enable_image': False,
     'image_style': 'digital art',
     'image_width': 1200,
-    'image_height': 675
+    'image_height': 675,
+    'membit_use_trending': True,   # Always enabled (required)
+    'membit_use_cluster_info': False,  # Optional, default unchecked
+    'membit_use_posts': False  # Optional, default unchecked
 }
 
 # Load prompt from file if exists
@@ -60,17 +63,23 @@ def load_prompt_config():
             bot_config['prompt_template'] = f.read()
     else:
         # Default prompt
-        bot_config['prompt_template'] = """Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit berikut:
+        bot_config['prompt_template'] = """Anda adalah seorang social media manager yang ahli di bidang Web3 dan cryptocurrency. 
 
+Analisis data trending dari Membit berikut:
 {trending_data}
 
-Pilih SATU topik paling menarik terkait 'Web3', dan membuat draf tweet yang informatif dalam Bahasa Indonesia. 
+Tugas Anda:
+1. Pilih SATU topik paling menarik dan relevan dari data di atas
+2. Prioritaskan topik yang sedang trending atau memiliki pergerakan signifikan
+3. Buat tweet informatif dan engaging dalam Bahasa Inggris
 
-PENTING: 
+Aturan PENTING:
 - Tweet MAKSIMAL {max_tweet_length} karakter (termasuk spasi dan hashtag)
-- Harus singkat, padat, dan menarik
-- Akhiri dengan hashtag #Web3
-- Jawab HANYA dengan draf tweet, tanpa pengantar apa pun"""
+- Singkat, padat, dan menarik
+- Fokus pada insight atau fakta menarik
+- Gunakan tone profesional tapi tetap casual
+- Akhiri dengan 1-2 hashtag relevan (contoh: #Web3, #Crypto, #DeFi, #NFT, #Oracle, #Layer2, dll sesuai topik)
+- Jawab HANYA dengan tweet final, tanpa penjelasan atau pengantar apapun"""
 
 def save_prompt_config():
     """Save prompt template to file"""
@@ -145,9 +154,65 @@ def create_and_post_tweet():
                 emit_log('Bot stopped, cancelling tweet generation', 'warning')
                 return
             
-            # Get trending data
-            emit_log('Fetching trending data from Membit...', 'info')
-            trending_data = membit.get_trending_topics()
+            # Get data from Membit based on user settings
+            emit_log('Fetching data from Membit...', 'info')
+            
+            membit_data_parts = []
+            cluster_label = None
+            
+            # 1. Trending Topics (clusters_search) - Always enabled
+            if True:  # Always fetch trending topics (required)
+                emit_log('→ Getting trending topics...', 'info')
+                try:
+                    trending = membit.get_trending_topics(query="Web3", limit=10)
+                    membit_data_parts.append(f"TRENDING TOPICS:\n{trending}")
+                    emit_log('Got trending topics', 'success')
+                    
+                    # Try to extract first cluster label for deep dive
+                    # Format: label="Cluster Name Here"
+                    try:
+                        import re
+                        # Find first occurrence of label="..."
+                        match = re.search(r'label="([^"]+)"', trending)
+                        if match:
+                            cluster_label = match.group(1)
+                            emit_log(f'Found cluster label: {cluster_label}', 'info')
+                    except Exception as e:
+                        emit_log(f'⚠️ Failed to extract cluster label: {str(e)}', 'warning')
+                except Exception as e:
+                    emit_log(f'⚠️ Failed to get trending topics: {str(e)}', 'warning')
+            
+            # 2. Cluster Details (clusters_info)
+            if bot_config.get('membit_use_cluster_info', False):
+                emit_log('Getting cluster details...', 'info')
+                try:
+                    if cluster_label:
+                        cluster_info = membit.get_cluster_info(label=cluster_label, limit=10)
+                        membit_data_parts.append(f"\nDETAILED CONTEXT:\n{cluster_info}")
+                        emit_log(f'Got details for cluster: {cluster_label}', 'success')
+                    else:
+                        emit_log('⚠️ No cluster label found, skipping deep dive', 'warning')
+                        emit_log('💡 Tip: Enable Trending Topics to get cluster labels', 'info')
+                except Exception as e:
+                    emit_log(f'⚠️ Failed to get cluster details: {str(e)}', 'warning')
+            
+            # 3. Posts Search (posts_search)
+            if bot_config.get('membit_use_posts', False):
+                emit_log('Getting community posts...', 'info')
+                try:
+                    posts = membit.search_posts(query="Web3", limit=5)
+                    membit_data_parts.append(f"\nCOMMUNITY POSTS:\n{posts}")
+                    emit_log('Got community posts', 'success')
+                except Exception as e:
+                    emit_log(f'⚠️ Failed to get posts: {str(e)}', 'warning')
+            
+            # Combine all data
+            if membit_data_parts:
+                trending_data = "\n\n".join(membit_data_parts)
+            else:
+                # Trending failed (should not happen often)
+                emit_log('⚠️ Failed to fetch Membit data. Using fallback.', 'warning')
+                trending_data = "Web3 and cryptocurrency trending topics"
             
             # Check if bot was stopped
             if stop_scheduler:
@@ -195,7 +260,6 @@ def create_and_post_tweet():
             
             # Generate and upload image if enabled
             media_ids = None
-            saved_image_path = None
             if bot_config.get('enable_image', False):
                 try:
                     emit_log('Generating image with AI...', 'info')
@@ -214,27 +278,19 @@ def create_and_post_tweet():
                     )
                     emit_log(f'Image generated: {image_path}', 'success')
                     
-                    # Save a copy for display (with timestamp)
-                    import shutil
-                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                    saved_image_path = Path(__file__).parent / 'static' / 'images' / f'tweet_{timestamp}.jpg'
-                    saved_image_path.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy(image_path, saved_image_path)
-                    
                     # Upload to Twitter
                     emit_log('Uploading image to Twitter...', 'info')
                     media_id = twitter.upload_media(image_path)
                     media_ids = [media_id]
                     emit_log('Image uploaded successfully', 'success')
                     
-                    # Cleanup temp files
+                    # Cleanup
                     image_gen.cleanup()
                     
                 except Exception as img_error:
                     emit_log(f'Failed to generate/upload image: {str(img_error)}', 'warning')
                     emit_log('Continuing with text-only tweet...', 'info')
                     media_ids = None
-                    saved_image_path = None
             
             # Post tweet
             if media_ids:
@@ -251,9 +307,7 @@ def create_and_post_tweet():
                 'text': tweet_text,
                 'id': result.get('id'),
                 'url': f"https://twitter.com/i/web/status/{result.get('id')}",
-                'timestamp': bot_status['last_run'],
-                'has_image': media_ids is not None,
-                'image_url': f"/static/images/{saved_image_path.name}" if saved_image_path else None
+                'timestamp': bot_status['last_run']
             }
             
             emit_log(f'Tweet posted successfully! ID: {result.get("id")}', 'success')
@@ -312,13 +366,6 @@ def index():
     """Main page"""
     return render_template('index.html')
 
-@app.route('/static/images/<filename>')
-def serve_image(filename):
-    """Serve tweet images"""
-    from flask import send_from_directory
-    images_dir = Path(__file__).parent / 'static' / 'images'
-    return send_from_directory(images_dir, filename)
-
 @app.route('/api/status')
 def get_status():
     """Get bot status"""
@@ -341,6 +388,11 @@ def handle_config():
             bot_config['image_style'] = data.get('image_style', 'digital art')
             bot_config['image_width'] = int(data.get('image_width', 1200))
             bot_config['image_height'] = int(data.get('image_height', 675))
+            
+            # Update Membit data source config
+            bot_config['membit_use_trending'] = True  # Always enabled (required)
+            bot_config['membit_use_cluster_info'] = data.get('membit_use_cluster_info', False)
+            bot_config['membit_use_posts'] = data.get('membit_use_posts', False)
             
             # Update .env file
             env_path = Path(__file__).parent / '.env'
@@ -372,7 +424,10 @@ def handle_config():
         'enable_image': bot_config.get('enable_image', False),
         'image_style': bot_config.get('image_style', 'digital art'),
         'image_width': bot_config.get('image_width', 1200),
-        'image_height': bot_config.get('image_height', 675)
+        'image_height': bot_config.get('image_height', 675),
+        'membit_use_trending': bot_config.get('membit_use_trending', True),
+        'membit_use_cluster_info': bot_config.get('membit_use_cluster_info', False),
+        'membit_use_posts': bot_config.get('membit_use_posts', False)
     })
 
 @app.route('/api/prompt', methods=['POST'])
@@ -391,7 +446,7 @@ def update_prompt():
         # Save to file for persistence
         save_prompt_config()
         
-        emit_log('Prompt template updated and saved', 'success')
+        emit_log('Updated and saved', 'success')
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})

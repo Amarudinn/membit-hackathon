@@ -13,44 +13,8 @@
   font-size: 1.125rem;
   line-height: 1.7;
   color: var(--text-primary);
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.5rem 0;
   white-space: pre-wrap;
-}
-
-.tweet-image-container {
-  position: relative;
-  margin-bottom: 1rem;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
-}
-
-.tweet-image {
-  width: 100%;
-  height: auto;
-  display: block;
-  background: var(--bg-primary);
-}
-
-.tweet-image-badge {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.375rem 0.75rem;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  border-radius: 0.375rem;
-  color: var(--accent-blue);
-  font-size: 0.75rem;
-  font-weight: 600;
-  border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.tweet-image-badge svg {
-  flex-shrink: 0;
 }
 
 .tweet-content.empty {

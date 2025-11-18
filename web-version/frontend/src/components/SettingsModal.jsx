@@ -19,7 +19,10 @@ function SettingsModal({ config, onClose, onSave }) {
     enable_image: config.enable_image || false,
     image_style: config.image_style || 'digital art',
     image_width: config.image_width || 1200,
-    image_height: config.image_height || 675
+    image_height: config.image_height || 675,
+    membit_use_trending: true,  // Always true (required, cannot be changed)
+    membit_use_cluster_info: config.membit_use_cluster_info === true,  // Default false, only true if explicitly set
+    membit_use_posts: config.membit_use_posts === true  // Default false, only true if explicitly set
   })
 
   useEffect(() => {
@@ -62,7 +65,10 @@ function SettingsModal({ config, onClose, onSave }) {
           enable_image: formData.enable_image,
           image_style: formData.image_style,
           image_width: formData.image_width,
-          image_height: formData.image_height
+          image_height: formData.image_height,
+          membit_use_trending: formData.membit_use_trending,
+          membit_use_cluster_info: formData.membit_use_cluster_info,
+          membit_use_posts: formData.membit_use_posts
         })
       })
 
@@ -314,6 +320,62 @@ function SettingsModal({ config, onClose, onSave }) {
                   </div>
                 </>
               )}
+
+              <div className="form-group" style={{marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)'}}>
+                <label style={{fontSize: '1rem', marginBottom: '1rem', display: 'block'}}>
+                  Membit Data Sources
+                </label>
+                <small style={{display: 'block', marginBottom: '1rem', color: 'var(--text-secondary)'}}>
+                  Choose which Membit MCP tools to use.
+                </small>
+                
+                <div style={{display: 'flex', flexDirection: 'column', gap: '0.75rem'}}>
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={true}
+                      disabled
+                      style={{cursor: 'not-allowed'}}
+                    />
+                    <span>Trending Topics (clusters_search) - Required</span>
+                  </label>
+                  <small style={{marginLeft: '2rem', color: 'var(--text-secondary)', fontSize: '0.75rem'}}>
+                    Always enabled - Fast overview of trending discussions (~2-3s)
+                  </small>
+
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={formData.membit_use_cluster_info}
+                      onChange={e => setFormData({ ...formData, membit_use_cluster_info: e.target.checked })}
+                    />
+                    <span>Deep Dive (clusters_info) - Optional</span>
+                  </label>
+                  <small style={{marginLeft: '2rem', color: 'var(--text-secondary)', fontSize: '0.75rem'}}>
+                    Add detailed context about specific topics
+                  </small>
+
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={formData.membit_use_posts}
+                      onChange={e => setFormData({ ...formData, membit_use_posts: e.target.checked })}
+                    />
+                    <span>Community Posts (posts_search) - Optional</span>
+                  </label>
+                  <small style={{marginLeft: '2rem', color: 'var(--text-secondary)', fontSize: '0.75rem'}}>
+                    Add real posts and examples from community
+                  </small>
+                </div>
+
+                {(formData.membit_use_cluster_info || formData.membit_use_posts) && (
+                  <div style={{marginTop: '1rem', padding: '0.75rem', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.3)', borderRadius: '0.5rem'}}>
+                    <small style={{color: 'var(--accent-blue)'}}>
+                      💡 Tip: Additional sources provide richer context but take longer (~{(formData.membit_use_cluster_info ? 3 : 0) + (formData.membit_use_posts ? 3 : 0)}s extra)
+                    </small>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

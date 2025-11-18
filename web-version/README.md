@@ -1,29 +1,29 @@
-# 🌐 Twitter Bot - Modern Web Dashboard
+# Twitter Bot - Modern Web Dashboard
 
 Automatic Twitter bot with modern web dashboard built with **Vite + React** for posting tweets based on trending topics from Membit using Google Gemini AI.
 
-## ✨ Main Features
+## Main Features
 
-### 🎮 Control Panel
+### Control Panel
 - **Start Bot** - Run bot with automatic scheduler
 - **Stop Bot** - Stop bot (immediately responsive)
 - **Run Once** - Test posting 1 tweet
 - **Status Indicator** - Red/green circle in top right corner
 
-### 📊 Real-time Monitoring
+### Real-time Monitoring
 - **Statistics Cards** - Total tweets, success count, error count
 - **Activity Logs** - Color-coded logs (info, success, warning, error)
 - **Last Tweet Preview** - View last tweet with link to Twitter
 - **Auto-scroll Logs** - Logs automatically scroll down
 
-### ⚙️ Settings Management
+### Settings Management
 - **API Keys Tab** - Configure Membit, Gemini, Twitter API
 - **Configuration Tab** - Schedule hours, max retries, tweet length
 - **Prompt Tab** - Customize prompt template for AI
 - **Password Toggle** - Show/hide API keys
 - **Persistent Storage** - Settings saved in `.env` file
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### Software
 - Python 3.8 or higher
@@ -45,13 +45,13 @@ Automatic Twitter bot with modern web dashboard built with **Vite + React** for 
 - Or `python -c "import secrets; print(secrets.token_hex(32))"`
 
 
-**📖 Twitter API Setup Guide:** See [TWITTER_SETUP.md](TWITTER_SETUP.md) for complete steps.
+**Twitter API Setup Guide:** See [TWITTER_SETUP.md](TWITTER_SETUP.md) for complete steps.
 
-**⚠️ Twitter Rate Limits:** See [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) for important information about API limitations.
+**Twitter Rate Limits:** See [TWITTER_RATE_LIMITS.md](TWITTER_RATE_LIMITS.md) for important information about API limitations.
 
-## 🚀 Quick Start
+## Quick Start
 
-⚠️ **IMPORTANT:** This project requires **2 servers** to run:
+**IMPORTANT:** This project requires **2 servers** to run:
 1. **Backend (Flask)** - Port 5000 - Bot logic & API
 2. **Frontend (Vite)** - Port 5173 - Dashboard UI
 
@@ -142,7 +142,7 @@ sudo ufw status
 
 ### 7. Run Backend Server (Terminal 1 / Screen 1)
 
-⚠️ **IMPORTANT:** Backend MUST be running for the bot to work!
+**IMPORTANT:** Backend MUST be running for the bot to work!
 
 ```bash
 # In web-version folder
@@ -231,12 +231,12 @@ npm run dev
 7. Click **"Save All Settings"**
 8. Bot is ready to use!
 
-**💡 Tips:**
+**Tips:**
 - Use eye icon (👁️) to show/hide password
 - All settings are saved in `.env` file
-- Read complete guide by clicking **"📖 Panduan"** button
+- Read complete guide by clicking **"Guide"** button
 
-## 🎮 How to Use
+## How to Use
 
 ### Control Panel
 
@@ -246,19 +246,19 @@ npm run dev
 
 **Control Buttons:**
 
-1. **▶️ Start Bot**
+1. **▶Start Bot**
    - Start bot with automatic scheduler
    - Bot will post every X hours (according to SCHEDULE_HOURS)
    - Status changes to "Running" (green)
    - Displays "Next Run" time
 
-2. **⏹️ Stop Bot**
+2. **⏹Stop Bot**
    - Stop the running bot
    - Bot stops immediately (responsive, max 1 second)
    - Status changes to "Stopped" (red)
    - Safe: does not post tweet after stop
 
-3. **⏩ Run Once**
+3. **▶▶Run Once**
    - Post 1 tweet now (for testing)
    - Does not affect schedule
    - Good for testing before starting automatic mode
@@ -271,10 +271,10 @@ npm run dev
 - **Errors** - Number of failures (red)
 
 **Activity Logs:**
-- 🔵 **Info** - General information (blue)
-- ✅ **Success** - Successful operation (green)
-- ⚠️ **Warning** - Warning (yellow)
-- ❌ **Error** - Error/failed (red)
+- **Info** - General information (blue)
+- **Success** - Successful operation (green)
+- **Warning** - Warning (yellow)
+- **Error** - Error/failed (red)
 - Auto-scroll to latest log
 - Max 100 log entries
 
@@ -303,7 +303,7 @@ npm run dev
 
 ### Guide
 
-Click **"📖 Panduan"** button to access:
+Click **"Guide"** button to access:
 
 **"How to Use" Tab:**
 - Initial setup (API keys)
@@ -318,7 +318,7 @@ Click **"📖 Panduan"** button to access:
 - Best practices
 - Troubleshooting error 429
 
-## ⚙️ Configuration
+## Configuration
 
 ### Via Environment Variables (`.env`)
 
@@ -345,7 +345,7 @@ Click **"📖 Panduan"** button to access:
 - `{trending_data}` - Trend data from Membit
 - `{max_tweet_length}` - Maximum tweet length
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Error: ECONNREFUSED ::1:5000
 
@@ -360,7 +360,7 @@ Click **"📖 Panduan"** button to access:
 4. Keep backend running
 5. Refresh browser
 
-**⚠️ IMPORTANT:** You need **BOTH** backend and frontend running:
+**IMPORTANT:** You need **BOTH** backend and frontend running:
 - Backend (Flask): Port 5000
 - Frontend (Vite): Port 5173
 
@@ -446,13 +446,13 @@ sudo ufw allow 5000
 3. Add instruction "MAXIMUM {max_tweet_length} characters"
 4. Save settings
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Feel free to:
-- 🐛 Report bugs
-- 💡 Suggest features
-- 🔧 Submit pull requests
+- Report bugs
+- Suggest features
+- Submit pull requests
 
-## 📄 License
+## License
 
 MIT License - Feel free to use and modify as needed.
