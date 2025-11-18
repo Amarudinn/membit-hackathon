@@ -1,8 +1,8 @@
-# 🤖 Twitter Bot - Python Version
+# Twitter Bot - Python Version
 
 Modern CLI version automatic Twitter bot for posting tweets based on trending topics from Membit using Google Gemini AI.
 
-## 📋 Prerequisites
+## Prerequisites
 
 ### Software
 - Python 3.8 or higher
@@ -17,11 +17,11 @@ Modern CLI version automatic Twitter bot for posting tweets based on trending to
   - Access Token
   - Access Token Secret
 
-**📖 Twitter API Setup Guide:** See [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md) for complete steps.
+**Twitter API Setup Guide:** See [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md) for complete steps.
   
-**⚠️ Twitter Rate Limits:** See [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md) for important information about API limitations.
+**Twitter Rate Limits:** See [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md) for important information about API limitations.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Clone
 
@@ -98,7 +98,7 @@ MAX_TWEET_LENGTH=250
 
 [TWITTER_SETUP.md](/web-version/TWITTER_SETUP.md)
 
-## ▶️ How to Use
+## How to Use
 
 ### Run the Bot
 
@@ -112,7 +112,7 @@ The bot will run once immediately, then automatically run every 6 hours.
 
 Press `Ctrl+C` to stop the bot with graceful shutdown.
 
-## ⚙️ Configuration
+## Configuration
 
 ### Via Environment Variables (`.env`)
 
@@ -164,9 +164,9 @@ IMPORTANT:
 - Answer ONLY with the tweet draft, without any introduction"""
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
-### ❌ Error: "Failed to fetch Membit data"
+### Error: "Failed to fetch Membit data"
 
 **Cause:**
 - Membit API Key is wrong
@@ -176,7 +176,7 @@ IMPORTANT:
 - Check `MEMBIT_API_KEY` in `.env` file
 - Test internet connection
 
-### ❌ Error: "Failed to generate content with Gemini"
+### Error: "Failed to generate content with Gemini"
 
 **Cause:**
 - Gemini API Key is wrong or expired
@@ -186,7 +186,7 @@ IMPORTANT:
 - Check `GEMINI_API_KEY` in `.env` file
 - Check quota at [Google AI Studio](https://membit.ai/integration)
 
-### ❌ Error: "Failed to post tweet"
+### Error: "Failed to post tweet"
 
 **Cause:**
 - Twitter credentials are wrong
@@ -200,18 +200,18 @@ IMPORTANT:
 - Wait a few minutes if rate limit
 - Change prompt so tweets are more varied
 
-### ⚠️ Warning: "ALTS creds ignored"
+### Warning: "ALTS creds ignored"
 
 **This is normal!** Warning from Google SDK, does not affect bot function. Already suppressed in code.
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Feel free to:
-- 🐛 Report bugs
-- 💡 Suggest features
-- 🔧 Submit pull requests
+- Report bugs
+- Suggest features
+- Submit pull requests
 
-## 📄 License
+## License
 
 MIT License - Feel free to use and modify as needed.
 

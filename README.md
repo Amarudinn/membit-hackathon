@@ -2,7 +2,7 @@
 
 This project explains how to install n8n on a VPS, and configure a workflow to automatically create tweets based on *real-time* trend data from Membit, using Google Gemini to generate content.
 
-## 🎯 Choose the Right Version
+## Choose the Right Version
 
 This project is available in 3 different versions:
 
@@ -12,7 +12,7 @@ This project is available in 3 different versions:
 | **[Python Terminal](python-version/)** |
 | **[Web Dashboard](web-version/)** |
 
-## 📋 Prerequisites
+## Prerequisites
 
 Before starting, make sure you have:
 * A **VPS/Server** (Debian/Ubuntu recommended) with root access.
@@ -21,13 +21,13 @@ Before starting, make sure you have:
 * A [Membit API Key](https://membit.ai/integration)
 * An **X (Twitter) Account** with access to the [Developer Portal](https://developer.x.com/) to create a custom application.
 
-## ⚠️ IMPORTANT: Twitter Rate Limits
+## IMPORTANT: Twitter Rate Limits
 
 **Read this documentation before running the bot:** [TWITTER_RATE_LIMITS.md](/web-version/TWITTER_RATE_LIMITS.md)
 
 ---
 
-## 🚀 Part 1: Server Installation (VPS)
+## Part 1: Server Installation (VPS)
 
 Log in to your VPS via SSH and set up Docker.
 
@@ -48,7 +48,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ---
 
-## ⚙️ Part 2: Installing n8n with Docker Compose
+## Part 2: Installing n8n with Docker Compose
 
 ### 1. Create Project Directory
 
@@ -135,7 +135,7 @@ Wait about a minute. n8n can now be accessed at `http://YOUR_VPS_IP:5678`.
 
 ---
 
-## 🤖 Part 3: Configuring n8n Workflow
+## Part 3: Configuring n8n Workflow
 
 After you create an admin account in n8n, follow these steps.
 
@@ -175,7 +175,7 @@ Drag arrows to create the following connections:
 
 ---
 
-## 🔧 Part 4: Filling in Node Parameters
+## Part 4: Filling in Node Parameters
 
 Click on each node to remove warning signs (🔺).
 
@@ -246,7 +246,7 @@ You are an expert social media manager. Your task is to look at trend data from 
 
 ---
 
-## ▶️ Part 5: Running the Workflow
+## Part 5: Running the Workflow
 
 ### 1. Testing
 
