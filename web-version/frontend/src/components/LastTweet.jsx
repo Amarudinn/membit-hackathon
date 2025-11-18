@@ -1,4 +1,4 @@
-import { Twitter, ExternalLink } from 'lucide-react'
+import { Twitter, ExternalLink, Image } from 'lucide-react'
 import './LastTweet.css'
 
 function LastTweet({ tweet }) {
@@ -11,6 +11,19 @@ function LastTweet({ tweet }) {
       {tweet ? (
         <div className="tweet-content">
           <p>{tweet.text}</p>
+          {tweet.image_url && (
+            <div className="tweet-image-container">
+              <img 
+                src={tweet.image_url} 
+                alt="Tweet image" 
+                className="tweet-image"
+              />
+              <div className="tweet-image-badge">
+                <Image size={14} />
+                <span>AI-Generated</span>
+              </div>
+            </div>
+          )}
           <div className="tweet-meta">
             <span className="tweet-time">{tweet.timestamp}</span>
             <a 

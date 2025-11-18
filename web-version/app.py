@@ -10,6 +10,7 @@ import time
 from membit_client import MembitClient
 from gemini_client import GeminiClient
 from twitter_client import TwitterClient
+from image_generator import ImageGenerator
 
 # Suppress Gemini warnings
 os.environ['GRPC_VERBOSITY'] = 'ERROR'
@@ -43,7 +44,12 @@ log_history = []
 MAX_LOGS = 100
 
 # Store bot configuration
-bot_config = {}
+bot_config = {
+    'enable_image': False,
+    'image_style': 'digital art',
+    'image_width': 1200,
+    'image_height': 675
+}
 
 # Load prompt from file if exists
 def load_prompt_config():
@@ -54,25 +60,17 @@ def load_prompt_config():
             bot_config['prompt_template'] = f.read()
     else:
         # Default prompt
-        bot_config['prompt_template'] = """Anda adalah seorang social media manager yang ahli di bidang Web3 dan cryptocurrency. 
+        bot_config['prompt_template'] = """Anda adalah seorang social media manager yang ahli. Tugas Anda adalah melihat data tren dari Membit berikut:
 
-Analisis data trending dari Membit berikut:
 {trending_data}
 
-Tugas Anda:
-1. Pilih SATU topik paling menarik dan relevan dari data di atas
-2. Prioritaskan topik yang sedang trending atau memiliki pergerakan signifikan
-3. Buat tweet informatif dan engaging dalam Bahasa Inggris
+Pilih SATU topik paling menarik terkait 'Web3', dan membuat draf tweet yang informatif dalam Bahasa Indonesia. 
 
-Aturan PENTING:
+PENTING: 
 - Tweet MAKSIMAL {max_tweet_length} karakter (termasuk spasi dan hashtag)
-- Singkat, padat, dan menarik
-- Fokus pada insight atau fakta menarik
-- Gunakan tone profesional tapi tetap casual
-- Akhiri dengan 1-2 hashtag relevan (contoh: #Web3, #Crypto, #DeFi, #NFT, #Oracle, #Layer2, dll sesuai topik)
-- Jawab HANYA dengan tweet final, tanpa penjelasan atau pengantar apapun
-
-Variasikan topik setiap kali - jangan selalu pilih topik yang sama!"""
+- Harus singkat, padat, dan menarik
+- Akhiri dengan hashtag #Web3
+- Jawab HANYA dengan draf tweet, tanpa pengantar apa pun"""
 
 def save_prompt_config():
     """Save prompt template to file"""
@@ -195,9 +193,55 @@ def create_and_post_tweet():
                 emit_log('Bot stopped, cancelling tweet posting', 'warning')
                 return
             
+            # Generate and upload image if enabled
+            media_ids = None
+            saved_image_path = None
+            if bot_config.get('enable_image', False):
+                try:
+                    emit_log('Generating image with AI...', 'info')
+                    
+                    # Generate image prompt from tweet
+                    image_prompt = gemini.generate_image_prompt(tweet_text)
+                    emit_log(f'Image prompt: {image_prompt}', 'info')
+                    
+                    # Generate image
+                    image_gen = ImageGenerator()
+                    image_path = image_gen.generate_image(
+                        prompt=image_prompt,
+                        width=bot_config.get('image_width', 1200),
+                        height=bot_config.get('image_height', 675),
+                        style=bot_config.get('image_style', 'digital art')
+                    )
+                    emit_log(f'Image generated: {image_path}', 'success')
+                    
+                    # Save a copy for display (with timestamp)
+                    import shutil
+                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                    saved_image_path = Path(__file__).parent / 'static' / 'images' / f'tweet_{timestamp}.jpg'
+                    saved_image_path.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy(image_path, saved_image_path)
+                    
+                    # Upload to Twitter
+                    emit_log('Uploading image to Twitter...', 'info')
+                    media_id = twitter.upload_media(image_path)
+                    media_ids = [media_id]
+                    emit_log('Image uploaded successfully', 'success')
+                    
+                    # Cleanup temp files
+                    image_gen.cleanup()
+                    
+                except Exception as img_error:
+                    emit_log(f'Failed to generate/upload image: {str(img_error)}', 'warning')
+                    emit_log('Continuing with text-only tweet...', 'info')
+                    media_ids = None
+                    saved_image_path = None
+            
             # Post tweet
-            emit_log('Posting to Twitter...', 'info')
-            result = twitter.post_tweet(tweet_text)
+            if media_ids:
+                emit_log('Posting tweet with image to Twitter...', 'info')
+            else:
+                emit_log('Posting tweet to Twitter...', 'info')
+            result = twitter.post_tweet(tweet_text, media_ids=media_ids)
             
             # Update status
             bot_status['last_run'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -207,7 +251,9 @@ def create_and_post_tweet():
                 'text': tweet_text,
                 'id': result.get('id'),
                 'url': f"https://twitter.com/i/web/status/{result.get('id')}",
-                'timestamp': bot_status['last_run']
+                'timestamp': bot_status['last_run'],
+                'has_image': media_ids is not None,
+                'image_url': f"/static/images/{saved_image_path.name}" if saved_image_path else None
             }
             
             emit_log(f'Tweet posted successfully! ID: {result.get("id")}', 'success')
@@ -224,7 +270,7 @@ def create_and_post_tweet():
             }
             
             if attempt < max_retries - 1:
-                emit_log('⏳ Retrying in 5 seconds...', 'warning')
+                emit_log('Retrying in 5 seconds...', 'warning')
                 # Sleep in small intervals to allow stopping
                 for _ in range(5):
                     if stop_scheduler:
@@ -266,6 +312,13 @@ def index():
     """Main page"""
     return render_template('index.html')
 
+@app.route('/static/images/<filename>')
+def serve_image(filename):
+    """Serve tweet images"""
+    from flask import send_from_directory
+    images_dir = Path(__file__).parent / 'static' / 'images'
+    return send_from_directory(images_dir, filename)
+
 @app.route('/api/status')
 def get_status():
     """Get bot status"""
@@ -282,6 +335,12 @@ def handle_config():
             os.environ['SCHEDULE_HOURS'] = str(data.get('schedule_hours', 6))
             os.environ['MAX_RETRIES'] = str(data.get('max_retries', 3))
             os.environ['MAX_TWEET_LENGTH'] = str(data.get('max_tweet_length', 250))
+            
+            # Update image config in memory
+            bot_config['enable_image'] = data.get('enable_image', False)
+            bot_config['image_style'] = data.get('image_style', 'digital art')
+            bot_config['image_width'] = int(data.get('image_width', 1200))
+            bot_config['image_height'] = int(data.get('image_height', 675))
             
             # Update .env file
             env_path = Path(__file__).parent / '.env'
@@ -309,7 +368,11 @@ def handle_config():
         'schedule_hours': int(os.getenv('SCHEDULE_HOURS', 6)),
         'max_retries': int(os.getenv('MAX_RETRIES', 3)),
         'max_tweet_length': int(os.getenv('MAX_TWEET_LENGTH', 250)),
-        'prompt_template': bot_config.get('prompt_template', '')
+        'prompt_template': bot_config.get('prompt_template', ''),
+        'enable_image': bot_config.get('enable_image', False),
+        'image_style': bot_config.get('image_style', 'digital art'),
+        'image_width': bot_config.get('image_width', 1200),
+        'image_height': bot_config.get('image_height', 675)
     })
 
 @app.route('/api/prompt', methods=['POST'])
@@ -463,7 +526,6 @@ def handle_start_bot():
     scheduler_thread = threading.Thread(target=scheduler_loop, daemon=True)
     scheduler_thread.start()
     
-    emit_log('🚀 Bot started successfully', 'success')
     emit('status_update', bot_status)
 
 @socketio.on('stop_bot')
@@ -479,7 +541,7 @@ def handle_stop_bot():
     bot_status['running'] = False
     bot_status['next_run'] = None
     
-    emit_log('🛑 Bot stopped by user', 'warning')
+    emit_log('Bot stopped by user', 'warning')
     emit('status_update', bot_status)
 
 @socketio.on('run_once')

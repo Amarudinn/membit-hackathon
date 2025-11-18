@@ -23,3 +23,38 @@ class GeminiClient:
             return response.text.strip()
         except Exception as e:
             raise Exception(f"Failed to generate content with Gemini: {str(e)}")
+    
+    def generate_image_prompt(self, tweet_text):
+        """Generate image prompt from tweet text"""
+        try:
+            prompt = f"""Based on this tweet: "{tweet_text}"
+
+Create a SHORT image generation prompt (maximum 80 characters) for an AI image generator.
+Focus ONLY on visual elements, colors, and style.
+
+Rules:
+- Maximum 80 characters
+- No text or words in the image
+- Focus on abstract concepts and visuals
+- Use descriptive adjectives
+
+Examples:
+Tweet: "Web3 is revolutionizing gaming"
+Prompt: "futuristic gaming metaverse, neon blue, blockchain network, digital art"
+
+Tweet: "Bitcoin reaches new heights"
+Prompt: "golden bitcoin coin, upward arrow, financial growth, modern minimal"
+
+Now create the prompt (ONLY the prompt, no explanation):"""
+            
+            response = self.model.generate_content(prompt)
+            image_prompt = response.text.strip().strip('"').strip("'")
+            
+            # Limit to 80 chars
+            if len(image_prompt) > 80:
+                image_prompt = image_prompt[:77] + "..."
+            
+            return image_prompt
+            
+        except Exception as e:
+            raise Exception(f"Failed to generate image prompt: {str(e)}")

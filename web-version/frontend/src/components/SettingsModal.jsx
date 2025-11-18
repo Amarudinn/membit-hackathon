@@ -15,7 +15,11 @@ function SettingsModal({ config, onClose, onSave }) {
     schedule_hours: config.schedule_hours,
     max_retries: config.max_retries,
     max_tweet_length: config.max_tweet_length,
-    prompt_template: config.prompt_template
+    prompt_template: config.prompt_template,
+    enable_image: config.enable_image || false,
+    image_style: config.image_style || 'digital art',
+    image_width: config.image_width || 1200,
+    image_height: config.image_height || 675
   })
 
   useEffect(() => {
@@ -54,7 +58,11 @@ function SettingsModal({ config, onClose, onSave }) {
         body: JSON.stringify({
           schedule_hours: formData.schedule_hours,
           max_retries: formData.max_retries,
-          max_tweet_length: formData.max_tweet_length
+          max_tweet_length: formData.max_tweet_length,
+          enable_image: formData.enable_image,
+          image_style: formData.image_style,
+          image_width: formData.image_width,
+          image_height: formData.image_height
         })
       })
 
@@ -257,6 +265,55 @@ function SettingsModal({ config, onClose, onSave }) {
                 />
                 <small>Maximum tweet length in characters (recommended: 250)</small>
               </div>
+
+              <div className="form-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={formData.enable_image}
+                    onChange={e => setFormData({ ...formData, enable_image: e.target.checked })}
+                  />
+                  <span>Enable AI-Generated Images</span>
+                </label>
+                <small>Generate and attach images to tweets using Pollinations.ai (FREE)</small>
+              </div>
+
+              {formData.enable_image && (
+                <>
+                  <div className="form-group">
+                    <label>Image Style</label>
+                    <select
+                      value={formData.image_style}
+                      onChange={e => setFormData({ ...formData, image_style: e.target.value })}
+                    >
+                      <option value="digital art">Digital Art</option>
+                      <option value="realistic">Realistic</option>
+                      <option value="minimalist">Minimalist</option>
+                      <option value="abstract">Abstract</option>
+                      <option value="cyberpunk">Cyberpunk</option>
+                      <option value="3d render">3D Render</option>
+                    </select>
+                    <small>Visual style for generated images</small>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Image Size</label>
+                    <select
+                      value={`${formData.image_width}x${formData.image_height}`}
+                      onChange={e => {
+                        const [width, height] = e.target.value.split('x').map(Number)
+                        setFormData({ ...formData, image_width: width, image_height: height })
+                      }}
+                    >
+                      <option value="1200x675">1200x675 (16:9 - Recommended)</option>
+                      <option value="1024x512">1024x512 (2:1)</option>
+                      <option value="1080x1080">1080x1080 (Square)</option>
+                      <option value="1080x1350">1080x1350 (4:5 Portrait)</option>
+                    </select>
+                    <small>Image dimensions for Twitter</small>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
