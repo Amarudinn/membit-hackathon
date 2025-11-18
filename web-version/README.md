@@ -23,14 +23,6 @@ Automatic Twitter bot with modern web dashboard built with **Vite + React** for 
 - **Password Toggle** - Show/hide API keys
 - **Persistent Storage** - Settings saved in `.env` file
 
-### 📖 Complete Guide
-- **Guide Button** - Access guide from dashboard
-- **2 Guide Tabs:**
-  - **How to Use** - Setup, configuration, operations
-  - **Rate Limits** - Twitter API limits info & best practices
-- **GitHub-style Markdown** - Tables, code blocks, info boxes
-- **External Links** - Icon ↗ for external links
-
 ## 📋 Prerequisites
 
 ### Software
@@ -162,8 +154,9 @@ python3 app.py
 
 You should see:
 ```
-🚀 Starting Twitter Bot Web Interface...
-📱 Open http://localhost:5000 in your browser
+🚀 Backend Running
+📱 http://localhost:5000
+🛑 Press Ctrl+C to stop
 ```
 
 **Keep this terminal running!** Or use `screen`:

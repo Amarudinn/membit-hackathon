@@ -523,20 +523,29 @@ def check_initial_setup():
         print('⚠️  INITIAL SETUP REQUIRED')
         print('='*60)
         print('\nSome API keys are missing. Please configure them via web interface:')
-        print('1. Open http://localhost:5000 in your browser')
+        print('1. Open http://localhost:5173 in your browser')
         print('2. Click "Settings" button')
         print('3. Go to "API Keys" tab')
         print('4. Enter your API keys')
-        print('5. Click "Save All Settings"')
+        print('5. Click "Save"')
         print('\nMissing keys:', ', '.join(missing_keys))
         print('='*60 + '\n')
 
 if __name__ == '__main__':
-    print('🚀 Starting Twitter Bot Web Interface...')
-    print('📱 Open http://localhost:5000 in your browser')
+    import logging
+    
+    # Suppress Flask/Werkzeug logs
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
+    
+    print('='*50)
+    print('🚀 Backend Running')
+    print('='*50)
+    print('📱 http://localhost:5000')
     print('🛑 Press Ctrl+C to stop')
+    print('='*50)
     
     # Check if initial setup is needed
     check_initial_setup()
     
-    socketio.run(app, host='0.0.0.0', port=5000, debug=False)
+    socketio.run(app, host='0.0.0.0', port=5000, debug=False, log_output=False)
