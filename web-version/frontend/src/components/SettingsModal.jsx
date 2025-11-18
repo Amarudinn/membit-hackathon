@@ -276,6 +276,15 @@ function SettingsModal({ config, onClose, onSave }) {
                     <li><code>{'{trending_data}'}</code> - Trend data from Membit</li>
                     <li><code>{'{max_tweet_length}'}</code> - Maximum tweet length</li>
                   </ul>
+                  
+                  <p><strong>Tips for creating good prompts:</strong></p>
+                  <ul className="prompt-tips">
+                    <li className="tip-good">✅ Clearly state MAXIMUM characters</li>
+                    <li className="tip-good">✅ Request output ONLY tweet, without introduction</li>
+                    <li className="tip-good">✅ Be specific about format and style</li>
+                    <li className="tip-good">✅ Add examples if needed</li>
+                    <li className="tip-bad">❌ Don't be too short or ambiguous</li>
+                  </ul>
                 </div>
               </div>
             </div>

@@ -236,6 +236,24 @@
   color: var(--accent-blue);
 }
 
+.prompt-tips {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.prompt-tips li {
+  color: var(--text-secondary);
+}
+
+.prompt-tips .tip-good {
+  color: var(--accent-green);
+}
+
+.prompt-tips .tip-bad {
+  color: var(--accent-red);
+}
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
