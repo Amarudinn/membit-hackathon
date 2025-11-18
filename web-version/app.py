@@ -2,6 +2,7 @@ import os
 import sys
 from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 from dotenv import load_dotenv
 from datetime import datetime
 import threading
@@ -22,6 +23,7 @@ load_dotenv(dotenv_path=env_path, override=True)
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here')
+CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Global variables

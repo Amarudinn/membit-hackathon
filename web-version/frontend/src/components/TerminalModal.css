@@ -1,0 +1,229 @@
+.terminal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  z-index: 997;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.terminal-modal {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 600px;
+  max-width: calc(100vw - 40px);
+  background: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.terminal-modal.minimized {
+  height: 40px;
+}
+
+.terminal-header {
+  background: #323232;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #1e1e1e;
+  user-select: none;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.terminal-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.terminal-btn svg {
+  display: none;
+  width: 8px;
+  height: 8px;
+}
+
+.terminal-btn:hover svg {
+  display: block;
+}
+
+.terminal-btn.close {
+  background: #ff5f57;
+}
+
+.terminal-btn.close:hover {
+  background: #ff3b30;
+}
+
+.terminal-btn.close svg {
+  color: #4d0000;
+}
+
+.terminal-btn.minimize {
+  background: #febc2e;
+}
+
+.terminal-btn.minimize:hover {
+  background: #ffb300;
+}
+
+.terminal-btn.minimize svg {
+  color: #4d3800;
+}
+
+.terminal-btn.maximize {
+  background: #28c840;
+  position: relative;
+}
+
+.terminal-btn.maximize:hover {
+  background: #20a034;
+}
+
+.maximize-icon {
+  width: 6px;
+  height: 6px;
+  border: 1px solid #004d00;
+  display: none;
+}
+
+.terminal-btn.maximize:hover .maximize-icon {
+  display: block;
+}
+
+.terminal-title {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  color: #b3b3b3;
+  font-weight: 500;
+}
+
+.terminal-spacer {
+  width: 68px;
+}
+
+.terminal-body {
+  background: #1e1e1e;
+  height: 400px;
+  overflow-y: auto;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.terminal-content {
+  padding: 12px;
+}
+
+.terminal-line {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: #d4d4d4;
+}
+
+.terminal-prompt {
+  color: #4ec9b0;
+  font-weight: 600;
+}
+
+.terminal-time {
+  color: #858585;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.terminal-icon {
+  font-weight: 700;
+  width: 16px;
+  text-align: center;
+}
+
+.terminal-text {
+  color: #d4d4d4;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* Scrollbar styling */
+.terminal-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+  background: #3e3e3e;
+  border-radius: 5px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+  background: #4e4e4e;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .terminal-modal {
+    bottom: 75px;
+    right: 10px;
+    left: 10px;
+    width: auto;
+    max-width: none;
+  }
+
+  .terminal-body {
+    height: 300px;
+  }
+
+  .terminal-title {
+    font-size: 12px;
+  }
+
+  .terminal-line {
+    font-size: 12px;
+  }
+}

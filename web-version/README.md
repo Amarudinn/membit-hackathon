@@ -1,6 +1,6 @@
-# 🌐 Twitter Bot - Web Dashboard Version
+# 🌐 Twitter Bot - Modern Web Dashboard (Vite + React)
 
-Automatic Twitter bot with modern web dashboard for posting tweets based on trending topics from Membit using Google Gemini AI.
+Automatic Twitter bot with modern web dashboard built with **Vite + React** for posting tweets based on trending topics from Membit using Google Gemini AI.
 
 ## ✨ Main Features
 
@@ -59,30 +59,28 @@ Automatic Twitter bot with modern web dashboard for posting tweets based on tren
 
 ## 🚀 Quick Start
 
-### 1. Clone
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/Amarudinn/membit-hackathon.git
-```
-
-### 2. Enter the Web Version Folder
-
-```bash
 cd web-version
 ```
 
-### 3. Install Dependencies
+### 2. Install Backend Dependencies
 
 ```bash
-# Windows
+# Install Python dependencies
 pip install -r requirements.txt
+```
 
-# Linux/Mac
-python3 -m venv venv
+### 3. Install Frontend Dependencies
 
-source venv/bin/activate
+```bash
+# Navigate to frontend folder
+cd frontend
 
-pip install -r requirements.txt
+# Install Node.js dependencies
+npm install
 ```
 
 ### 4. Setup Environment Variables
@@ -126,15 +124,28 @@ sudo ufw allow 5000/tcp
 sudo ufw status
 ```
 
-### 6. Run Web Server
+### 6. Run Backend Server (Terminal 1)
 
 ```bash
+# In web-version folder
 python app.py
 ```
 
-### 7. Open Browser & Setup API Keys
+Backend will run at `http://localhost:5000`
 
-Access dashboard at: **http://localhost:5000**
+### 7. Run Frontend Dev Server (Terminal 2)
+
+```bash
+# In web-version/frontend folder
+cd frontend
+npm run dev
+```
+
+Frontend will run at `http://localhost:5173`
+
+### 8. Open Browser & Setup API Keys
+
+Access dashboard at: **http://localhost:5173**
 
 **First Time Setup:**
 1. Dashboard will display warning if API keys are not configured yet

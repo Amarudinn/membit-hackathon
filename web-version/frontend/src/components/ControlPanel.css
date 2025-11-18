@@ -1,0 +1,119 @@
+.control-panel {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.control-header h2 {
+  margin: 0;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.status-badge.running {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-green);
+  border: 2px solid var(--accent-green);
+  box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.stopped {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+  border: 2px solid var(--accent-red);
+  box-shadow: 0 2px 12px rgba(239, 68, 68, 0.3);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.status-badge.running .status-dot {
+  background: var(--accent-green);
+}
+
+.status-badge.stopped .status-dot {
+  background: var(--accent-red);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+}
+
+.button-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.next-run {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.next-run span {
+  color: var(--text-secondary);
+}
+
+.next-run strong {
+  color: var(--accent-blue);
+}
+
+@media (max-width: 768px) {
+  .control-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .control-header h2 {
+    font-size: 1.125rem;
+  }
+
+  .status-badge {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .button-group {
+    grid-template-columns: 1fr;
+  }
+}

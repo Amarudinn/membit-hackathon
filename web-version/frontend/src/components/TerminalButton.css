@@ -1,0 +1,65 @@
+.terminal-float-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 998;
+  transition: all 0.3s;
+}
+
+.terminal-float-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, #334155 0%, #475569 100%);
+}
+
+.terminal-float-btn:active {
+  transform: translateY(0);
+}
+
+.terminal-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 12px;
+  height: 12px;
+  background: var(--accent-red);
+  border-radius: 50%;
+  border: 2px solid var(--bg-primary);
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .terminal-float-btn {
+    bottom: 15px;
+    right: 15px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .terminal-float-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}

@@ -1,0 +1,80 @@
+.activity-logs {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+.logs-container {
+  max-height: 400px;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+}
+
+.log-entry {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 1rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  align-items: center;
+}
+
+.log-entry:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.log-entry:last-child {
+  margin-bottom: 0;
+}
+
+.log-icon {
+  font-size: 1rem;
+}
+
+.log-time {
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.log-message {
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.log-entry.info {
+  border-left: 3px solid var(--accent-blue);
+}
+
+.log-entry.success {
+  border-left: 3px solid var(--accent-green);
+}
+
+.log-entry.warning {
+  border-left: 3px solid var(--accent-yellow);
+}
+
+.log-entry.error {
+  border-left: 3px solid var(--accent-red);
+}
+
+@media (max-width: 768px) {
+  .log-entry {
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+  }
+
+  .log-time {
+    grid-column: 2;
+    font-size: 0.75rem;
+  }
+
+  .log-message {
+    grid-column: 1 / -1;
+  }
+}
