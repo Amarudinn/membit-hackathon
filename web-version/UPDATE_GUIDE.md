@@ -18,7 +18,14 @@ git pull origin main
 # git reset --hard origin/main
 ```
 
-### 2. Install New Dependencies
+### 2. Use Virtual Environments
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install New Dependencies
 
 ```bash
 # Navigate to web-version
@@ -37,7 +44,7 @@ cd frontend
 npm install
 ```
 
-### 3. Clear Cache
+### 4. Clear Cache
 
 ```bash
 # Still in frontend folder
@@ -45,7 +52,7 @@ rm -rf node_modules/.vite
 rm -rf dist
 ```
 
-### 4. Restart Services
+### 5. Restart Services
 
 ```bash
 # Start backend
