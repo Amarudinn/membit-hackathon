@@ -8,7 +8,8 @@ import {
   Settings, 
   BookOpen,
   Twitter,
-  LogOut
+  LogOut,
+  UserCircle2
 } from 'lucide-react'
 import '../App.css'
 import ControlPanel from './ControlPanel'
@@ -19,6 +20,10 @@ import SettingsModal from './SettingsModal'
 import GuideModal from './GuideModal'
 import TerminalButton from './TerminalButton'
 import TerminalModal from './TerminalModal'
+import ProfileButton from './ProfileButton'
+import ProfileModal from './ProfileModal'
+import DonationButton from './DonationButton'
+import DonationModal from './DonationModal'
 
 function Dashboard() {
   const navigate = useNavigate()
@@ -45,6 +50,8 @@ function Dashboard() {
   const [showGuide, setShowGuide] = useState(false)
   const [showTerminal, setShowTerminal] = useState(false)
   const [isTerminalMinimized, setIsTerminalMinimized] = useState(false)
+  const [showProfile, setShowProfile] = useState(false)
+  const [showDonation, setShowDonation] = useState(false)
 
   useEffect(() => {
     // Check auth status
@@ -124,9 +131,12 @@ function Dashboard() {
         method: 'POST',
         credentials: 'include'
       })
-      navigate('/login')
+      // Force full page reload to clear auth state
+      window.location.href = '/login'
     } catch (err) {
       console.error('Logout failed:', err)
+      // Even if logout fails, redirect to login
+      window.location.href = '/login'
     }
   }
 
@@ -142,9 +152,6 @@ function Dashboard() {
             </div>
           </div>
           <div className="header-actions">
-            <div className="user-info">
-              <span>👤 {username}</span>
-            </div>
             <button className="btn btn-secondary" onClick={() => setShowGuide(true)}>
               <BookOpen size={18} />
               Guide
@@ -152,10 +159,6 @@ function Dashboard() {
             <button className="btn btn-primary" onClick={() => setShowSettings(true)}>
               <Settings size={18} />
               Settings
-            </button>
-            <button className="btn btn-danger" onClick={handleLogout}>
-              <LogOut size={18} />
-              Logout
             </button>
           </div>
         </div>
@@ -180,10 +183,26 @@ function Dashboard() {
         <LastTweet tweet={botStatus.last_tweet} />
       </main>
 
+      <DonationButton onClick={() => setShowDonation(!showDonation)} />
+      
+      <ProfileButton onClick={() => setShowProfile(!showProfile)} />
+      
       <TerminalButton 
         onClick={() => setShowTerminal(!showTerminal)} 
         hasNewLogs={logs.length > 0 && !showTerminal}
       />
+
+      {showDonation && (
+        <DonationModal onClose={() => setShowDonation(false)} />
+      )}
+
+      {showProfile && (
+        <ProfileModal 
+          username={username}
+          onClose={() => setShowProfile(false)}
+          onLogout={handleLogout}
+        />
+      )}
 
       {showTerminal && (
         <TerminalModal 

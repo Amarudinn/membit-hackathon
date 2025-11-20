@@ -1,30 +1,27 @@
 .terminal-float-btn {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 1rem;
+  right: 2rem;
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  background: #1e293b;
   border: 2px solid var(--border-color);
   color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 998;
-  transition: all 0.3s;
+  transition: transform 0.2s ease;
 }
 
 .terminal-float-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  background: linear-gradient(135deg, #334155 0%, #475569 100%);
+  transform: translateY(-4px);
 }
 
 .terminal-float-btn:active {
-  transform: translateY(0);
+  transform: translateY(-2px);
 }
 
 .terminal-badge {
@@ -52,8 +49,8 @@
 
 @media (max-width: 768px) {
   .terminal-float-btn {
-    bottom: 15px;
-    right: 15px;
+    bottom: 1rem;
+    right: 1rem;
     width: 48px;
     height: 48px;
   }

@@ -29,8 +29,8 @@ function App() {
         alignItems: 'center',
         justifyContent: 'center',
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
+        background: '#0f172a',
+        color: '#f1f5f9',
         fontSize: '1.5rem'
       }}>
         Loading...

@@ -1,0 +1,34 @@
+.donation-button {
+  position: fixed;
+  bottom: 10rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  z-index: 999;
+}
+
+.donation-button:hover {
+  transform: translateY(-4px);
+}
+
+.donation-button:active {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .donation-button {
+    bottom: 9rem;
+    right: 1rem;
+    width: 48px;
+    height: 48px;
+  }
+}

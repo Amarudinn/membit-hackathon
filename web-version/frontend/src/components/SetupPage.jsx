@@ -84,8 +84,8 @@ function SetupPage() {
       const data = await response.json()
 
       if (data.success) {
-        // Setup complete, redirect to dashboard
-        navigate('/dashboard')
+        // Setup complete, redirect to login page
+        window.location.href = '/login'
       } else {
         setError(data.error || 'Invalid code')
       }
@@ -189,8 +189,8 @@ function SetupPage() {
               />
             </div>
 
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading ? 'Setting up...' : 'Continue'}
+            <button type="submit" className="btn btn-primary btn-center" disabled={loading}>
+              {loading ? 'Setting up' : 'Continue'}
             </button>
           </form>
         )}
@@ -223,15 +223,10 @@ function SetupPage() {
                 <Download size={24} />
                 Backup Codes
               </h3>
-              <p>Save these codes in a safe place. You can use them if you lose access to your authenticator app.</p>
-              <div className="backup-codes-grid">
-                {backupCodes.map((code, idx) => (
-                  <code key={idx}>{code}</code>
-                ))}
-              </div>
+              <p>Download and save these codes in a safe place. You can use them if you lose access to your authenticator app. Each code can only be used once.</p>
               <button 
                 type="button" 
-                className="btn btn-secondary"
+                className="btn btn-primary btn-center"
                 onClick={downloadBackupCodes}
               >
                 <Download size={18} />
@@ -241,7 +236,7 @@ function SetupPage() {
 
             <button 
               type="button" 
-              className="btn btn-primary"
+              className="btn btn-primary btn-center"
               onClick={() => setStep(3)}
             >
               Continue to Verification

@@ -427,11 +427,7 @@ def auth_verify_setup():
         success, error = auth_manager.verify_setup(totp_code)
         
         if success:
-            # Auto login after successful setup
-            session['logged_in'] = True
-            session['username'] = auth_manager.config.get('username')
-            session.permanent = True
-            
+            # Setup completed, user must login manually
             return jsonify({'success': True})
         else:
             return jsonify({'success': False, 'error': error}), 400

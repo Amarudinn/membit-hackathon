@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Shield, User, Lock, Smartphone, AlertCircle, Twitter } from 'lucide-react'
 import './LoginPage.css'
@@ -10,6 +10,17 @@ function LoginPage() {
   const [totpCode, setTotpCode] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    // Check if setup is completed
+    fetch('/api/auth/status', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.setup_completed) {
+          navigate('/setup')
+        }
+      })
+  }, [navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -38,7 +49,8 @@ function LoginPage() {
       const data = await response.json()
 
       if (data.success) {
-        navigate('/dashboard')
+        // Force full page reload to update auth status
+        window.location.href = '/dashboard'
       } else {
         setError(data.error || 'Login failed')
         setTotpCode('') // Clear code on error
@@ -114,19 +126,14 @@ function LoginPage() {
             <small>6-digit code from authenticator app</small>
           </div>
 
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+          <button type="submit" className="btn btn-primary btn-center" disabled={loading}>
+            {loading ? 'Signing in' : 'Sign In'}
           </button>
         </form>
 
         <div className="login-footer">
           <Shield size={16} />
           <span>Protected by 2FA</span>
-        </div>
-
-        <div className="login-help">
-          <p>Lost access to your authenticator?</p>
-          <small>Use one of your backup codes instead of the 6-digit code</small>
         </div>
       </div>
     </div>

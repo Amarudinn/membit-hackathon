@@ -14,9 +14,12 @@
   --accent-green: #10b981;
   --accent-red: #ef4444;
   --accent-yellow: #f59e0b;
+  --success-color: #10b981;
+  --error-color: #ef4444;
   --border-color: #334155;
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  --card-bg: #1e293b;
 }
 
 body {
@@ -88,12 +91,12 @@ body {
 }
 
 .user-info {
-  padding: 0.5rem 1rem;
-  background: var(--bg-tertiary);
-  border-radius: 0.5rem;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .user-info span {
@@ -219,11 +222,20 @@ body {
 
   .header-actions {
     width: 100%;
-    justify-content: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .user-info {
+    justify-content: center;
+    padding: 0.75rem;
+    background: var(--bg-tertiary);
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-color);
   }
 
   .header-actions .btn {
-    flex: 1;
     justify-content: center;
   }
 
