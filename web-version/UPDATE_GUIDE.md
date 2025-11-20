@@ -34,9 +34,6 @@ cd web-version
 # Install Python dependencies
 pip3 install -r requirements.txt
 
-# go back to web-version
-cd ..
-
 # Navigate to frontend
 cd frontend
 
