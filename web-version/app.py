@@ -1,16 +1,18 @@
 import os
 import sys
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, session
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta
 import threading
 import time
+from functools import wraps
 from membit_client import MembitClient
 from gemini_client import GeminiClient
 from twitter_client import TwitterClient
 from image_generator import ImageGenerator
+from auth_manager import AuthManager
 
 # Suppress Gemini warnings
 os.environ['GRPC_VERBOSITY'] = 'ERROR'
@@ -24,8 +26,12 @@ load_dotenv(dotenv_path=env_path, override=True)
 # Initialize Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-here')
-CORS(app)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
+CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+
+# Initialize Auth Manager
+auth_manager = AuthManager()
 
 # Global variables
 bot_status = {
@@ -92,6 +98,16 @@ load_prompt_config()
 
 scheduler_thread = None
 stop_scheduler = False
+
+# Auth decorator
+def login_required(f):
+    """Decorator to require authentication"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('logged_in'):
+            return jsonify({'error': 'Authentication required', 'auth_required': True}), 401
+        return f(*args, **kwargs)
+    return decorated_function
 
 def emit_log(message, level='info'):
     """Emit log message to frontend"""
@@ -361,17 +377,159 @@ def scheduler_loop():
                 break
             time.sleep(1)
 
+# ============================================================================
+# AUTHENTICATION ROUTES
+# ============================================================================
+
+@app.route('/api/auth/status')
+def auth_status():
+    """Check authentication status"""
+    return jsonify({
+        'setup_completed': auth_manager.is_setup_completed(),
+        'logged_in': session.get('logged_in', False),
+        'username': session.get('username') if session.get('logged_in') else None
+    })
+
+@app.route('/api/auth/setup', methods=['POST'])
+def auth_setup():
+    """Initial setup - create username, password, and 2FA"""
+    try:
+        # Check if already setup
+        if auth_manager.is_setup_completed():
+            return jsonify({'success': False, 'error': 'Setup already completed'}), 400
+        
+        data = request.json
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        
+        success, qr_code, totp_secret, backup_codes, error = auth_manager.setup_auth(username, password)
+        
+        if success:
+            return jsonify({
+                'success': True,
+                'qr_code': qr_code,
+                'totp_secret': totp_secret,
+                'backup_codes': backup_codes
+            })
+        else:
+            return jsonify({'success': False, 'error': error}), 400
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/auth/verify-setup', methods=['POST'])
+def auth_verify_setup():
+    """Verify TOTP code during setup"""
+    try:
+        data = request.json
+        totp_code = data.get('totp_code', '').strip()
+        
+        success, error = auth_manager.verify_setup(totp_code)
+        
+        if success:
+            # Auto login after successful setup
+            session['logged_in'] = True
+            session['username'] = auth_manager.config.get('username')
+            session.permanent = True
+            
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': error}), 400
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/auth/login', methods=['POST'])
+def auth_login():
+    """Login with username, password, and TOTP code"""
+    try:
+        data = request.json
+        username = data.get('username', '').strip()
+        password = data.get('password', '')
+        totp_code = data.get('totp_code', '').strip()
+        
+        success, error = auth_manager.verify_login(username, password, totp_code)
+        
+        if success:
+            session['logged_in'] = True
+            session['username'] = username
+            session.permanent = True
+            
+            emit_log(f'User {username} logged in', 'info')
+            
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': error}), 401
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/auth/logout', methods=['POST'])
+def auth_logout():
+    """Logout current user"""
+    username = session.get('username', 'Unknown')
+    session.clear()
+    emit_log(f'User {username} logged out', 'info')
+    return jsonify({'success': True})
+
+@app.route('/api/auth/change-password', methods=['POST'])
+@login_required
+def auth_change_password():
+    """Change password"""
+    try:
+        data = request.json
+        old_password = data.get('old_password', '')
+        new_password = data.get('new_password', '')
+        totp_code = data.get('totp_code', '').strip()
+        
+        success, error = auth_manager.change_password(old_password, new_password, totp_code)
+        
+        if success:
+            emit_log('Password changed successfully', 'success')
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, 'error': error}), 400
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/auth/regenerate-backup-codes', methods=['POST'])
+@login_required
+def auth_regenerate_backup_codes():
+    """Regenerate backup codes"""
+    try:
+        data = request.json
+        password = data.get('password', '')
+        totp_code = data.get('totp_code', '').strip()
+        
+        success, backup_codes, error = auth_manager.regenerate_backup_codes(password, totp_code)
+        
+        if success:
+            emit_log('Backup codes regenerated', 'success')
+            return jsonify({'success': True, 'backup_codes': backup_codes})
+        else:
+            return jsonify({'success': False, 'error': error}), 400
+            
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+# ============================================================================
+# MAIN ROUTES
+# ============================================================================
+
 @app.route('/')
 def index():
     """Main page"""
     return render_template('index.html')
 
 @app.route('/api/status')
+@login_required
 def get_status():
     """Get bot status"""
     return jsonify(bot_status)
 
 @app.route('/api/config', methods=['GET', 'POST'])
+@login_required
 def handle_config():
     """Get or update bot configuration"""
     if request.method == 'POST':
@@ -431,6 +589,7 @@ def handle_config():
     })
 
 @app.route('/api/prompt', methods=['POST'])
+@login_required
 def update_prompt():
     """Update prompt template"""
     try:
@@ -452,6 +611,7 @@ def update_prompt():
         return jsonify({'success': False, 'error': str(e)})
 
 @app.route('/api/keys', methods=['GET', 'POST'])
+@login_required
 def handle_keys():
     """Get or update API keys"""
     if request.method == 'POST':
@@ -541,6 +701,7 @@ def mask_key(key):
     return key if key else ''
 
 @app.route('/api/logs')
+@login_required
 def get_logs():
     """Get log history"""
     return jsonify(log_history)
@@ -549,6 +710,11 @@ def get_logs():
 def handle_start_bot():
     """Start the bot"""
     global scheduler_thread, stop_scheduler, bot_status
+    
+    # Check authentication
+    if not session.get('logged_in'):
+        emit('error', {'message': 'Authentication required'})
+        return
     
     if bot_status['running']:
         emit('error', {'message': 'Bot is already running'})
@@ -588,6 +754,11 @@ def handle_stop_bot():
     """Stop the bot"""
     global stop_scheduler, bot_status
     
+    # Check authentication
+    if not session.get('logged_in'):
+        emit('error', {'message': 'Authentication required'})
+        return
+    
     if not bot_status['running']:
         emit('error', {'message': 'Bot is not running'})
         return
@@ -602,6 +773,11 @@ def handle_stop_bot():
 @socketio.on('run_once')
 def handle_run_once():
     """Run tweet generation once"""
+    # Check authentication
+    if not session.get('logged_in'):
+        emit('error', {'message': 'Authentication required'})
+        return
+    
     # Validate API keys before running
     required_keys = {
         'MEMBIT_API_KEY': 'Membit',

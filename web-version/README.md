@@ -154,9 +154,8 @@ python3 app.py
 
 You should see:
 ```
-🚀 Backend Running
-📱 http://localhost:5000
-🛑 Press Ctrl+C to stop
+🚀 Starting Twitter Bot Web Interface...
+📱 Open http://localhost:5000 in your browser
 ```
 
 **Keep this terminal running!** Or use `screen`:
@@ -259,7 +258,7 @@ npm run dev
    - Status changes to "Stopped" (red)
    - Safe: does not post tweet after stop
 
-3. **▶Run Once**
+3. **▶▶Run Once**
    - Post 1 tweet now (for testing)
    - Does not affect schedule
    - Good for testing before starting automatic mode

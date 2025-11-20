@@ -1,6 +1,9 @@
 # Environment variables
 .env
 
+# Authentication
+auth_config.json
+
 # Python
 __pycache__/
 *.py[cod]
