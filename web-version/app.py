@@ -11,6 +11,7 @@ from functools import wraps
 from membit_client import MembitClient
 from gemini_client import GeminiClient
 from twitter_client import TwitterClient
+from image_generator import ImageGenerator
 from auth_manager import AuthManager
 
 # Suppress Gemini warnings
