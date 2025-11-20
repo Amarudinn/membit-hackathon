@@ -13,7 +13,7 @@
 
 .donation-modal {
   position: fixed;
-  bottom: 12rem;
+  bottom: 7.5rem;
   right: 2rem;
   width: 420px;
   max-height: 80vh;
@@ -180,10 +180,11 @@
 
 @media (max-width: 768px) {
   .donation-modal {
-    bottom: 11rem;
+    bottom: 7rem;
     right: 1rem;
     left: 1rem;
     width: auto;
+    max-height: 60vh;
   }
 
   .wallet-address {

@@ -1,6 +1,6 @@
 .donation-button {
   position: fixed;
-  bottom: 10rem;
+  bottom: 5.5rem;
   right: 2rem;
   width: 56px;
   height: 56px;
@@ -26,7 +26,7 @@
 
 @media (max-width: 768px) {
   .donation-button {
-    bottom: 9rem;
+    bottom: 5rem;
     right: 1rem;
     width: 48px;
     height: 48px;

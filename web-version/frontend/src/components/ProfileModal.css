@@ -13,7 +13,7 @@
 
 .profile-modal {
   position: fixed;
-  bottom: 7.5rem;
+  bottom: 12rem;
   right: 2rem;
   width: 320px;
   background: var(--bg-secondary);
@@ -125,7 +125,7 @@
 
 @media (max-width: 768px) {
   .profile-modal {
-    bottom: 7rem;
+    bottom: 11rem;
     right: 1rem;
     left: 1rem;
     width: auto;
